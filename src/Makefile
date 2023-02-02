@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/01/24 23:37:00 by minjungk         ###   ########.fr        #
+#    Updated: 2023/02/03 06:37:02 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,10 @@
 .DEFAULT_GOAL := all
 
 CFLAGS		= -Wall -Wextra -Werror -MMD -MP -O3
+
+CPPFLAGS	+= -I../lib/libft
+LDFLAGS		+= -L../lib/libft
+LDLIBS		+= -lft
 
 LDLIBS		+= -lncurses
 LDLIBS		+= -lreadline
