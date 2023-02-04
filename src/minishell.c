@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/04 23:05:46 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/04 23:12:02 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,12 @@ static volatile sig_atomic_t	g_status;
 
 static void	handler(int sig)
 {
-	if (sig == SIGINT)
-	{
-		write(STDOUT_FILENO, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		g_status = 130;
-	}
-	else if (sig == SIGQUIT)
-	{
-		write(STDOUT_FILENO, "\b\b  \b\b", 6);
-		g_status = 0;
-	}
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	g_status = 130;
 }
 
 static void	loop(void)
@@ -58,8 +51,15 @@ static void	loop(void)
 
 int	main(void)
 {
+	struct termios	term_org;
+	struct termios	term_new;
+
 	signal(SIGINT, handler);
-	signal(SIGQUIT, handler);
+	tcgetattr(STDIN_FILENO, &term_org);
+	tcgetattr(STDIN_FILENO, &term_new);
+	term_new.c_cc[VQUIT] = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term_new);
 	loop();
+	tcsetattr(STDIN_FILENO, TCSANOW, &term_org);
 	exit(EXIT_SUCCESS);
 }
