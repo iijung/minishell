@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/03 06:36:15 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/04 23:05:46 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static volatile sig_atomic_t	g_status;
 
-void	handler(int sig)
+static void	handler(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -31,13 +31,11 @@ void	handler(int sig)
 	}
 }
 
-int	main(void)
+static void	loop(void)
 {
 	char	*line;
 	char	*command;
 
-	signal(SIGINT, handler);
-	signal(SIGQUIT, handler);
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -56,5 +54,12 @@ int	main(void)
 		free(line);
 	}
 	rl_clear_history();
+}
+
+int	main(void)
+{
+	signal(SIGINT, handler);
+	signal(SIGQUIT, handler);
+	loop();
 	exit(EXIT_SUCCESS);
 }
