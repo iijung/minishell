@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/04 23:46:41 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/05 23:48:10 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static int	event(void)
 	return (0);
 }
 
+extern void	run(const char *command);
+
 static void	loop(void)
 {
 	char	*line;
@@ -49,7 +51,7 @@ static void	loop(void)
 		if (command && *command)
 		{
 			add_history(command);
-			printf("[TODO] execute[%s]\n", command);
+			run(command);
 		}
 		free(command);
 		free(line);
