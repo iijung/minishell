@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:48 by minjungk          #+#    #+#             */
-/*   Updated: 2023/01/24 23:26:23 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/04 21:49:53 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 # define MINISHELL_H
 # include <stdio.h>
 # include <stdlib.h>
+# include <signal.h>
+# include <termios.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include "libft.h"
 
 #endif
