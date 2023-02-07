@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/02/06 03:44:30 by minjungk         ###   ########.fr        #
+#    Updated: 2023/02/07 22:58:34 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@
 
 CFLAGS		= -Wall -Wextra -Werror -MMD -MP -O3
 
+CPPFLAGS	+= -I./util
 CPPFLAGS	+= -I./prompt
 
 CPPFLAGS	+= -I../lib/libft
