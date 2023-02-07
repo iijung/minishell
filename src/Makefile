@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/02/07 22:58:34 by minjungk         ###   ########.fr        #
+#    Updated: 2023/02/07 23:24:32 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ MINISHELL_SRCS = \
 	util/ft_debug.c \
 	util/ft_assert.c \
 	prompt/prompt.c \
+	execute/run.c \
 	builtin/pwd.c \
 
 MINISHELL_OBJS := $(MINISHELL_SRCS:.c=.o)
