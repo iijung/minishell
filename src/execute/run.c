@@ -6,12 +6,12 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 23:45:12 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/07 23:56:16 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/09 07:48:33 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "util.h"
-# include "sys/wait.h"
+#include "util.h"
+#include "sys/wait.h"
 
 extern char	**environ;
 
