@@ -6,12 +6,13 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 23:45:12 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/09 07:52:54 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/09 07:55:17 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "util.h"
 #include "sys/wait.h"
+#include "builtin.h"
 
 extern char	**environ;
 
@@ -21,7 +22,8 @@ static int	do_child(char **argv)
 
 	if (ft_strchr(argv[0], '/'))
 		exit(execve(argv[0], argv, environ));
-	// builtin
+	if (builtin_func)
+		exit(builtin_func(argv));
 	// path
 	if (access(argv[0], F_OK | X_OK) == 0)
 		exit(execve(argv[0], argv, environ));
@@ -34,7 +36,10 @@ static int	execute(char **argv)
 {
 	pid_t					pid;
 	int						wstatus;
+	const t_builtin_func	builtin_func = builtin(argv);
 
+	if (builtin_func)
+		return (builtin_func(argv));
 	pid = fork();
 	if (pid == 0)
 		return (do_child(argv));
