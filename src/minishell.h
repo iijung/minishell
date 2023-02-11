@@ -16,4 +16,8 @@
 # include <stdlib.h>
 # include "libft.h"
 
+#define ERORR -1
+#define FALSE 0
+#define TRUE 1
+
 #endif

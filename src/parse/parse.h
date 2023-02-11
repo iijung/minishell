@@ -14,6 +14,28 @@
 # define PARSE_H
 # include "libft.h"
 
+enum type_parse_node
+{
+	ROOT,
+	APL,
+	OPL,
+	PL,
+	WL,
+	W,
+	RED
+}
+
+enum type_token
+{
+	WORD,
+	AND,
+	OR,
+	RED_READ,
+	RED_HERECOD,
+	RED_WRITE,
+	RED_APPEND
+}
+
 typedef struct s_parse_node
 {
 	unsigned int	type;
@@ -24,7 +46,7 @@ typedef struct s_stack
 {
 	int		cursor;
 	int		capacity;
-	t_list	*stack;
+	t_list	*arr_data;
 }	t_stack;
 
 typedef struct s_wordline
@@ -39,8 +61,8 @@ typedef struct s_wordline
 
 typedef struct s_parse_tree
 {
-	unsigned int		type;
-	char				*value;
+	t_parse_node		node;
+	struct s_parse_tree	*parent;
 	struct s_parse_tree	*left;
 	struct s_parse_tree	*right;
 	t_wordline			*wl;
