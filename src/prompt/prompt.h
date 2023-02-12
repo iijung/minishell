@@ -14,8 +14,9 @@
 # define PROMPT_H
 # include <signal.h>
 # include <termios.h>
-# include <readline/history.h>
-# include <readline/readline.h>
+# include <stdio.h>
+# include "readline.h"
+# include "history.h"
 # include "libft.h"
 
 extern char	*prompt(void);
