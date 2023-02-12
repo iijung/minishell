@@ -102,18 +102,13 @@ static int	lex_token(t_list **lst, char *base)
 
 t_list	*lex(char *command)
 {
-	static char		*symbol_table = NULL;
-	static t_list	*tokens = NULL;
+	t_list	*tokens;
 
 	errno = 0;
+	tokens = NULL;
+	if (lex_token(&tokens, command) < 0 || errno)
 	{
 		ft_lstclear(&tokens, free);
-		free(symbol_table);
-	}
-	tokens = NULL;
-	symbol_table = ft_strdup(command);
-	if (lex_token(&tokens, symbol_table) < 0 || errno)
-	{
 		ft_putstr_fd("minishell: lexing error\n", STDERR_FILENO);
 		return (NULL);
 	}
