@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/12 15:03:10 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/12 23:32:36 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,27 @@
 
 static void	debug(void *param)
 {
-	const struct s_content	*content = param;
+	const struct s_content	*c = param;
+	const char				*typename[] = {
+		"STRING",
+		"EOF",
+		"IFS",
+		"QUOTE",
+		"DQUOTE",
+		"OPERATOR",
+		"WILDCARD",
+		"ENVIRONMENT",
+		"PARENTHESIS",
+		"REDIRECTION"
+	};
 
 	if (DEBUG == 0)
 		return ;
-	if (content == NULL)
+	if (c == NULL)
 		printf("DEBUG:: content is NULL\n");
 	else
-		printf("DEBUG:: content type[%02x] len[%lu] data[%.*s]\n",
-			content->type, content->len, (int)content->len, content->data);
+		printf("DEBUG:: content [%x: %12s] len[%lu] data[%.*s]\n",
+			c->type, typename[c->type], c->len, (int)c->len, c->data);
 }
 
 static void	add_token(t_list **lst, int type, size_t len, char *data)
@@ -82,15 +94,11 @@ static int	lex_token(t_list **lst, char *base)
 		return (-1);
 	while (*base)
 	{
-		while (is_lexeme(base[0]) == LEXEME_IFS)
-			++base;
-		if (base[0] == '\0')
-			return (0);
-		curr = base;
 		type = is_lexeme(base[0]);
-		while (is_lexeme(curr[0]) == LEXEME_STRING)
+		curr = base + 1;
+		while (type == LEXEME_IFS && is_lexeme(curr[0]) == LEXEME_IFS)
 			curr++;
-		if (type != LEXEME_STRING)
+		while (type == LEXEME_STRING && is_lexeme(curr[0]) == LEXEME_STRING)
 			curr++;
 		if (type == LEXEME_REDIRECTION || type == LEXEME_OPERATOR)
 			curr += (base[0] == curr[0]);
