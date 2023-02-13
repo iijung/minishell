@@ -1,35 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   termset.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/06 02:10:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/13 22:16:05 by jaemjeon         ###   ########.fr       */
+/*   Created: 2023/02/13 20:55:19 by jaemjeon          #+#    #+#             */
+/*   Updated: 2023/02/13 22:19:25 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "prompt.h"
+#include "minishell.h"
+#include <termios.h>
 
-char	*prompt(void)
+void	setting_terminal(int option)
 {
-	char	*line;
-	char	*command;
+	struct termios	term;
 
-	line = readline("minishell$ : ");
-	if (line == NULL)
+	tcgetattr(0, &term);
+	if (option == MINISHELL_HAS_CHILD || option == MINISHELL_HEREDOC || \
+			option == MINISHELL_NO_CHILD)
 	{
-		ft_putstr_fd("exit\n", STDERR_FILENO);
-		exit(EXIT_SUCCESS);
+		term.c_lflag &= ~ECHOCTL;
 	}
-	command = ft_strtrim(line, " ");
-	if (command == NULL || *command == '\0')
+	else if (option == EXE_CHILD)
 	{
-		free(command);
-		return (NULL);
+		term.c_lflag |= ECHOCTL;
 	}
-	add_history(command);
-	free(line);
-	return (command);
+	tcsetattr(0, TCSANOW, &term);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/02/12 17:37:24 by jaemjeon         ###   ########.fr        #
+#    Updated: 2023/02/13 22:18:27 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,10 @@
 
 CFLAGS		= -Wall -Wextra -Werror -MMD -MP -O3
 
+CPPFLAGS	+= -I./
 CPPFLAGS	+= -I./prompt
 CPPFLAGS	+= -I./lexer
+CPPFLAGS	+= -I./signal
 
 CPPFLAGS	+= -I../lib/libft
 CPPFLAGS	+= -I../lib/readline
@@ -39,8 +41,10 @@ MINISHELL_SRCS = \
 	util/ft_debug.c \
 	util/ft_assert.c \
 	prompt/prompt.c \
+	prompt/termset.c \
 	lexer/lexer.c \
 	builtin/pwd.c \
+	signal/signal.c \
 
 MINISHELL_OBJS := $(MINISHELL_SRCS:.c=.o)
 MINISHELL_DEPS := $(MINISHELL_SRCS:.c=.d)

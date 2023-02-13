@@ -3,21 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/12 15:03:27 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/13 22:14:36 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "prompt.h"
+#include "sigsetting.h"
 #include "lexer.h"
 
 int	main(void)
 {
 	char	*command;
 
+	setting_terminal(MINISHELL_NO_CHILD);
+	setting_signal(MINISHELL_NO_CHILD);
 	while (1)
 	{
 		command = prompt();

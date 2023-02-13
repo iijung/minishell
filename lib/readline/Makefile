@@ -308,10 +308,6 @@ clean:	force
 	-( cd doc && $(MAKE) $(MFLAGS) $@ )
 	-( cd examples && $(MAKE) $(MFLAGS) $@ )
 
-fclean: clean
-
-re: clean $(STATIC_LIBS)
-
 mostlyclean: clean
 	( cd shlib && $(MAKE) $(MFLAGS) $@ )
 	-( cd doc && $(MAKE) $(MFLAGS) $@ )

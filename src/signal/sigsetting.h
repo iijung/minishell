@@ -1,35 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   sigsetting.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/06 02:10:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/13 22:16:05 by jaemjeon         ###   ########.fr       */
+/*   Created: 2023/02/13 21:42:58 by jaemjeon          #+#    #+#             */
+/*   Updated: 2023/02/13 22:14:17 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "prompt.h"
+#ifndef SIGSETTING_H
+# define SIGSETTING_H
 
-char	*prompt(void)
-{
-	char	*line;
-	char	*command;
+void	signal_handler(int signo);
+void	signal_event(void);
+void	setting_signal(int option);
 
-	line = readline("minishell$ : ");
-	if (line == NULL)
-	{
-		ft_putstr_fd("exit\n", STDERR_FILENO);
-		exit(EXIT_SUCCESS);
-	}
-	command = ft_strtrim(line, " ");
-	if (command == NULL || *command == '\0')
-	{
-		free(command);
-		return (NULL);
-	}
-	add_history(command);
-	free(line);
-	return (command);
-}
+#endif
