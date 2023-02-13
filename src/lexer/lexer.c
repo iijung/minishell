@@ -68,14 +68,14 @@ static int	is_lexeme(char data)
 		return (LEXEME_IFS);
 	else if (data == '\0')
 		return (LEXEME_EOF);
-	// else if (data == '\'')
-	// 	return (LEXEME_QUOTE);
-	// else if (data == '"')
-	// 	return (LEXEME_DQUOTE);
-	// else if (data == '*')
-	// 	return (LEXEME_WILDCARD);
-	// else if (data == '$')
-	// 	return (LEXEME_ENVIRONMENT);
+	else if (data == '\'')
+		return (LEXEME_QUOTE);
+	else if (data == '"')
+		return (LEXEME_DQUOTE);
+	else if (data == '*')
+		return (LEXEME_WILDCARD);
+	else if (data == '$')
+		return (LEXEME_ENVIRONMENT);
 	else if (data == '(' || data == ')')
 		return (LEXEME_PARENTHESIS);
 	else if (data == '<' || data == '>')
