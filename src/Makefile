@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/02/09 07:59:20 by minjungk         ###   ########.fr        #
+#    Updated: 2023/02/12 17:37:24 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,13 +18,20 @@ CFLAGS		= -Wall -Wextra -Werror -MMD -MP -O3
 CPPFLAGS	+= -I./util
 CPPFLAGS	+= -I./prompt
 CPPFLAGS	+= -I./builtin
+CPPFLAGS	+= -I./lexer
 
 CPPFLAGS	+= -I../lib/libft
+CPPFLAGS	+= -I../lib/readline
 LDFLAGS		+= -L../lib/libft
+LDFLAGS		+= -L../lib/readline
 LDLIBS		+= -lft
 
 LDLIBS		+= -lncurses
 LDLIBS		+= -lreadline
+
+ifdef DEBUG
+CPPFLAGS	+= -g -DDEBUG
+endif
 
 # **************************************************************************** #
 MINISHELL = minishell
@@ -36,6 +43,7 @@ MINISHELL_SRCS = \
 	prompt/prompt.c \
 	execute/run.c \
 	builtin/builtin.c \
+	lexer/lexer.c \
 	builtin/pwd.c \
 	builtin/cd.c \
 	builtin/env.c \
