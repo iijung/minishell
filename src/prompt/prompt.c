@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 02:10:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/14 17:34:49 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/02/14 17:37:54 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*prompt(void)
 	command = ft_strtrim(line, " ");
 	if (command == NULL || *command == '\0')
 	{
-		free(command);
+		free(line);
 		return (NULL);
 	}
 	add_history(command);
