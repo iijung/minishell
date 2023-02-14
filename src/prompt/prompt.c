@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 02:10:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/06 03:43:18 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/14 17:27:29 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	set_terminal(void)
 
 	rl_event_hook = event;
 	tcgetattr(STDIN_FILENO, &term);
-	term.c_cc[VQUIT] = 0;
+	term.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
@@ -48,7 +48,7 @@ static char	*get_readline(void)
 	char			*line;
 
 	signal(SIGINT, handler);
-	signal(SIGQUIT, handler);
+	signal(SIGQUIT, SIG_IGN);
 	tcgetattr(STDIN_FILENO, &term);
 	set_terminal();
 	line = readline("minishell$ ");
