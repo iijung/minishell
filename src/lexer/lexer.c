@@ -75,17 +75,55 @@ int	read_nonquote(const char *string_start, t_lex_token **lst_lex_token)
 
 }
 
+enum
+{
+	E_READ_STRING_NORM = 1 << 0,
+	E_READ_STRING_IN_DQUOTE = 1 << 1,
+	E_READ_STRING_IN_SQUOTE = 1 << 2,
+	E_READ_STRING_ACC = 1 << 3,
+	E_READ_STRING_ERROR = 1 << 4
+};
+
 int	read_string(const char *cursor, t_lex_token **lst_lex_token)
 {
-	t_lex_token	*new_token;
+	t_lex_token			*new_token;
+	char const * const	s_str = cursor;
+	int					read_state;
 
 	new_token = ft_calloc(1, sizeof(t_lex_token));
 	if (new_token == NULL)
 		exit(errno);
-	if (*cursor == '"' || *cursor == '\'')
-		return (read_quote(cursor, lst_lex_token));
+	read_state = E_READ_STRING_NORM;
+	while (read_state != E_READ_STRING_ACC && read_state != E_READ_STRING_ERROR)
+	{
+		if (read_state == E_READ_STRING_NORM)
+		{
+			read_state = read_string_norm(&cursor);
+		}
+		else if (read_state == E_READ_STRING_IN_DQUOTE)
+		{
+			read_state = read_string_in_dquote(&cursor);
+		}
+		else if (read_state == E_READ_STRING_IN_SQUOTE)
+		{
+			read_state = read_string_in_squote(&cursor);
+		}
+		else if (read_state == E_READ_STRING_ACC || read_state == E_READ_STRING_ERROR)
+			break ;
+	}
+	if (E_READ_STRING_ACC)
+	{
+		new_token->type = E_STRING;
+		new_token->string = ft_substr(s_str, 0, cursor - s_str + 1);
+		if (new_token->string == NULL)
+			exit(errno);
+		ft_lstadd_back(lst_lex_token, new_token);
+	}
 	else
-		return (read_nonquote(cursor, lst_lex_token));
+	{
+		new_token->type = E_ERROR;
+		ft_lstadd_front(lst_lex_token, new_token);
+	}
 }
 
 int	read_operator(t_lex_token **lst_lex_token, int type)
