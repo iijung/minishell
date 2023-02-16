@@ -16,14 +16,25 @@
 
 int	main(void)
 {
-	char	*command;
+	char		*command;
+	t_lex_token	*lst_token;
 
 	while (1)
 	{
 		command = prompt();
 		if (command == NULL)
 			continue ;
-		lex(command);
+		lst_token = lexer(command);
+		while (lst_token)
+		{
+			printf("type : %d\n", lst_token->type);
+			if (lst_token->type == E_STRING || lst_token->type == E_DQUOTE || lst_token->type == E_SQUOTE)
+			{
+				printf("type : %s\n", lst_token->string);
+			}
+			printf("=================\n");
+			lst_token = lst_token->next;
+		}
 		free(command);
 	}
 	rl_clear_history();
