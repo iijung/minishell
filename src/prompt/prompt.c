@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 02:10:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/14 17:37:54 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/02/17 17:22:50 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,14 @@ char	*prompt(void)
 	line = get_readline();
 	if (line == NULL)
 	{
-		ft_putstr_fd("exit\n", STDOUT_FILENO);
+		ft_putstr_fd("exit\n", STDERR_FILENO);
 		exit(EXIT_SUCCESS);
 	}
 	command = ft_strtrim(line, " ");
 	if (command == NULL || *command == '\0')
 	{
 		free(line);
+		free(command);
 		return (NULL);
 	}
 	add_history(command);
