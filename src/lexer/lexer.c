@@ -84,29 +84,89 @@ enum
 	E_READ_STRING_ERROR = 1 << 4
 };
 
-int	read_string(const char *cursor, t_lex_token **lst_lex_token)
+int	read_string_norm(const char **p_cursor)
+{
+	while (!(**p_cursor == '"' || **p_cursor == '\'' || **p_cursor == ')' || \
+		**p_cursor == '(' || **p_cursor == '|' || **p_cursor == '\0' || \
+		ft_strncmp(*p_cursor, "&&", 2) == 0))
+	{
+		(*p_cursor)++;
+	}
+	if (**p_cursor == '"')
+		return (E_READ_STRING_IN_DQUOTE);
+	else if (**p_cursor == '\'')
+		return (E_READ_STRING_IN_SQUOTE);
+	else
+	{
+		if (is_ifs(**p_cursor))
+		{
+			(*p_cursor)--;
+			return (E_READ_STRING_ACC);
+		}
+		else if (**p_cursor == '\0')
+			return (E_READ_STRING_ACC);
+		else
+			return (E_READ_STRING_ERROR);
+	}
+}
+
+int	read_string_in_quote(const char **p_cursor, char quote)
+{
+	char	*next_cursor;
+
+	next_cursor = ft_strchr(*p_cursor + 1, quote);
+	if (next_cursor == NULL)
+		return (E_READ_STRING_ERROR);
+	else
+	{
+		next_cursor++;
+		*p_cursor = next_cursor;
+		if (*next_cursor == '\0' || is_ifs(*next_cursor) || *next_cursor == '|' \
+			|| ft_strncmp(next_cursor, "&&", 2) == 0 || *next_cursor == ')' || \
+				*next_cursor =='(')
+			return (E_READ_STRING_ACC);
+		if (*next_cursor == '\'')
+			return (E_READ_STRING_IN_SQUOTE);
+		else if (*next_cursor == '"')
+			return (E_READ_STRING_IN_DQUOTE);
+		else
+			return (E_READ_STRING_NORM);
+	}
+}
+
+int	set_read_string_state(char c)
+{
+	if (c == '\'')
+		return (E_READ_STRING_IN_SQUOTE);
+	else if (c == '"')
+		return (E_READ_STRING_IN_DQUOTE);
+	else
+		return (E_READ_STRING_NORM);
+}
+
+void	read_string(const char **cursor, t_lex_token **lst_lex_token)
 {
 	t_lex_token			*new_token;
-	char const * const	s_str = cursor;
+	const char			*s_str = *cursor;
 	int					read_state;
 
 	new_token = ft_calloc(1, sizeof(t_lex_token));
 	if (new_token == NULL)
 		exit(errno);
-	read_state = E_READ_STRING_NORM;
+	read_state = set_read_string_state(**cursor);
 	while (read_state != E_READ_STRING_ACC && read_state != E_READ_STRING_ERROR)
 	{
 		if (read_state == E_READ_STRING_NORM)
 		{
-			read_state = read_string_norm(&cursor);
+			read_state = read_string_norm(cursor);
 		}
 		else if (read_state == E_READ_STRING_IN_DQUOTE)
 		{
-			read_state = read_string_in_dquote(&cursor);
+			read_state = read_string_in_quote(cursor, '"');
 		}
 		else if (read_state == E_READ_STRING_IN_SQUOTE)
 		{
-			read_state = read_string_in_squote(&cursor);
+			read_state = read_string_in_quote(cursor, '\'');
 		}
 		else if (read_state == E_READ_STRING_ACC || read_state == E_READ_STRING_ERROR)
 			break ;
@@ -114,15 +174,15 @@ int	read_string(const char *cursor, t_lex_token **lst_lex_token)
 	if (E_READ_STRING_ACC)
 	{
 		new_token->type = E_STRING;
-		new_token->string = ft_substr(s_str, 0, cursor - s_str + 1);
+		new_token->string = ft_substr(s_str, 0, *cursor - s_str);
 		if (new_token->string == NULL)
 			exit(errno);
-		ft_lstadd_back(lst_lex_token, new_token);
+		ft_lstadd_back((t_list **)lst_lex_token, (t_list *)new_token);
 	}
 	else
 	{
 		new_token->type = E_ERROR;
-		ft_lstadd_front(lst_lex_token, new_token);
+		ft_lstadd_front((t_list **)lst_lex_token, (t_list *)new_token);
 	}
 }
 
@@ -162,7 +222,7 @@ t_lex_token	*lexer(const char *input)
 		else if (*input == '(')
 			input += read_operator(&lst_lex_token, E_SUB_S);
 		else
-			input += read_string(input, &lst_lex_token);
+			read_string(&input, &lst_lex_token);
 	}
 	return (lst_lex_token);
 }
