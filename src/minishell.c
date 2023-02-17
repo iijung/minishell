@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/12 15:03:27 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/17 20:04:37 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(void)
 			printf("type : %d\n", lst_token->type);
 			if (lst_token->type == E_STRING || lst_token->type == E_DQUOTE || lst_token->type == E_SQUOTE)
 			{
-				printf("type : %s\n", lst_token->string);
+				printf("string : %s\n", lst_token->string);
 			}
 			printf("=================\n");
 			lst_token = lst_token->next;

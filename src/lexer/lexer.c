@@ -5,84 +5,11 @@ int	is_ifs(char c)
 	return (c == ' ' || c == '\t');
 }
 
-void	skip_ifs(const char **string)
+static void	skip_ifs(const char **string)
 {
 	while (is_ifs(**string))
 		(*string)++;
 }
-
-static char const	*find_strend(char const *cursor)
-{
-	while (*cursor != '|' && *cursor != '&' && \
-			*cursor != '(' && *cursor != ')' && *cursor != '\0')
-		cursor++;
-	return (cursor - 1);
-}
-
-int	read_quote(const char *quote_start, t_lex_token **lst_lex_token)
-{
-	char		*quote_end;
-	t_lex_token	*new_token;
-
-	new_token = ft_calloc(1, sizeof(t_lex_token));
-	if (new_token == NULL)
-		exit(errno);
-	quote_end = ft_strchr(quote_start + 1, *quote_start);
-	if (quote_end == NULL)
-	{
-		new_token->type = E_ERROR;
-		ft_lstadd_front((t_list **)lst_lex_token, (t_list *)new_token);
-		return (0);
-	}
-	else
-	{
-		if (*quote_start == '"')
-			new_token->type = E_DQUOTE;
-		else
-			new_token->type = E_SQUOTE;
-		new_token->string = ft_substr(quote_start, 0, quote_end - quote_start + 1);
-		if (new_token->string == NULL)
-			exit(errno);
-		ft_lstadd_back((t_list **)lst_lex_token, (t_list *)new_token);
-		return (quote_end - quote_start + 1);
-	}
-}
-
-int	read_nonquote(const char *string_start, t_lex_token **lst_lex_token)
-{
-	char const	*string_end;
-	t_lex_token	*new_token;
-
-	new_token = ft_calloc(1, sizeof(t_lex_token));
-	if (new_token == NULL)
-		exit(errno);
-	string_end = find_strend(string_start);
-	if (string_end == NULL)
-	{
-		new_token->type = E_ERROR;
-		ft_lstadd_front((t_list **)lst_lex_token, (t_list *)new_token);
-		return (0);
-	}
-	else
-	{
-		new_token->type = E_STRING;
-		new_token->string = ft_substr(string_start, 0, string_end - string_start + 1);
-		if (new_token->string == NULL)
-			exit(errno);
-		ft_lstadd_back((t_list **)lst_lex_token, (t_list *)new_token);
-		return (string_end - string_start + 1);
-	}
-
-}
-
-enum
-{
-	E_READ_STRING_NORM = 1 << 0,
-	E_READ_STRING_IN_DQUOTE = 1 << 1,
-	E_READ_STRING_IN_SQUOTE = 1 << 2,
-	E_READ_STRING_ACC = 1 << 3,
-	E_READ_STRING_ERROR = 1 << 4
-};
 
 int	read_string_norm(const char **p_cursor)
 {
@@ -103,10 +30,8 @@ int	read_string_norm(const char **p_cursor)
 			(*p_cursor)--;
 			return (E_READ_STRING_ACC);
 		}
-		else if (**p_cursor == '\0')
-			return (E_READ_STRING_ACC);
 		else
-			return (E_READ_STRING_ERROR);
+			return (E_READ_STRING_ACC);
 	}
 }
 
@@ -122,8 +47,8 @@ int	read_string_in_quote(const char **p_cursor, char quote)
 		next_cursor++;
 		*p_cursor = next_cursor;
 		if (*next_cursor == '\0' || is_ifs(*next_cursor) || *next_cursor == '|' \
-			|| ft_strncmp(next_cursor, "&&", 2) == 0 || *next_cursor == ')' || \
-				*next_cursor =='(')
+			|| ft_strncmp(next_cursor, "&&", 2) == 0 || *next_cursor == ')' \
+			|| *next_cursor == '(')
 			return (E_READ_STRING_ACC);
 		if (*next_cursor == '\'')
 			return (E_READ_STRING_IN_SQUOTE);
@@ -144,37 +69,18 @@ int	set_read_string_state(char c)
 		return (E_READ_STRING_NORM);
 }
 
-void	read_string(const char **cursor, t_lex_token **lst_lex_token)
+void	lex_add_token(t_lex_token **lst_lex_token, const char *s_str, int len, \
+	int read_state)
 {
-	t_lex_token			*new_token;
-	const char			*s_str = *cursor;
-	int					read_state;
+	t_lex_token	*new_token;
 
 	new_token = ft_calloc(1, sizeof(t_lex_token));
 	if (new_token == NULL)
 		exit(errno);
-	read_state = set_read_string_state(**cursor);
-	while (read_state != E_READ_STRING_ACC && read_state != E_READ_STRING_ERROR)
-	{
-		if (read_state == E_READ_STRING_NORM)
-		{
-			read_state = read_string_norm(cursor);
-		}
-		else if (read_state == E_READ_STRING_IN_DQUOTE)
-		{
-			read_state = read_string_in_quote(cursor, '"');
-		}
-		else if (read_state == E_READ_STRING_IN_SQUOTE)
-		{
-			read_state = read_string_in_quote(cursor, '\'');
-		}
-		else if (read_state == E_READ_STRING_ACC || read_state == E_READ_STRING_ERROR)
-			break ;
-	}
-	if (E_READ_STRING_ACC)
+	if (read_state == E_READ_STRING_ACC)
 	{
 		new_token->type = E_STRING;
-		new_token->string = ft_substr(s_str, 0, *cursor - s_str);
+		new_token->string = ft_substr(s_str, 0, len);
 		if (new_token->string == NULL)
 			exit(errno);
 		ft_lstadd_back((t_list **)lst_lex_token, (t_list *)new_token);
@@ -184,6 +90,26 @@ void	read_string(const char **cursor, t_lex_token **lst_lex_token)
 		new_token->type = E_ERROR;
 		ft_lstadd_front((t_list **)lst_lex_token, (t_list *)new_token);
 	}
+}
+
+void	read_string(const char **cursor, t_lex_token **lst_lex_token)
+{
+	const char			*s_str = *cursor;
+	int					read_state;
+
+	read_state = set_read_string_state(**cursor);
+	while (read_state != E_READ_STRING_ACC && read_state != E_READ_STRING_ERROR)
+	{
+		if (read_state == E_READ_STRING_NORM)
+			read_state = read_string_norm(cursor);
+		else if (read_state == E_READ_STRING_IN_DQUOTE)
+			read_state = read_string_in_quote(cursor, '"');
+		else if (read_state == E_READ_STRING_IN_SQUOTE)
+			read_state = read_string_in_quote(cursor, '\'');
+		else
+			break ;
+	}
+	lex_add_token(lst_lex_token, s_str, *cursor - s_str, read_state);
 }
 
 int	read_operator(t_lex_token **lst_lex_token, int type)

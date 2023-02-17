@@ -13,6 +13,15 @@ enum
 	E_ERROR = 1 << 8
 };
 
+enum
+{
+	E_READ_STRING_NORM = 1 << 0,
+	E_READ_STRING_IN_DQUOTE = 1 << 1,
+	E_READ_STRING_IN_SQUOTE = 1 << 2,
+	E_READ_STRING_ACC = 1 << 3,
+	E_READ_STRING_ERROR = 1 << 4
+};
+
 typedef struct s_lex_token
 {
 	char				*string;
