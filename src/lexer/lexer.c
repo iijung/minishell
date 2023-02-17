@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/12 23:32:36 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/17 19:27:23 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,16 @@ static void	debug(void *param)
 		"IFS",
 		"QUOTE",
 		"DQUOTE",
-		"OPERATOR",
 		"WILDCARD",
 		"ENVIRONMENT",
 		"PARENTHESIS",
-		"REDIRECTION"
-	};
+		"OR",
+		"AND",
+		"PIPE",
+		"HEREDOC",
+		"INFILE",
+		"OUTFILE",
+		"ADDFILE"};
 
 	if (DEBUG == 0)
 		return ;
@@ -43,7 +47,7 @@ static void	debug(void *param)
 			c->type, typename[c->type], c->len, (int)c->len, c->data);
 }
 
-static void	add_token(t_list **lst, int type, size_t len, char *data)
+static void	add_token(t_list **lst, int type, size_t len, const char *data)
 {
 	t_list	*token;
 
@@ -78,34 +82,40 @@ static int	is_lexeme(char data)
 		return (LEXEME_ENVIRONMENT);
 	else if (data == '(' || data == ')')
 		return (LEXEME_PARENTHESIS);
-	else if (data == '<' || data == '>')
-		return (LEXEME_REDIRECTION);
-	else if (data == '&' || data == '|')
-		return (LEXEME_OPERATOR);
+	else if (data == '<')
+		return (LEXEME_INFILE);
+	else if (data == '>')
+		return (LEXEME_OUTFILE);
+	else if (data == '|')
+		return (LEXEME_PIPE);
 	return (LEXEME_STRING);
 }
 
-static int	lex_token(t_list **lst, char *base)
+static char	*lex_token(t_list **lst, char *curr)
 {
-	int		type;
-	char	*curr;
+	int			type;
+	const char	*base = curr;
 
-	if (base == NULL)
-		return (-1);
-	while (*base)
+	if (ft_strncmp(base, "||", 2) == 0)
+		add_token(lst, LEXEME_OR, 2, base);
+	else if (ft_strncmp(base, "&&", 2) == 0)
+		add_token(lst, LEXEME_AND, 2, base);
+	else if (ft_strncmp(base, "<<", 2) == 0)
+		add_token(lst, LEXEME_HEREDOC, 2, base);
+	else if (ft_strncmp(base, ">>", 2) == 0)
+		add_token(lst, LEXEME_ADDFILE, 2, base);
+	else
 	{
 		type = is_lexeme(base[0]);
-		curr = base + 1;
+		++curr;
 		while (type == LEXEME_IFS && is_lexeme(curr[0]) == LEXEME_IFS)
-			curr++;
+			++curr;
 		while (type == LEXEME_STRING && is_lexeme(curr[0]) == LEXEME_STRING)
-			curr++;
-		if (type == LEXEME_REDIRECTION || type == LEXEME_OPERATOR)
-			curr += (base[0] == curr[0]);
+			++curr;
 		add_token(lst, type, curr - base, base);
-		base = curr;
+		return (curr);
 	}
-	return (0);
+	return (curr + 2);
 }
 
 t_list	*lex(char *command)
@@ -114,7 +124,9 @@ t_list	*lex(char *command)
 
 	errno = 0;
 	tokens = NULL;
-	if (lex_token(&tokens, command) < 0 || errno)
+	while (command && *command)
+		command = lex_token(&tokens, command);
+	if (command == NULL || errno)
 	{
 		ft_lstclear(&tokens, free);
 		ft_putstr_fd("minishell: lexing error\n", STDERR_FILENO);
