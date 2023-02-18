@@ -69,3 +69,17 @@ typedef struct s_parse_tree
 }	t_parse_tree;
 
 #endif
+
+
+struct s_content
+{
+	int			type;
+	size_t		len;
+	const char	*data;
+};
+
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}				t_list;
