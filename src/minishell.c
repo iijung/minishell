@@ -29,10 +29,10 @@ int	main(void)
 		token_loop = lst_token;
 		while (token_loop)
 		{
-			printf("type : %d\n", lst_token->type);
-			if (lst_token->type == E_STRING || lst_token->type == E_DQUOTE || lst_token->type == E_SQUOTE)
+			printf("type : %d\n", token_loop->type);
+			if (token_loop->type == E_STRING || token_loop->type == E_DQUOTE || token_loop->type == E_SQUOTE)
 			{
-				printf("string : %s\n", lst_token->string);
+				printf("string : %s\n", token_loop->string);
 			}
 			printf("=================\n");
 			token_loop = token_loop->next;
