@@ -17,6 +17,7 @@
 int	main(void)
 {
 	char		*command;
+	t_lex_token	*token_loop;
 	t_lex_token	*lst_token;
 
 	while (1)
@@ -25,7 +26,8 @@ int	main(void)
 		if (command == NULL)
 			continue ;
 		lst_token = lexer(command);
-		while (lst_token)
+		token_loop = lst_token;
+		while (token_loop)
 		{
 			printf("type : %d\n", lst_token->type);
 			if (lst_token->type == E_STRING || lst_token->type == E_DQUOTE || lst_token->type == E_SQUOTE)
@@ -33,7 +35,7 @@ int	main(void)
 				printf("string : %s\n", lst_token->string);
 			}
 			printf("=================\n");
-			lst_token = lst_token->next;
+			token_loop = token_loop->next;
 		}
 		ft_lstclear((t_list **)&lst_token, free);
 		free(command);
