@@ -15,7 +15,7 @@ int	read_string_norm(const char **p_cursor)
 {
 	while (!(**p_cursor == '"' || **p_cursor == '\'' || **p_cursor == ')' || \
 		**p_cursor == '(' || **p_cursor == '|' || **p_cursor == '\0' || \
-		ft_strncmp(*p_cursor, "&&", 2) == 0))
+		ft_strncmp(*p_cursor, "&&", 2) == 0 || is_ifs(**p_cursor)))
 	{
 		(*p_cursor)++;
 	}
@@ -25,13 +25,7 @@ int	read_string_norm(const char **p_cursor)
 		return (E_READ_STRING_IN_SQUOTE);
 	else
 	{
-		if (is_ifs(**p_cursor))
-		{
-			(*p_cursor)--;
-			return (E_READ_STRING_ACC);
-		}
-		else
-			return (E_READ_STRING_ACC);
+		return (E_READ_STRING_ACC);
 	}
 }
 
@@ -41,21 +35,20 @@ int	read_string_in_quote(const char **p_cursor, char quote)
 
 	next_cursor = ft_strchr(*p_cursor + 1, quote);
 	if (next_cursor == NULL)
+		*p_cursor = next_cursor;
+	else
+		*p_cursor = next_cursor + 1;
+	if (next_cursor == NULL)
 		return (E_READ_STRING_ERROR);
 	else
 	{
 		next_cursor++;
-		*p_cursor = next_cursor;
-		if (*next_cursor == '\0' || is_ifs(*next_cursor) || *next_cursor == '|' \
-			|| ft_strncmp(next_cursor, "&&", 2) == 0 || *next_cursor == ')' \
-			|| *next_cursor == '(')
-			return (E_READ_STRING_ACC);
 		if (*next_cursor == '\'')
 			return (E_READ_STRING_IN_SQUOTE);
 		else if (*next_cursor == '"')
 			return (E_READ_STRING_IN_DQUOTE);
 		else
-			return (E_READ_STRING_NORM);
+			return (E_READ_STRING_ACC);
 	}
 }
 
@@ -134,7 +127,7 @@ t_lex_token	*lexer(const char *input)
 	t_lex_token	*lst_lex_token;
 
 	lst_lex_token = NULL;
-	while (*input)
+	while (input && *input)
 	{
 		skip_ifs(&input);
 		if (ft_strncmp(input, "||", 2) == 0)

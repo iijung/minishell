@@ -35,6 +35,7 @@ int	main(void)
 			printf("=================\n");
 			lst_token = lst_token->next;
 		}
+		ft_lstclear((t_list **)&lst_token, free);
 		free(command);
 	}
 	rl_clear_history();
