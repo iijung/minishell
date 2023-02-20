@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/02/12 17:37:24 by jaemjeon         ###   ########.fr        #
+#    Updated: 2023/02/20 23:09:40 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,11 +21,12 @@ CPPFLAGS	+= -I./builtin
 CPPFLAGS	+= -I./lexer
 
 CPPFLAGS	+= -I../lib/libft
-CPPFLAGS	+= -I../lib/readline
 LDFLAGS		+= -L../lib/libft
-LDFLAGS		+= -L../lib/readline
 LDLIBS		+= -lft
 
+CPPFLAGS	+= -I../external/include/ncurses
+CPPFLAGS	+= -I../external/include/readline
+LDFLAGS		+= -L../external/lib
 LDLIBS		+= -lncurses
 LDLIBS		+= -lreadline
 
