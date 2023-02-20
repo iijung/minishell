@@ -14,6 +14,8 @@
 #include "prompt.h"
 #include "lexer.h"
 
+extern void	run(const char *command);
+
 int	main(void)
 {
 	char	*command;
@@ -24,6 +26,7 @@ int	main(void)
 		if (command == NULL)
 			continue ;
 		lex(command);
+		run(command);
 		free(command);
 	}
 	rl_clear_history();

@@ -15,7 +15,9 @@
 
 CFLAGS		= -Wall -Wextra -Werror -MMD -MP -O3
 
+CPPFLAGS	+= -I./util
 CPPFLAGS	+= -I./prompt
+CPPFLAGS	+= -I./builtin
 CPPFLAGS	+= -I./lexer
 
 CPPFLAGS	+= -I../lib/libft
@@ -39,8 +41,13 @@ MINISHELL_SRCS = \
 	util/ft_debug.c \
 	util/ft_assert.c \
 	prompt/prompt.c \
+	execute/run.c \
+	builtin/builtin.c \
 	lexer/lexer.c \
 	builtin/pwd.c \
+	builtin/cd.c \
+	builtin/env.c \
+	builtin/exit.c \
 
 MINISHELL_OBJS := $(MINISHELL_SRCS:.c=.o)
 MINISHELL_DEPS := $(MINISHELL_SRCS:.c=.d)
