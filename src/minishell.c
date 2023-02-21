@@ -14,6 +14,8 @@
 #include "prompt.h"
 #include "lexer.h"
 
+extern void	run(const char *command);
+
 int	main(void)
 {
 	char	*command;
@@ -26,6 +28,7 @@ int	main(void)
 			continue ;
 		tokens = lex(command);
 		ft_lstclear(&tokens, free);
+		run(command);
 		free(command);
 	}
 	rl_clear_history();
