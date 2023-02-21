@@ -35,21 +35,21 @@ int	read_string_in_quote(const char **p_cursor, char quote)
 
 	next_cursor = ft_strchr(*p_cursor + 1, quote);
 	if (next_cursor == NULL)
+	{
 		*p_cursor = next_cursor;
+		return (E_READ_STRING_ERROR);
+	}
 	else
 		*p_cursor = next_cursor + 1;
-	if (next_cursor == NULL)
-		return (E_READ_STRING_ERROR);
+	next_cursor++;
+	if (*next_cursor == '\'')
+		return (E_READ_STRING_IN_SQUOTE);
+	else if (*next_cursor == '"')
+		return (E_READ_STRING_IN_DQUOTE);
+	else if (*next_cursor == '|' || ft_strncmp(next_cursor, "&&", 2) == 0)
+		return (E_READ_STRING_ACC);
 	else
-	{
-		next_cursor++;
-		if (*next_cursor == '\'')
-			return (E_READ_STRING_IN_SQUOTE);
-		else if (*next_cursor == '"')
-			return (E_READ_STRING_IN_DQUOTE);
-		else
-			return (E_READ_STRING_ACC);
-	}
+		return (E_READ_STRING_NORM);
 }
 
 int	set_read_string_state(char c)
