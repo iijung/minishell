@@ -76,36 +76,28 @@ void	lex_add_token(t_lex_token **lst_lex_token, const char *s_str, int len, \
 		ft_lstadd_back((t_list **)lst_lex_token, (t_list *)new_token);
 }
 
-void	read_string(const char **cursor, t_lex_token **lst_lex_token)
+void	read_string(const char **cursor, t_lex_token **lst_lex_token, int type)
 {
-	const char			*s_str = *cursor;
-	int					token_type;
+	const char	*s_str = *cursor;
 
-	if (is_ifs(**cursor))
-	{
-		token_type = E_IFS;
+	if (type == E_IFS)
 		skip_ifs(cursor);
-	}
 	else if (**cursor == '"' || **cursor == '\'')
 	{
 		*cursor = ft_strchr(s_str + 1, **cursor);
 		if (*cursor == NULL)
-			token_type = E_ERROR;
+			type = E_ERROR;
 		else
-		{
-			token_type = E_STRING;
 			(*cursor)++;
-		}
 	}
 	else
 	{
-		token_type = E_STRING;
 		while (!(**cursor == '"' || **cursor == '\'' || **cursor == ')' ||
 				 **cursor == '(' || **cursor == '|' || **cursor == '\0' ||
 				 ft_strncmp(*cursor, "&&", 2) == 0 || is_ifs(**cursor)))
 			(*cursor)++;
 	}
-	lex_add_token(lst_lex_token, s_str, *cursor - s_str, token_type);
+	lex_add_token(lst_lex_token, s_str, *cursor - s_str, type);
 }
 
 void	read_operator(const char **input, t_lex_token **lst_lex_token, int type)
@@ -159,9 +151,10 @@ t_lex_token	*lexer(const char *input)
 	{
 		next_token_type = get_next_type(input);
 		if (next_token_type == E_STRING || next_token_type == E_IFS)
-			read_string(&input, &(info_parse.lst_token));
+			read_string(&input, &(info_parse.lst_token), next_token_type);
 		else
 			read_operator(&input, &(info_parse.lst_token), next_token_type);
+		
 	}
 	return (info_parse.lst_token);
 }
