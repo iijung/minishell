@@ -63,16 +63,17 @@ void	lex_add_token(t_lex_token **lst_lex_token, const char *s_str, int len, \
 	new_token = ft_calloc(1, sizeof(t_lex_token));
 	if (new_token == NULL)
 		exit(errno);
+	new_token->type = token_type;
 	if (token_type == E_STRING)
 	{
-		new_token->type = E_STRING;
 		new_token->string = ft_substr(s_str, 0, len);
 		if (new_token->string == NULL)
 			exit(errno);
 	}
+	if (token_type == E_ERROR)
+		ft_lstadd_front((t_list **)lst_lex_token, (t_list *)new_token);
 	else
-		new_token->type = E_IFS;
-	ft_lstadd_back((t_list **)lst_lex_token, (t_list *)new_token);
+		ft_lstadd_back((t_list **)lst_lex_token, (t_list *)new_token);
 }
 
 void	read_string(const char **cursor, t_lex_token **lst_lex_token)
