@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/17 19:27:23 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/23 21:21:20 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,23 +47,24 @@ static void	debug(void *param)
 			c->type, typename[c->type], c->len, (int)c->len, c->data);
 }
 
-static void	add_token(t_list **lst, int type, size_t len, const char *data)
+static char	*add_token(t_list **lst, int type, size_t len, const char *data)
 {
 	t_list	*token;
 
 	token = ft_lstnew(NULL);
 	if (token == NULL)
-		return ;
+		return (NULL);
 	token->content = ft_calloc(1, sizeof(struct s_content));
 	if (token->content == NULL)
 	{
 		ft_lstdelone(token, NULL);
-		return ;
+		return (NULL);
 	}
 	((struct s_content *)token->content)->type = type;
 	((struct s_content *)token->content)->data = data;
 	((struct s_content *)token->content)->len = len;
 	ft_lstadd_back(lst, token);
+	return ((char *)data + len);
 }
 
 static int	is_lexeme(char data)
@@ -93,29 +94,25 @@ static int	is_lexeme(char data)
 
 static char	*lex_token(t_list **lst, char *curr)
 {
-	int			type;
 	const char	*base = curr;
+	const int	type = is_lexeme(base[0]);
 
 	if (ft_strncmp(base, "||", 2) == 0)
-		add_token(lst, LEXEME_OR, 2, base);
+		return (add_token(lst, LEXEME_OR, 2, base));
 	else if (ft_strncmp(base, "&&", 2) == 0)
-		add_token(lst, LEXEME_AND, 2, base);
+		return (add_token(lst, LEXEME_AND, 2, base));
 	else if (ft_strncmp(base, "<<", 2) == 0)
-		add_token(lst, LEXEME_HEREDOC, 2, base);
+		return (add_token(lst, LEXEME_HEREDOC, 2, base));
 	else if (ft_strncmp(base, ">>", 2) == 0)
-		add_token(lst, LEXEME_ADDFILE, 2, base);
-	else
-	{
-		type = is_lexeme(base[0]);
+		return (add_token(lst, LEXEME_ADDFILE, 2, base));
+	if ((type == LEXEME_QUOTE && ft_strchr(base + 1, '\'') == NULL)
+		&& (type == LEXEME_DQUOTE && ft_strchr(base + 1, '"') == NULL))
+		errno = EINVAL;
+	while (type == LEXEME_IFS && is_lexeme(curr[1]) == LEXEME_IFS)
 		++curr;
-		while (type == LEXEME_IFS && is_lexeme(curr[0]) == LEXEME_IFS)
-			++curr;
-		while (type == LEXEME_STRING && is_lexeme(curr[0]) == LEXEME_STRING)
-			++curr;
-		add_token(lst, type, curr - base, base);
-		return (curr);
-	}
-	return (curr + 2);
+	while (type == LEXEME_STRING && is_lexeme(curr[1]) == LEXEME_STRING)
+		++curr;
+	return (add_token(lst, type, curr + 1 - base, base));
 }
 
 t_list	*lex(char *command)
