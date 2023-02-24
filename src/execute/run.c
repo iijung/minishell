@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 23:45:12 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/09 07:55:17 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/24 15:56:14 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,9 @@ static int	execute(char **argv)
 void	run(const char *command)
 {
 	static int	exit_status = 0;
-	char		*comment;
 	char		**argv;
 	int			argc;
 
-	comment = ft_strchr(command, '#');
-	if (comment)
-		*comment = '\0';
-	if (*command == '\0')
-		return ;
 	//	lexing
 	//	parsing
 	//	expansion
