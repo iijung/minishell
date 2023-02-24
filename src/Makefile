@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/02/20 23:09:40 by minjungk         ###   ########.fr        #
+#    Updated: 2023/02/24 17:30:38 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ MINISHELL_SRCS = \
 	minishell.c \
 	util/ft_debug.c \
 	util/ft_assert.c \
+	util/ft_strndup.c \
 	prompt/prompt.c \
 	execute/run.c \
 	builtin/builtin.c \
