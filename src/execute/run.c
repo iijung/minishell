@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 23:45:12 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/24 16:06:46 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:09:53 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,4 @@ int	executor(const char *command)
 		free(argv[argc]);
 	free(argv);
 	return (exit_status);
-}
-
-void	run(const char *command)
-{
-	//	lexing
-	//	parsing
-	//	expansion
-	//	redirection
-	executor(command);
 }
