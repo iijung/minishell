@@ -70,6 +70,12 @@ void	lex_add_token(t_lex_token **lst_lex_token, const char *s_str, int len, \
 		if (new_token->string == NULL)
 			exit(errno);
 	}
+	else if (token_type == E_DQUOTE || token_type == E_SQUOTE)
+	{
+		new_token->string = ft_substr(s_str, 1, len - 2);
+		if (new_token->string == NULL)
+			exit(errno);
+	}
 	if (token_type == E_ERROR)
 		ft_lstadd_front((t_list **)lst_lex_token, (t_list *)new_token);
 	else
