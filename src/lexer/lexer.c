@@ -76,6 +76,13 @@ void	lex_add_token(t_lex_token **lst_lex_token, const char *s_str, int len, \
 		ft_lstadd_back((t_list **)lst_lex_token, (t_list *)new_token);
 }
 
+static int	is_meta(const char *string)
+{
+	return (*string == '"' || *string == '\'' || *string == ')' ||
+			*string == '(' || *string == '|' || *string == '\0' ||
+			ft_strncmp(string, "&&", 2) == 0 || is_ifs(*string));
+}
+
 void	read_string(const char **cursor, t_lex_token **lst_lex_token, int type)
 {
 	const char	*s_str = *cursor;
@@ -88,19 +95,23 @@ void	read_string(const char **cursor, t_lex_token **lst_lex_token, int type)
 		if (*cursor == NULL)
 			type = E_ERROR;
 		else
+		{
+			if (*s_str == '"')
+				type = E_DQUOTE;
+			else
+				type = E_SQUOTE;
 			(*cursor)++;
+		}
 	}
 	else
 	{
-		while (!(**cursor == '"' || **cursor == '\'' || **cursor == ')' ||
-				 **cursor == '(' || **cursor == '|' || **cursor == '\0' ||
-				 ft_strncmp(*cursor, "&&", 2) == 0 || is_ifs(**cursor)))
+		while (!(is_meta(*cursor) || **cursor == '\0' || is_ifs(**cursor)))
 			(*cursor)++;
 	}
 	lex_add_token(lst_lex_token, s_str, *cursor - s_str, type);
 }
 
-void	read_operator(const char **input, t_lex_token **lst_lex_token, int type)
+void	read_meta(const char **input, t_lex_token **lst_lex_token, int type)
 {
 	t_lex_token	*new_token;
 
@@ -117,7 +128,15 @@ void	read_operator(const char **input, t_lex_token **lst_lex_token, int type)
 
 static int	get_next_type(const char *input)
 {
-	if (*input == '|')
+	if (ft_strncmp(input, "<<", 2) == 0)
+		return (E_HEREDOC);
+	else if (ft_strncmp(input, ">>", 2) == 0)
+		return (E_APPEND);
+	else if (ft_strncmp(input, "||", 2) == 0)
+		return (E_OR);
+	else if (ft_strncmp(input, "&&", 2) == 0)
+		return (E_AND);
+	else if (*input == '|')
 		return (E_PIPE);
 	else if (*input == '(')
 		return (E_SUB_S);
@@ -127,14 +146,6 @@ static int	get_next_type(const char *input)
 		return (E_READ);
 	else if (*input == '>')
 		return (E_WRITE);
-	else if (ft_strncmp(input, "<<", 2) == 0)
-		return (E_HEREDOC);
-	else if (ft_strncmp(input, ">>", 2) == 0)
-		return (E_APPEND);
-	else if (ft_strncmp(input, "||", 2) == 0)
-		return (E_OR);
-	else if (ft_strncmp(input, "&&", 2) == 0)
-		return (E_AND);
 	else if (is_ifs(*input))
 		return (E_IFS);
 	else
@@ -153,7 +164,7 @@ t_lex_token	*lexer(const char *input)
 		if (next_token_type == E_STRING || next_token_type == E_IFS)
 			read_string(&input, &(info_parse.lst_token), next_token_type);
 		else
-			read_operator(&input, &(info_parse.lst_token), next_token_type);
+			read_meta(&input, &(info_parse.lst_token), next_token_type);
 		
 	}
 	return (info_parse.lst_token);
