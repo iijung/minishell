@@ -1,21 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util.h                                             :+:      :+:    :+:   */
+/*   environ.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/04 05:24:31 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/24 17:12:27 by minjungk         ###   ########.fr       */
+/*   Created: 2023/02/24 12:11:44 by minjungk          #+#    #+#             */
+/*   Updated: 2023/02/24 17:23:51 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#ifndef UTIL_H
-# define UTIL_H
+#ifndef ENVIRON_H
+# define ENVIRON_H
 # include "libft.h"
+# include "util.h"
 # include <stdio.h>
 
-void	ft_debug(void (*f)(void *), void *param);
-void	ft_assert(int condition, char *file, int line);
-char	*ft_strndup(const char *s1, size_t n);
+struct s_environ
+{
+	char	*key;
+	char	*value;
+};
+
+void	env_init(t_list **table, size_t table_max);
+int		env_delete(t_list **table, size_t table_max, char *key, int all);
+int		env_insert(t_list **table, size_t table_max, char *key, char *value);
+char	*env_get(t_list **table, size_t table_max, char *key);
+char	**env_gets(t_list **table, size_t table_max);
+
 #endif

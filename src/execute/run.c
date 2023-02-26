@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 23:45:12 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/09 07:55:17 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:09:53 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,29 +49,19 @@ static int	execute(char **argv)
 	return (WEXITSTATUS(wstatus));
 }
 
-void	run(const char *command)
+int	executor(const char *command)
 {
-	static int	exit_status = 0;
-	char		*comment;
-	char		**argv;
-	int			argc;
+	int		exit_status;
+	char	**argv;
+	int		argc;
 
-	comment = ft_strchr(command, '#');
-	if (comment)
-		*comment = '\0';
-	if (*command == '\0')
-		return ;
-	//	lexing
-	//	parsing
-	//	expansion
-	//	redirection
 	argv = ft_split(command, ' ');
 	if (argv == NULL)
-		exit_status = EXIT_FAILURE;
-	else
-		exit_status = execute(argv);
+		return (EXIT_FAILURE);
+	exit_status = execute(argv);
 	argc = -1;
 	while (argv[++argc])
 		free(argv[argc]);
 	free(argv);
+	return (exit_status);
 }
