@@ -12,16 +12,6 @@ static void	skip_ifs(const char **string)
 		(*string)++;
 }
 
-// int	read_string_norm(const char **p_cursor)
-// {
-// 	while (!(**p_cursor == '"' || **p_cursor == '\'' || **p_cursor == ')' || \
-// 		**p_cursor == '(' || **p_cursor == '|' || **p_cursor == '\0' || \
-// 		ft_strncmp(*p_cursor, "&&", 2) == 0 || is_ifs(**p_cursor)))
-// 	{
-// 		(*p_cursor)++;
-// 	}
-// }
-
 int	read_string_in_quote(const char **p_cursor, char quote)
 {
 	char	*next_cursor;
@@ -89,32 +79,32 @@ static int	is_meta(const char *string)
 			ft_strncmp(string, "&&", 2) == 0 || is_ifs(*string));
 }
 
-void	read_string(const char **cursor, t_lex_token **lst_lex_token, int type)
+void	read_string(const char **cursor, t_lex_token **lst_lex_token)
 {
 	const char	*s_str = *cursor;
+	int			token_type;
 
-	if (type == E_IFS)
-		skip_ifs(cursor);
-	else if (**cursor == '"' || **cursor == '\'')
+	if (**cursor == '"' || **cursor == '\'')
 	{
 		*cursor = ft_strchr(s_str + 1, **cursor);
 		if (*cursor == NULL)
-			type = E_ERROR;
+			token_type = E_ERROR;
 		else
 		{
 			if (*s_str == '"')
-				type = E_DQUOTE;
+				token_type = E_DQUOTE;
 			else
-				type = E_SQUOTE;
+				token_type = E_SQUOTE;
 			(*cursor)++;
 		}
 	}
 	else
 	{
+		token_type = E_STRING;
 		while (!(is_meta(*cursor) || **cursor == '\0' || is_ifs(**cursor)))
 			(*cursor)++;
 	}
-	lex_add_token(lst_lex_token, s_str, *cursor - s_str, type);
+	lex_add_token(lst_lex_token, s_str, *cursor - s_str, token_type);
 }
 
 void	read_meta(const char **input, t_lex_token **lst_lex_token, int type)
@@ -167,8 +157,13 @@ t_lex_token	*lexer(const char *input)
 	while (input && *input)
 	{
 		next_token_type = get_next_type(input);
-		if (next_token_type == E_STRING || next_token_type == E_IFS)
-			read_string(&input, &(info_parse.lst_token), next_token_type);
+		if (next_token_type == E_STRING)
+			read_string(&input, &(info_parse.lst_token));
+		else if (next_token_type == E_IFS)
+		{
+			skip_ifs(&input);
+			lex_add_token(&(info_parse.lst_token), NULL, 0, E_IFS);
+		}
 		else
 			read_meta(&input, &(info_parse.lst_token), next_token_type);
 		
