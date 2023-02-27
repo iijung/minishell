@@ -16,9 +16,10 @@
 
 int	main(void)
 {
-	char		*command;
-	t_lex_token	*token_loop;
-	t_lex_token	*lst_token;
+	char			*command;
+	t_lex_token		*token_loop;
+	t_lex_token		*lst_token;
+	t_parse_tree	*tree_parse;
 
 	while (1)
 	{
@@ -37,6 +38,10 @@ int	main(void)
 			printf("=================\n");
 			token_loop = token_loop->next;
 		}
+		tree_parse = parse(t_lex_token *lst_token);
+
+
+		//
 		ft_lstclear((t_list **)&lst_token, free);
 		free(command);
 	}

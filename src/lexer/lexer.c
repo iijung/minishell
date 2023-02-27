@@ -150,23 +150,23 @@ static int	get_next_type(const char *input)
 
 t_lex_token	*lexer(const char *input)
 {
-	t_parse	info_parse;
+	t_lex_token	*lst_token;
 	int		next_token_type;
 
-	ft_memset(&info_parse, 0, sizeof(t_parse));
+	lst_token = NULL;
 	while (input && *input)
 	{
 		next_token_type = get_next_type(input);
 		if (next_token_type == E_STRING)
-			read_string(&input, &(info_parse.lst_token));
+			read_string(&input, &lst_token);
 		else if (next_token_type == E_IFS)
 		{
 			skip_ifs(&input);
-			lex_add_token(&(info_parse.lst_token), NULL, 0, E_IFS);
+			lex_add_token(&lst_token, NULL, 0, E_IFS);
 		}
 		else
-			read_meta(&input, &(info_parse.lst_token), next_token_type);
+			read_meta(&input, &lst_token, next_token_type);
 		
 	}
-	return (info_parse.lst_token);
+	return (lst_token);
 }
