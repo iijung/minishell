@@ -13,6 +13,7 @@
 #include "minishell.h"
 #include "prompt.h"
 #include "lexer.h"
+#include "parse.h"
 
 int	main(void)
 {
@@ -38,10 +39,9 @@ int	main(void)
 			printf("=================\n");
 			token_loop = token_loop->next;
 		}
-		tree_parse = parse(t_lex_token *lst_token);
+		tree_parse = parse(lst_token);
 
 
-		//
 		ft_lstclear((t_list **)&lst_token, free);
 		free(command);
 	}

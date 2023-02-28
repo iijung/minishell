@@ -5,21 +5,21 @@
 
 enum
 {
-	E_STRING = 1 << 0,
-	E_DQUOTE = 1 << 1,
-	E_SQUOTE = 1 << 2,
-	E_PIPE = 1 << 3,
-	E_AND = 1 << 4,
-	E_OR = 1 << 5,
-	E_SUB_S = 1 << 6,
-	E_SUB_E = 1 << 7,
-	E_IFS = 1 << 8, // 256
-	E_READ = 1 << 9,
-	E_HEREDOC = 1 << 10,
-	E_WRITE = 1 << 11,
-	E_APPEND = 1 << 12,
-	E_REDIRECT = E_READ | E_HEREDOC | E_WRITE | E_APPEND,
-	E_ERROR = 1 << 13
+	E_AND,
+	E_OR,
+	E_SUB_S,
+	E_SUB_E,
+	E_PIPE,
+	E_STRING,
+	E_READ,
+	E_HEREDOC,
+	E_WRITE,
+	E_APPEND,
+	E_END,
+	E_DQUOTE,
+	E_SQUOTE,
+	E_IFS,
+	E_ERROR
 };
 
 enum
