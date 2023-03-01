@@ -38,6 +38,7 @@ typedef struct s_lex_token
 	unsigned int		type;
 }	t_lex_token;
 
+
 t_lex_token	*lexer(const char *input);
 
 #endif
