@@ -2,9 +2,20 @@
 # define PARSE_H
 # include "lexer.h"
 
+enum
+{
+	E_REDIRECT,
+	E_W,
+	E_WL,
+	E_PL,
+	E_OPL,
+	E_APL,
+	E_S
+};
+
 typedef struct s_parse_tree
 {
-	t_lex_token			*content;
+	unsigned int		type;
 	struct s_parse_tree	*parent;
 	struct s_parse_tree	*child[3];
 }	t_parse_tree;
@@ -44,7 +55,7 @@ int	lr_state_20(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token
 int	lr_state_21(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
 int	lr_state_22(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
 
-int		stk_token_push(t_lr_stack *stack, t_token *token);
+int		stk_token_push(t_lr_stack *stack, void *node);
 t_token	*stk_token_pop(t_lr_stack *stack);
 void	stk_state_push(t_lr_stack *stack, int state);
 int		stk_state_pop(t_lr_stack *stack);

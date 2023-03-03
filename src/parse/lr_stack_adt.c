@@ -1,11 +1,11 @@
 #include "parse.h"
 
-int	stk_token_push(t_lr_stack *stack, t_token *token)
+int	stk_token_push(t_lr_stack *stack, void *node)
 {
 	if (stack->idx_token == stack->stk_capacity)
 		return (1);
 	stack->idx_token++;
-	stack->stk_token[stack->idx_token] = token;
+	stack->stk_token[stack->idx_token] = node;
 	return (0);
 }
 

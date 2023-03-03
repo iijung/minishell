@@ -26,9 +26,95 @@ void	s(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
 	stk_token_push(stack, token);
 }
 
-void	r(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+t_parse_tree	*new_internal_node(void *child3, void *child2, void *child1, unsigned int type)
 {
-	
+	t_parse_tree	*new_node;
+
+	new_node = ft_calloc(1, sizeof(t_parse_tree));
+	new_node->child[0] = child1;
+	new_node->child[1] = child2;
+	new_node->child[2] = child3;
+	new_node->type = type;
+}
+
+void	acc(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	*parse_tree = new_internal_node(stk_token_pop(stack), NULL, NULL, E_S);
+}
+
+void	r1(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(stk_token_pop(stack), stk_token_pop(stack), stk_token_pop(stack), E_APL));
+}
+
+void	r2(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, NULL, stk_token_pop(stack), E_APL));
+}
+
+void	r3(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(stk_token_pop(stack), stk_token_pop(stack), stk_token_pop(stack), E_OPL));
+}
+
+void	r4(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, NULL, stk_token_pop(stack), E_OPL));
+}
+
+void	r5(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(stk_token_pop(stack), stk_token_pop(stack), stk_token_pop(stack), E_WL));
+}
+
+void	r6(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(stk_token_pop(stack), stk_token_pop(stack), stk_token_pop(stack), E_PL));
+}
+
+void	r7(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, NULL, stk_token_pop(stack), E_WL));
+}
+
+void	r8(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, stk_token_pop(stack), stk_token_pop(stack), E_WL));
+}
+
+void	r9(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, NULL, stk_token_pop(stack), E_WL));
+}
+
+void	r10(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, NULL, stk_token_pop(stack), E_W));
+}
+
+void	r11(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, stk_token_pop(stack), stk_token_pop(stack), E_W));
+}
+
+void	r12(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, NULL, stk_token_pop(stack), E_W));
+}
+
+void	r13(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, NULL, stk_token_pop(stack), E_REDIRECT));
+}
+
+void	r14(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, NULL, stk_token_pop(stack), E_REDIRECT));
+}
+
+void	r15(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
+{
+	stk_token_push(stack, new_internal_node(NULL, NULL, stk_token_pop(stack), E_REDIRECT));
 }
 
 void	acc(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
@@ -230,7 +316,7 @@ int lr_state_9(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
 	static void (*const action[11])\
 		(t_parse_tree **tree, t_lr_stack *stack, t_lex_token *token) = 
 			{f, f, f, f, f, r, f, f, f, f, f};
-	static int next_status[11] = {-1, -1, -1, -1, -1, 12, -1, -1, -1, -1, -1};
+	static int next_status[11] = {-1, -1, -1, -1, -1, 15, -1, -1, -1, -1, -1};
 	static int goto_table[7] = {-1, -1, -1, -1, -1, -1, -1};
 
 	if (stack->idx_state == stack->idx_token)

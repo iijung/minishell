@@ -19,6 +19,7 @@ enum
 	E_DQUOTE,
 	E_SQUOTE,
 	E_IFS,
+	E_WORD,
 	E_ERROR
 };
 
