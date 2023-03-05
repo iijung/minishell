@@ -166,7 +166,7 @@ t_lex_token	*lexer(const char *input)
 		}
 		else
 			read_meta(&input, &lst_token, next_token_type);
-		
 	}
+	lex_add_token(&lst_token, NULL, 0, E_END);
 	return (lst_token);
 }

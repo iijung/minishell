@@ -36,6 +36,7 @@ typedef struct s_lex_token
 {
 	char				*string;
 	struct s_lex_token	*next;
+	void				*byte_pedding[2];
 	unsigned int		type;
 }	t_lex_token;
 

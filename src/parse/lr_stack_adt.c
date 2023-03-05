@@ -9,7 +9,7 @@ int	stk_token_push(t_lr_stack *stack, void *node)
 	return (0);
 }
 
-t_token	*stk_token_pop(t_lr_stack *stack)
+void	*stk_token_pop(t_lr_stack *stack)
 {
 	if (stack->idx_token == -1)
 		return (NULL);
@@ -17,7 +17,7 @@ t_token	*stk_token_pop(t_lr_stack *stack)
 	return (stack->stk_token[stack->idx_token + 1]);
 }
 
-void	stk_state_push(t_lr_stack *stack, int state)
+int	stk_state_push(t_lr_stack *stack, int state)
 {
 	if (stack->idx_state == stack->stk_capacity)
 		return (1);
@@ -29,7 +29,7 @@ void	stk_state_push(t_lr_stack *stack, int state)
 int	stk_state_pop(t_lr_stack *stack)
 {
 	if (stack->idx_state == -1)
-		return (NULL);
+		return (-1);
 	stack->idx_state--;
 	return (stack->stk_state[stack->idx_state + 1]);
 }

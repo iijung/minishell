@@ -13,10 +13,11 @@
 .DEFAULT_ON_ERROR:
 .DEFAULT_GOAL := all
 
-CFLAGS		= -Wall -Wextra -Werror -MMD -MP -O3
+CFLAGS		= -MMD -MP -O3
 
 CPPFLAGS	+= -I./prompt
 CPPFLAGS	+= -I./lexer
+CPPFLAGS	+= -I./parse
 
 CPPFLAGS	+= -I../lib/libft
 CPPFLAGS	+= -I../lib/readline
@@ -41,6 +42,9 @@ MINISHELL_SRCS = \
 	prompt/prompt.c \
 	lexer/lexer.c \
 	builtin/pwd.c \
+	parse/lr_stack_adt.c \
+	parse/lr_state01.c \
+	parse/parse.c
 
 MINISHELL_OBJS := $(MINISHELL_SRCS:.c=.o)
 MINISHELL_DEPS := $(MINISHELL_SRCS:.c=.d)

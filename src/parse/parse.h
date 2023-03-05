@@ -15,9 +15,9 @@ enum
 
 typedef struct s_parse_tree
 {
-	unsigned int		type;
 	struct s_parse_tree	*parent;
 	struct s_parse_tree	*child[3];
+	unsigned int		type;
 }	t_parse_tree;
 
 typedef struct s_lr_stack
@@ -56,8 +56,8 @@ int	lr_state_21(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token
 int	lr_state_22(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
 
 int		stk_token_push(t_lr_stack *stack, void *node);
-t_token	*stk_token_pop(t_lr_stack *stack);
-void	stk_state_push(t_lr_stack *stack, int state);
+void	*stk_token_pop(t_lr_stack *stack);
+int	stk_state_push(t_lr_stack *stack, int state);
 int		stk_state_pop(t_lr_stack *stack);
 
 #endif

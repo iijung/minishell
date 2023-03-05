@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/17 20:04:37 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/06 05:34:54 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	main(void)
 			token_loop = token_loop->next;
 		}
 		tree_parse = parse(lst_token);
-
 
 		ft_lstclear((t_list **)&lst_token, free);
 		free(command);
