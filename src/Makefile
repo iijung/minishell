@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/02/12 17:37:24 by jaemjeon         ###   ########.fr        #
+#    Updated: 2023/03/07 00:08:13 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ MINISHELL_SRCS = \
 	minishell.c \
 	util/ft_debug.c \
 	util/ft_assert.c \
+	util/ft_check_char.c \
 	prompt/prompt.c \
 	lexer/lexer.c \
 	builtin/pwd.c \

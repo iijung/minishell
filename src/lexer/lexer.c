@@ -3,135 +3,128 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/17 19:27:23 by minjungk         ###   ########.fr       */
+/*   Created: 2023/03/07 01:12:27 by jaemjeon          #+#    #+#             */
+/*   Updated: 2023/03/07 01:12:54 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include "libft.h"
 
-#ifdef DEBUG
-# define DEBUG 1
-#else
-# define DEBUG 0
-#endif
-
-static void	debug(void *param)
+int	read_string_in_quote(const char **p_cursor, char quote)
 {
-	const struct s_content	*c = param;
-	const char				*typename[] = {
-		"STRING",
-		"EOF",
-		"IFS",
-		"QUOTE",
-		"DQUOTE",
-		"WILDCARD",
-		"ENVIRONMENT",
-		"PARENTHESIS",
-		"OR",
-		"AND",
-		"PIPE",
-		"HEREDOC",
-		"INFILE",
-		"OUTFILE",
-		"ADDFILE"};
+	char	*next_cursor;
 
-	if (DEBUG == 0)
-		return ;
-	if (c == NULL)
-		printf("DEBUG:: content is NULL\n");
-	else
-		printf("DEBUG:: content [%x: %12s] len[%lu] data[%.*s]\n",
-			c->type, typename[c->type], c->len, (int)c->len, c->data);
-}
-
-static void	add_token(t_list **lst, int type, size_t len, const char *data)
-{
-	t_list	*token;
-
-	token = ft_lstnew(NULL);
-	if (token == NULL)
-		return ;
-	token->content = ft_calloc(1, sizeof(struct s_content));
-	if (token->content == NULL)
+	next_cursor = ft_strchr(*p_cursor + 1, quote);
+	if (next_cursor == NULL)
 	{
-		ft_lstdelone(token, NULL);
-		return ;
+		*p_cursor = next_cursor;
+		return (E_READ_STRING_ERROR);
 	}
-	((struct s_content *)token->content)->type = type;
-	((struct s_content *)token->content)->data = data;
-	((struct s_content *)token->content)->len = len;
-	ft_lstadd_back(lst, token);
+	else
+		*p_cursor = next_cursor + 1;
+	next_cursor++;
+	if (*next_cursor == '\'')
+		return (E_READ_STRING_IN_SQUOTE);
+	else if (*next_cursor == '"')
+		return (E_READ_STRING_IN_DQUOTE);
+	else if (*next_cursor == '|' || ft_strncmp(next_cursor, "&&", 2) == 0)
+		return (E_READ_STRING_ACC);
+	else
+		return (E_READ_STRING_NORM);
 }
 
-static int	is_lexeme(char data)
+void	lex_add_token(t_lex_token **lst_lex_token, const char *s_str, int len, \
+	int token_type)
 {
-	if (data == ' ' || ('\t' <= data && data <= '\r'))
-		return (LEXEME_IFS);
-	else if (data == '\0')
-		return (LEXEME_EOF);
-	else if (data == '\'')
-		return (LEXEME_QUOTE);
-	else if (data == '"')
-		return (LEXEME_DQUOTE);
-	else if (data == '*')
-		return (LEXEME_WILDCARD);
-	else if (data == '$')
-		return (LEXEME_ENVIRONMENT);
-	else if (data == '(' || data == ')')
-		return (LEXEME_PARENTHESIS);
-	else if (data == '<')
-		return (LEXEME_INFILE);
-	else if (data == '>')
-		return (LEXEME_OUTFILE);
-	else if (data == '|')
-		return (LEXEME_PIPE);
-	return (LEXEME_STRING);
+	t_lex_token	*new_token;
+
+	new_token = ft_calloc(1, sizeof(t_lex_token));
+	if (new_token == NULL)
+		exit(errno);
+	new_token->type = token_type;
+	if (token_type == E_STRING)
+	{
+		new_token->string = ft_substr(s_str, 0, len);
+		if (new_token->string == NULL)
+			exit(errno);
+	}
+	else if (token_type == E_DQUOTE || token_type == E_SQUOTE)
+	{
+		new_token->string = ft_substr(s_str, 1, len - 2);
+		if (new_token->string == NULL)
+			exit(errno);
+	}
+	if (token_type == E_ERROR)
+		ft_lstadd_front((t_list **)lst_lex_token, (t_list *)new_token);
+	else
+		ft_lstadd_back((t_list **)lst_lex_token, (t_list *)new_token);
 }
 
-static char	*lex_token(t_list **lst, char *curr)
+void	read_string(const char **cursor, t_lex_token **lst_lex_token)
 {
-	int			type;
-	const char	*base = curr;
+	const char	*s_str = *cursor;
+	int			token_type;
 
-	if (ft_strncmp(base, "||", 2) == 0)
-		add_token(lst, LEXEME_OR, 2, base);
-	else if (ft_strncmp(base, "&&", 2) == 0)
-		add_token(lst, LEXEME_AND, 2, base);
-	else if (ft_strncmp(base, "<<", 2) == 0)
-		add_token(lst, LEXEME_HEREDOC, 2, base);
-	else if (ft_strncmp(base, ">>", 2) == 0)
-		add_token(lst, LEXEME_ADDFILE, 2, base);
+	if (**cursor == '"' || **cursor == '\'')
+	{
+		*cursor = ft_strchr(s_str + 1, **cursor);
+		if (*cursor == NULL)
+			token_type = E_ERROR;
+		else
+		{
+			if (*s_str == '"')
+				token_type = E_DQUOTE;
+			else
+				token_type = E_SQUOTE;
+			(*cursor)++;
+		}
+	}
 	else
 	{
-		type = is_lexeme(base[0]);
-		++curr;
-		while (type == LEXEME_IFS && is_lexeme(curr[0]) == LEXEME_IFS)
-			++curr;
-		while (type == LEXEME_STRING && is_lexeme(curr[0]) == LEXEME_STRING)
-			++curr;
-		add_token(lst, type, curr - base, base);
-		return (curr);
+		token_type = E_STRING;
+		while (!(is_meta(*cursor) || **cursor == '\0' || is_ifs(**cursor)))
+			(*cursor)++;
 	}
-	return (curr + 2);
+	lex_add_token(lst_lex_token, s_str, *cursor - s_str, token_type);
 }
 
-t_list	*lex(char *command)
+void	read_meta(const char **input, t_lex_token **lst_lex_token, int type)
 {
-	t_list	*tokens;
+	t_lex_token	*new_token;
 
-	errno = 0;
-	tokens = NULL;
-	while (command && *command)
-		command = lex_token(&tokens, command);
-	if (command == NULL || errno)
+	new_token = ft_calloc(1, sizeof(t_lex_token));
+	if (new_token == NULL)
+		exit(errno);
+	new_token->type = type;
+	ft_lstadd_back((t_list **)lst_lex_token, (t_list *)new_token);
+	if (type == E_AND || type == E_OR || type == E_APPEND || type == E_HEREDOC)
+		(*input) += 2;
+	else
+		(*input) += 1;
+}
+
+t_lex_token	*lexer(const char *input)
+{
+	t_lex_token	*lst_token;
+	int			next_token_type;
+
+	lst_token = NULL;
+	while (input && *input)
 	{
-		ft_lstclear(&tokens, free);
-		ft_putstr_fd("minishell: lexing error\n", STDERR_FILENO);
-		return (NULL);
+		next_token_type = get_next_type(input);
+		if (next_token_type == E_STRING)
+			read_string(&input, &lst_token);
+		else if (next_token_type == E_IFS)
+		{
+			skip_ifs(&input);
+			lex_add_token(&lst_token, NULL, 0, E_IFS);
+		}
+		else
+			read_meta(&input, &lst_token, next_token_type);
 	}
-	ft_lstiter(tokens, debug);
-	return (tokens);
+	lex_add_token(&lst_token, NULL, 0, E_END);
+	return (lst_token);
 }

@@ -3,44 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/17 19:27:29 by minjungk         ###   ########.fr       */
+/*   Created: 2023/03/07 01:13:34 by jaemjeon          #+#    #+#             */
+/*   Updated: 2023/03/07 01:13:59 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 # include "libft.h"
-# include <stdio.h>
 
-enum e_lexeme
+enum
 {
-	LEXEME_STRING,
-	LEXEME_EOF,
-	LEXEME_IFS,
-	LEXEME_QUOTE,
-	LEXEME_DQUOTE,
-	LEXEME_WILDCARD,
-	LEXEME_ENVIRONMENT,
-	LEXEME_PARENTHESIS,
-	LEXEME_OR,
-	LEXEME_AND,
-	LEXEME_PIPE,
-	LEXEME_HEREDOC,
-	LEXEME_INFILE,
-	LEXEME_OUTFILE,
-	LEXEME_ADDFILE
+	E_AND,
+	E_OR,
+	E_SUB_S,
+	E_SUB_E,
+	E_PIPE,
+	E_STRING,
+	E_READ,
+	E_HEREDOC,
+	E_WRITE,
+	E_APPEND,
+	E_END = 10,
+	E_DQUOTE,
+	E_SQUOTE,
+	E_IFS = 13,
+	E_WORD,
+	E_ERROR
 };
 
-struct s_content
+enum
 {
-	int			type;
-	size_t		len;
-	const char	*data;
+	E_READ_STRING_NORM = 1 << 0,
+	E_READ_STRING_IN_DQUOTE = 1 << 1,
+	E_READ_STRING_IN_SQUOTE = 1 << 2,
+	E_READ_STRING_ACC = 1 << 3,
+	E_READ_STRING_ERROR = 1 << 4
 };
 
-t_list	*lex(char *command);
+typedef struct s_lex_token
+{
+	char				*string;
+	struct s_lex_token	*next;
+	void				*byte_pedding[2];
+	unsigned int		type;
+}	t_lex_token;
+
+t_lex_token	*lexer(const char *input);
 
 #endif
