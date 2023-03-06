@@ -14,6 +14,12 @@ void	init_lr_stack(t_lr_stack *stack, size_t capacity)
 	stk_state_push(stack, 0);
 }
 
+void	destroy_lr_stack(t_lr_stack *stack)
+{
+	free(stack->stk_state);
+	free(stack->stk_token);
+}
+
 t_parse_tree	*parse(t_lex_token *lst_token)
 {
 	t_parse_tree	*root;
@@ -36,5 +42,6 @@ t_parse_tree	*parse(t_lex_token *lst_token)
 				(&root, &lr_stack, lst_token))
 			lst_token = lst_token->next;
 	}
+	destroy_lr_stack(&lr_stack);
 	return (root);
 }
