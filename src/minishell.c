@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/03/07 01:28:08 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/07 05:01:50 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	main(void)
 		lst_token = lexer(command);
 		tree_parse = parse(lst_token);
 
+		clear_parse_tree(tree_parse);
+		free(tree_parse);
 		ft_lstclear((t_list **)&lst_token, free);
 		free(command);
 	}

@@ -1,16 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/07 04:27:22 by jaemjeon          #+#    #+#             */
+/*   Updated: 2023/03/07 04:27:24 by jaemjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSE_H
 # define PARSE_H
 # include "lexer.h"
 
 enum
 {
-	E_S,
-	E_APL,
-	E_OPL,
-	E_WL,
-	E_PL,
-	E_W,
-	E_REDIRECT
+	E_S = 0 << 8,
+	E_APL = 1 << 8,
+	E_OPL = 2 << 8,
+	E_WL = 3 << 8,
+	E_PL = 4 << 8,
+	E_W = 5 << 8,
+	E_REDIRECT = 6 << 8
 };
 
 typedef struct s_parse_tree
@@ -80,4 +92,7 @@ void	r15(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
 void	f(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
 void	s(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
 
+void	clear_parse_tree(t_parse_tree *tree);
+
+int	get_nonterminal_type(t_lr_stack *stack);
 #endif

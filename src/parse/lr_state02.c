@@ -5,14 +5,14 @@ int lr_state_5(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
 	static void (*const action[11])\
 		(t_parse_tree **tree, t_lr_stack *stack, t_lex_token *token) =
 			{f, f, s, f, f, s, s, s, s, s, f};
-	static int next_status[11] = {-1, -1, 5, -1, -1, 7, 9, 10, 11, 12};
+	static int next_status[11] = {-1, -1, 5, -1, -1, 7, 9, 10, 11, 12, -1};
 	static int goto_table[7] = {-1, 17, 2, 4, 3, 6, 8};
 
 	if (stack->idx_state == stack->idx_token)
 	{
-		if (goto_table[stack->stk_token[stack->idx_token]->type] == -1)
+		if (goto_table[get_nonterminal_type(stack)] == -1)
 			f(parse_tree, stack, token);
-		stk_state_push(stack, goto_table[stack->stk_token[stack->idx_token]->type]);
+		stk_state_push(stack, goto_table[get_nonterminal_type(stack)]);
 	}
 	else
 	{
@@ -36,9 +36,9 @@ int lr_state_6(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
 
 	if (stack->idx_state == stack->idx_token)
 	{
-		if (goto_table[stack->stk_token[stack->idx_token]->type] == -1)
+		if (goto_table[get_nonterminal_type(stack)] == -1)
 			f(parse_tree, stack, token);
-		stk_state_push(stack, goto_table[stack->stk_token[stack->idx_token]->type]);
+		stk_state_push(stack, goto_table[get_nonterminal_type(stack)]);
 	}
 	else
 	{
@@ -62,9 +62,9 @@ int lr_state_7(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
 
 	if (stack->idx_state == stack->idx_token)
 	{
-		if (goto_table[stack->stk_token[stack->idx_token]->type] == -1)
+		if (goto_table[get_nonterminal_type(stack)] == -1)
 			f(parse_tree, stack, token);
-		stk_state_push(stack, goto_table[stack->stk_token[stack->idx_token]->type]);
+		stk_state_push(stack, goto_table[get_nonterminal_type(stack)]);
 	}
 	else
 	{
@@ -88,9 +88,9 @@ int lr_state_8(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
 
 	if (stack->idx_state == stack->idx_token)
 	{
-		if (goto_table[stack->stk_token[stack->idx_token]->type] == -1)
+		if (goto_table[get_nonterminal_type(stack)] == -1)
 			f(parse_tree, stack, token);
-		stk_state_push(stack, goto_table[stack->stk_token[stack->idx_token]->type]);
+		stk_state_push(stack, goto_table[get_nonterminal_type(stack)]);
 	}
 	else
 	{
@@ -114,9 +114,9 @@ int lr_state_9(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
 
 	if (stack->idx_state == stack->idx_token)
 	{
-		if (goto_table[stack->stk_token[stack->idx_token]->type] == -1)
+		if (goto_table[get_nonterminal_type(stack)] == -1)
 			f(parse_tree, stack, token);
-		stk_state_push(stack, goto_table[stack->stk_token[stack->idx_token]->type]);
+		stk_state_push(stack, goto_table[get_nonterminal_type(stack)]);
 	}
 	else
 	{

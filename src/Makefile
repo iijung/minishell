@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+         #
+#    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/03/07 03:04:15 by jaemjeon         ###   ########.fr        #
+#    Updated: 2023/03/07 04:25:17 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,9 @@ MINISHELL_SRCS = \
 	parse/lr_reduce02.c \
 	parse/lr_reduce03.c \
 	parse/lr_stack_adt.c \
-	parse/lr_action_func.c
+	parse/lr_action_func.c \
+	parse/clear_tree.c \
+	parse/lr_util.c 
 
 MINISHELL_OBJS := $(MINISHELL_SRCS:.c=.o)
 MINISHELL_DEPS := $(MINISHELL_SRCS:.c=.d)

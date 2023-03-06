@@ -16,11 +16,11 @@ void	f(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
 		[E_END] = "newline"
 	};
 
-	parse_tree = NULL;
 	stack = NULL;
 	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
 	ft_putendl_fd(token_string_value[token->type], 2);
-	// clear_parse_tree(parse_tree);
+	clear_parse_tree(*parse_tree);
+	*parse_tree = NULL;
 }
 
 void	s(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
