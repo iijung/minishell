@@ -6,7 +6,7 @@
 #    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/03/07 06:43:26 by jaemjeon         ###   ########.fr        #
+#    Updated: 2023/03/07 06:45:34 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,7 @@ MINISHELL_SRCS = \
 	parse/lr_stack_adt.c \
 	parse/lr_action_func.c \
 	parse/clear_tree.c \
-	parse/lr_util.c 
+	parse/lr_util.c \
 	builtin/cd.c \
 	builtin/env.c \
 	builtin/exit.c \
