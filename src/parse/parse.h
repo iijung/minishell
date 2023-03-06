@@ -1,85 +1,82 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/11 21:03:18 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/02/12 01:07:13 by jaemjeon         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef PARSE_H
 # define PARSE_H
-# include "libft.h"
+# include "lexer.h"
 
-enum type_parse_node
+enum
 {
-	ROOT,
-	APL,
-	OPL,
-	PL,
-	WL,
-	W,
-	RED
-}
-
-enum type_token
-{
-	WORD,
-	AND,
-	OR,
-	RED_READ,
-	RED_HERECOD,
-	RED_WRITE,
-	RED_APPEND
-}
-
-typedef struct s_parse_node
-{
-	unsigned int	type;
-	char			*value;
-}	t_parse_node;
-
-typedef struct s_stack
-{
-	int		cursor;
-	int		capacity;
-	t_list	*arr_data;
-}	t_stack;
-
-typedef struct s_wordline
-{
-	int		count_outred;
-	t_list	*outred;
-	int		count_inred;
-	t_list	*inred;
-	int		count_cmd;
-	char 	**cmd;
-}	t_wordline;
+	E_S,
+	E_APL,
+	E_OPL,
+	E_WL,
+	E_PL,
+	E_W,
+	E_REDIRECT
+};
 
 typedef struct s_parse_tree
 {
-	t_parse_node		node;
 	struct s_parse_tree	*parent;
-	struct s_parse_tree	*left;
-	struct s_parse_tree	*right;
-	t_wordline			*wl;
+	struct s_parse_tree	*child[3];
+	unsigned int		type;
 }	t_parse_tree;
 
+typedef struct s_lr_stack
+{
+	t_lex_token	**stk_token;
+	int			idx_token;
+	int			*stk_state;
+	int			idx_state;
+	int			stk_capacity;
+}	t_lr_stack;
+
+t_parse_tree	*parse(t_lex_token *lst_token);
+
+int	lr_state_0(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_1(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_2(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_3(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_4(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_5(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_6(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_7(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_8(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_9(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_10(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_11(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_12(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_13(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_14(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_15(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_16(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_17(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_18(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_19(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_20(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_21(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+int	lr_state_22(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+
+int		stk_token_push(t_lr_stack *stack, void *node);
+void	*stk_token_pop(t_lr_stack *stack);
+int		stk_state_push(t_lr_stack *stack, int state);
+int		stk_state_pop(t_lr_stack *stack);
+
+void	acc(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r1(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r2(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r3(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r4(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r5(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r6(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r7(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r8(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r9(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r10(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r11(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r12(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r13(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r14(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	r15(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	f(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+void	s(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
+
 #endif
-
-
-struct s_content
-{
-	int			type;
-	size_t		len;
-	const char	*data;
-};
-
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}				t_list;

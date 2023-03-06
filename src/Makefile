@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/03/07 00:08:13 by jaemjeon         ###   ########.fr        #
+#    Updated: 2023/03/07 01:34:56 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,13 @@ MINISHELL_SRCS = \
 	prompt/prompt.c \
 	lexer/lexer.c \
 	builtin/pwd.c \
+	parse/lr_state01.c \
+	parse/lr_state02.c \
+	parse/lr_state03.c \
+	parse/lr_state04.c \
+	parse/lr_state05.c \
+	parse/lr_stack_adt.c \
+	parse/lr_action_func.c
 
 MINISHELL_OBJS := $(MINISHELL_SRCS:.c=.o)
 MINISHELL_DEPS := $(MINISHELL_SRCS:.c=.d)
