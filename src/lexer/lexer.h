@@ -15,10 +15,10 @@ enum
 	E_HEREDOC,
 	E_WRITE,
 	E_APPEND,
-	E_END,
+	E_END = 10,
 	E_DQUOTE,
 	E_SQUOTE,
-	E_IFS,
+	E_IFS = 13,
 	E_WORD,
 	E_ERROR
 };

@@ -4,13 +4,13 @@
 
 enum
 {
-	E_REDIRECT,
-	E_W,
+	E_S,
+	E_APL,
+	E_OPL,
 	E_WL,
 	E_PL,
-	E_OPL,
-	E_APL,
-	E_S
+	E_W,
+	E_REDIRECT
 };
 
 typedef struct s_parse_tree

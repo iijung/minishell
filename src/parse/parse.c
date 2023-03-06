@@ -36,4 +36,5 @@ t_parse_tree	*parse(t_lex_token *lst_token)
 				(&root, &lr_stack, lst_token))
 			lst_token = lst_token->next;
 	}
+	return (root);
 }
