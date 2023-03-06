@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 04:27:22 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/03/07 04:27:24 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/07 05:51:37 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	f(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
 void	s(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
 
 void	clear_parse_tree(t_parse_tree *tree);
+void	clear_lr_stack(t_lr_stack *stack);
 
 int	get_nonterminal_type(t_lr_stack *stack);
 #endif

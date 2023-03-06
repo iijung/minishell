@@ -4,22 +4,22 @@ void	f(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token)
 {
 	static char * const	token_string_value[] = \
 	{
-		[E_AND] = "&&",
-		[E_OR] = "||",
-		[E_SUB_S] = "(",
-		[E_SUB_E] = ")",
-		[E_PIPE] = "|",
-		[E_READ] = "<",
-		[E_HEREDOC] = "<<",
-		[E_WRITE] = ">",
-		[E_APPEND] = ">>",
-		[E_END] = "newline"
+		[LEXEME_AND] = "&&",
+		[LEXEME_OR] = "||",
+		[LEXEME_SUB_S] = "(",
+		[LEXEME_SUB_E] = ")",
+		[LEXEME_PIPE] = "|",
+		[LEXEME_READ] = "<",
+		[LEXEME_HEREDOC] = "<<",
+		[LEXEME_WRITE] = ">",
+		[LEXEME_APPEND] = ">>",
+		[LEXEME_END] = "newline"
 	};
 
-	stack = NULL;
 	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
 	ft_putendl_fd(token_string_value[token->type], 2);
-	clear_parse_tree(*parse_tree);
+	clear_lr_stack(stack);
+	// clear_parse_tree(*parse_tree);
 	*parse_tree = NULL;
 }
 

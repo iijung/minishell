@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 01:20:34 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/03/07 03:03:11 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/07 05:13:14 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_parse_tree	*parse(t_lex_token *lst_token)
 	init_lr_stack(&lr_stack, ft_lstsize((t_list *)lst_token));
 	while (lr_stack.stk_state[lr_stack.idx_state] != -1)
 	{
-		while (lst_token->type == E_IFS)
+		while (lst_token->type == LEXEME_IFS)
 			lst_token = lst_token->next;
 		if (lr_func[lr_stack.stk_state[lr_stack.idx_state]]\
 				(&root, &lr_stack, lst_token))

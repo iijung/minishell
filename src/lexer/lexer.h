@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 01:13:34 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/03/07 04:27:28 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/07 05:15:36 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,22 @@
 
 enum
 {
-	E_AND,
-	E_OR,
-	E_SUB_S,
-	E_SUB_E,
-	E_PIPE,
-	E_STRING,
-	E_READ,
-	E_HEREDOC,
-	E_WRITE,
-	E_APPEND,
-	E_END = 10,
-	E_DQUOTE,
-	E_SQUOTE,
-	E_IFS = 13,
-	E_WORD,
-	E_ERROR
+	LEXEME_AND,
+	LEXEME_OR,
+	LEXEME_SUB_S,
+	LEXEME_SUB_E,
+	LEXEME_PIPE,
+	LEXEME_STRING,
+	LEXEME_READ,
+	LEXEME_HEREDOC,
+	LEXEME_WRITE,
+	LEXEME_APPEND,
+	LEXEME_END = 10,
+	LEXEME_DQUOTE,
+	LEXEME_SQUOTE,
+	LEXEME_IFS = 13,
+	LEXEME_WORD,
+	LEXEME_ERROR
 };
 
 enum
@@ -52,10 +52,10 @@ typedef struct s_lex_token
 }	t_lex_token;
 
 t_lex_token	*lexer(const char *input);
-int	is_ifs(char c);
-int	is_meta(const char *string);
-int	set_read_string_state(char c);
-int	get_next_type(const char *input);
-void	skip_ifs(const char **string);
+int			is_ifs(char c);
+int			is_meta(const char *string);
+int			set_read_string_state(char c);
+int			get_next_type(const char *input);
+void		skip_ifs(const char **string);
 
 #endif

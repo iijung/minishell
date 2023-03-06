@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 01:11:13 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/03/07 02:53:38 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/07 05:13:14 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,27 @@ int	set_read_string_state(char c)
 int	get_next_type(const char *input)
 {
 	if (ft_strncmp(input, "<<", 2) == 0)
-		return (E_HEREDOC);
+		return (LEXEME_HEREDOC);
 	else if (ft_strncmp(input, ">>", 2) == 0)
-		return (E_APPEND);
+		return (LEXEME_APPEND);
 	else if (ft_strncmp(input, "||", 2) == 0)
-		return (E_OR);
+		return (LEXEME_OR);
 	else if (ft_strncmp(input, "&&", 2) == 0)
-		return (E_AND);
+		return (LEXEME_AND);
 	else if (*input == '|')
-		return (E_PIPE);
+		return (LEXEME_PIPE);
 	else if (*input == '(')
-		return (E_SUB_S);
+		return (LEXEME_SUB_S);
 	else if (*input == ')')
-		return (E_SUB_E);
+		return (LEXEME_SUB_E);
 	else if (*input == '<')
-		return (E_READ);
+		return (LEXEME_READ);
 	else if (*input == '>')
-		return (E_WRITE);
+		return (LEXEME_WRITE);
 	else if (is_ifs(*input))
-		return (E_IFS);
+		return (LEXEME_IFS);
 	else
-		return (E_STRING);
+		return (LEXEME_STRING);
 }
 
 void	skip_ifs(const char **string)
