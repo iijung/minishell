@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 01:20:34 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/03/07 01:33:04 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/07 03:03:11 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_parse_tree	*parse(t_lex_token *lst_token)
 	};
 
 	root = NULL;
-	init_lr_stack(&lr_stack, ft_lstsize(lst_token));
+	init_lr_stack(&lr_stack, ft_lstsize((t_list *)lst_token));
 	while (lr_stack.stk_state[lr_stack.idx_state] != -1)
 	{
 		while (lst_token->type == E_IFS)

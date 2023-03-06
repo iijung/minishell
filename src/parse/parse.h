@@ -59,6 +59,7 @@ int		stk_token_push(t_lr_stack *stack, void *node);
 void	*stk_token_pop(t_lr_stack *stack);
 int		stk_state_push(t_lr_stack *stack, int state);
 int		stk_state_pop(t_lr_stack *stack);
+t_parse_tree	*new_internal_node(void *child3, void *child2, void *child1, unsigned int type);
 
 void	acc(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);
 void	r1(t_parse_tree **parse_tree, t_lr_stack *stack, t_lex_token *token);

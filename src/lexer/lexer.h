@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 01:13:34 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/03/07 01:13:59 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/07 02:53:42 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,10 @@ typedef struct s_lex_token
 }	t_lex_token;
 
 t_lex_token	*lexer(const char *input);
+int	is_ifs(char c);
+int	is_meta(const char *string);
+int	set_read_string_state(char c);
+int	get_next_type(const char *input);
+void	skip_ifs(const char **string);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 01:11:13 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/03/07 01:13:18 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/07 02:53:38 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	is_ifs(char c)
 	return (c == ' ' || c == '\t' || c == '\n');
 }
 
-static int	is_meta(const char *string)
+int	is_meta(const char *string)
 {
 	return (*string == '"' || *string == '\'' || *string == ')' \
 			|| *string == '(' || *string == '|' || *string == '\0' \
@@ -58,4 +58,10 @@ int	get_next_type(const char *input)
 		return (E_IFS);
 	else
 		return (E_STRING);
+}
+
+void	skip_ifs(const char **string)
+{
+	while (is_ifs(**string))
+		(*string)++;
 }
