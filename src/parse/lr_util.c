@@ -1,30 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   lr_util.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/24 23:20:48 by minjungk          #+#    #+#             */
-/*   Updated: 2023/03/07 06:43:26 by jaemjeon         ###   ########.fr       */
+/*   Created: 2023/03/07 04:21:29 by jaemjeon          #+#    #+#             */
+/*   Updated: 2023/03/07 04:32:40 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include <stdio.h>
-# include <stdlib.h>
-# include "libft.h"
+#include "parse.h"
 
-#define ERORR -1
-#define FALSE 0
-#define TRUE 1
-# define HASH_MAX	10
-
-struct s_minishell
+int	get_nonterminal_type(t_lr_stack *stack)
 {
-	int		exit_status;
-	t_list	*environ[HASH_MAX];
-};
-
-#endif
+	return (stack->stk_token[stack->idx_token]->type >> 8);
+}

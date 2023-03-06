@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/02/24 17:12:48 by minjungk         ###   ########.fr        #
+#    Updated: 2023/03/07 06:45:34 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ CPPFLAGS	+= -I./environ
 CPPFLAGS	+= -I./prompt
 CPPFLAGS	+= -I./builtin
 CPPFLAGS	+= -I./lexer
+CPPFLAGS	+= -I./parse
 
 CPPFLAGS	+= -I../lib/libft
 LDFLAGS		+= -L../lib/libft
@@ -49,7 +50,21 @@ MINISHELL_SRCS = \
 	execute/run.c \
 	builtin/builtin.c \
 	lexer/lexer.c \
+	lexer/lexer_util.c \
 	builtin/pwd.c \
+	parse/parse.c \
+	parse/lr_state01.c \
+	parse/lr_state02.c \
+	parse/lr_state03.c \
+	parse/lr_state04.c \
+	parse/lr_state05.c \
+	parse/lr_reduce01.c \
+	parse/lr_reduce02.c \
+	parse/lr_reduce03.c \
+	parse/lr_stack_adt.c \
+	parse/lr_action_func.c \
+	parse/clear_tree.c \
+	parse/lr_util.c \
 	builtin/cd.c \
 	builtin/env.c \
 	builtin/exit.c \
