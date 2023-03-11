@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 01:12:27 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/03/07 06:43:26 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/12 00:50:47 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,23 +68,17 @@ void	read_string(const char **cursor, t_lex_token **lst_lex_token)
 	const char	*s_str = *cursor;
 	int			token_type;
 
+	token_type = LEXEME_STRING;
 	if (**cursor == '"' || **cursor == '\'')
 	{
 		*cursor = ft_strchr(s_str + 1, **cursor);
 		if (*cursor == NULL)
 			token_type = LEXEME_ERROR;
 		else
-		{
-			if (*s_str == '"')
-				token_type = LEXEME_DQUOTE;
-			else
-				token_type = LEXEME_SQUOTE;
 			(*cursor)++;
-		}
 	}
 	else
 	{
-		token_type = LEXEME_STRING;
 		while (!(is_meta(*cursor) || **cursor == '\0' || is_ifs(**cursor)))
 			(*cursor)++;
 	}
