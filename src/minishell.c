@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/03/07 06:45:52 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/07 16:41:50 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@ static void	run(struct s_minishell *sh, char *command)
 
 int	main(void)
 {
-	static struct s_minishell	sh;
-	char						*command;
+	struct s_minishell	sh;
+	char				*command;
 
+	ft_memset(&sh, 0, sizeof(struct s_minishell));
 	env_init(sh.environ, HASH_MAX);
 	while (1)
 	{

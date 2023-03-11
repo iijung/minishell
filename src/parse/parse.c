@@ -6,14 +6,12 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 01:20:34 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/03/07 05:13:14 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/03/07 16:37:27 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 #include <stdio.h>
-
-// string ifs dquote | string || ifs string ....으로 들어옴
 
 void	init_lr_stack(t_lr_stack *stack, size_t capacity)
 {
@@ -31,6 +29,16 @@ void	destroy_lr_stack(t_lr_stack *stack)
 	free(stack->stk_token);
 }
 
+static int	check_quote_pair(t_lex_token *token)
+{
+	if (token->type == LEXEME_ERROR)
+	{
+		ft_putendl_fd("minishell : syntax error, unpaired quote", 2);
+		return (1);
+	}
+	return (0);
+}
+
 t_parse_tree	*parse(t_lex_token *lst_token)
 {
 	t_parse_tree	*root;
@@ -44,6 +52,8 @@ t_parse_tree	*parse(t_lex_token *lst_token)
 	};
 
 	root = NULL;
+	if (check_quote_pair(lst_token))
+		return (NULL);
 	init_lr_stack(&lr_stack, ft_lstsize((t_list *)lst_token));
 	while (lr_stack.stk_state[lr_stack.idx_state] != -1)
 	{
