@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:34:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/24 17:27:56 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/12 00:38:42 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static void	debug(t_list **table, size_t table_max)
 	size_t			i;
 	char **const	environment = env_gets(table, table_max);
 
+	if (DEBUG == 0)
+		return ;
 	i = -1;
 	while (environment[++i])
 		printf("%s\n", environment[i]);
