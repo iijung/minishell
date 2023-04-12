@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/23 21:21:20 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:22:49 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static void	debug(void *param)
 		"DQUOTE",
 		"WILDCARD",
 		"ENVIRONMENT",
-		"PARENTHESIS",
+		"PARENTHESIS_OPEN",
+		"PARENTHESIS_CLOSE",
 		"OR",
 		"AND",
 		"PIPE",
@@ -47,24 +48,25 @@ static void	debug(void *param)
 			c->type, typename[c->type], c->len, (int)c->len, c->data);
 }
 
-static char	*add_token(t_list **lst, int type, size_t len, const char *data)
+static char	*add_token(t_list **lst, int type, size_t len, char *data)
 {
-	t_list	*token;
+	t_list				*token;
+	struct s_content	*content;
 
-	token = ft_lstnew(NULL);
-	if (token == NULL)
+	content = ft_calloc(1, sizeof(struct s_content));
+	if (content == NULL)
 		return (NULL);
-	token->content = ft_calloc(1, sizeof(struct s_content));
-	if (token->content == NULL)
+	token = ft_lstnew(content);
+	if (token == NULL)
 	{
-		ft_lstdelone(token, NULL);
+		free(content);
 		return (NULL);
 	}
-	((struct s_content *)token->content)->type = type;
-	((struct s_content *)token->content)->data = data;
-	((struct s_content *)token->content)->len = len;
+	content->type = type;
+	content->data = data;
+	content->len = len;
 	ft_lstadd_back(lst, token);
-	return ((char *)data + len);
+	return (data + len);
 }
 
 static int	is_lexeme(char data)
@@ -81,8 +83,10 @@ static int	is_lexeme(char data)
 		return (LEXEME_WILDCARD);
 	else if (data == '$')
 		return (LEXEME_ENVIRONMENT);
-	else if (data == '(' || data == ')')
-		return (LEXEME_PARENTHESIS);
+	else if (data == '(')
+		return (LEXEME_PARENTHESIS_OPEN);
+	else if (data == ')')
+		return (LEXEME_PARENTHESIS_CLOSE);
 	else if (data == '<')
 		return (LEXEME_INFILE);
 	else if (data == '>')
@@ -94,7 +98,7 @@ static int	is_lexeme(char data)
 
 static char	*lex_token(t_list **lst, char *curr)
 {
-	const char	*base = curr;
+	char *const	base = curr;
 	const int	type = is_lexeme(base[0]);
 
 	if (ft_strncmp(base, "||", 2) == 0)
