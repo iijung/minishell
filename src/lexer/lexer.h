@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/12 18:20:16 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:27:01 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ enum e_lexeme
 	LEXEME_ADDFILE
 };
 
-struct s_content
+struct s_lexeme
 {
 	enum e_lexeme	type;
 	size_t			len;
 	const char		*data;
 };
 
-static const struct s_content	g_lexeme[] = {
+static const struct s_lexeme	g_lexeme[] = {
 [LEXEME_PARENTHESIS_CLOSE] = {LEXEME_PARENTHESIS_CLOSE, 1, ")"},
 [LEXEME_PARENTHESIS_OPEN] = {LEXEME_PARENTHESIS_OPEN, 1, "("},
 [LEXEME_ENVIRONMENT] = {LEXEME_ENVIRONMENT, 1, "$"},

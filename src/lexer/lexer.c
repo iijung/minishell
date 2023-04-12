@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/12 18:22:49 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:28:40 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 static void	debug(void *param)
 {
-	const struct s_content	*c = param;
+	const struct s_lexeme	*c = param;
 	const char				*typename[] = {
 		"STRING",
 		"EOF",
@@ -42,29 +42,29 @@ static void	debug(void *param)
 	if (DEBUG == 0)
 		return ;
 	if (c == NULL)
-		printf("DEBUG:: content is NULL\n");
+		printf("DEBUG:: lexeme is NULL\n");
 	else
-		printf("DEBUG:: content [%x: %12s] len[%lu] data[%.*s]\n",
+		printf("DEBUG:: lexeme [%x: %12s] len[%lu] data[%.*s]\n",
 			c->type, typename[c->type], c->len, (int)c->len, c->data);
 }
 
 static char	*add_token(t_list **lst, int type, size_t len, char *data)
 {
-	t_list				*token;
-	struct s_content	*content;
+	t_list			*token;
+	struct s_lexeme	*lexeme;
 
-	content = ft_calloc(1, sizeof(struct s_content));
-	if (content == NULL)
+	lexeme = ft_calloc(1, sizeof(struct s_lexeme));
+	if (lexeme == NULL)
 		return (NULL);
-	token = ft_lstnew(content);
+	lexeme->type = type;
+	lexeme->data = data;
+	lexeme->len = len;
+	token = ft_lstnew(lexeme);
 	if (token == NULL)
 	{
-		free(content);
+		free(lexeme);
 		return (NULL);
 	}
-	content->type = type;
-	content->data = data;
-	content->len = len;
 	ft_lstadd_back(lst, token);
 	return (data + len);
 }
