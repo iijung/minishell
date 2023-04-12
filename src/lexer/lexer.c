@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/12 21:22:03 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/12 21:38:22 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,27 @@ static void	debug(void *param)
 {
 	const struct s_lexeme	*c = param;
 	const char				*typename[] = {
-		"STRING",
-		"EOF",
-		"IFS",
-		"OR",
-		"AND",
-		"HEREDOC",
-		"ADDFILE",
-		"OUTFILE",
-		"INFILE",
-		"PIPE",
-		"QUOTE",
-		"DQUOTE",
-		"WILDCARD",
-		"ENVIRONMENT",
-		"PARENTHESIS_OPEN",
-		"PARENTHESIS_CLOSE"};
+	[LEXEME_STRING] = "STRING",
+	[LEXEME_EOF] = "EOF",
+	[LEXEME_IFS] = "IFS",
+	[LEXEME_OR] = "OR",
+	[LEXEME_AND] = "AND",
+	[LEXEME_HEREDOC] = "HEREDOC",
+	[LEXEME_ADDFILE] = "ADDFILE",
+	[LEXEME_OUTFILE] = "OUTFILE",
+	[LEXEME_INFILE] = "INFILE",
+	[LEXEME_PIPE] = "PIPE",
+	[LEXEME_QUOTE] = "QUOTE",
+	[LEXEME_DQUOTE] = "DQUOTE",
+	[LEXEME_WILDCARD] = "WILDCARD",
+	[LEXEME_ENVIRONMENT] = "ENVIRONMENT",
+	[LEXEME_PARENTHESIS_OPEN] = "PARENTHESIS_OPEN",
+	[LEXEME_PARENTHESIS_CLOSE] = "PARENTHESIS_CLOSE"};
 
-	if (DEBUG == 0)
+	if (DEBUG == 0 || c == NULL)
 		return ;
-	if (c == NULL)
-		printf("DEBUG:: lexeme is NULL\n");
-	else
-		printf("DEBUG:: lexeme [%x: %12s] len[%lu] data[%.*s]\n",
-			c->type, typename[c->type], c->len, (int)c->len, c->data);
+	printf("DEBUG:: lexeme [%x: %12s] len[%lu] data[%.*s]\n",
+		c->type, typename[c->type], c->len, (int)c->len, c->data);
 }
 
 static char	*add_token(t_list **lst, int type, size_t len, char *data)
