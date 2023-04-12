@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/12 18:28:40 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/12 21:22:03 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,19 @@ static void	debug(void *param)
 		"STRING",
 		"EOF",
 		"IFS",
+		"OR",
+		"AND",
+		"HEREDOC",
+		"ADDFILE",
+		"OUTFILE",
+		"INFILE",
+		"PIPE",
 		"QUOTE",
 		"DQUOTE",
 		"WILDCARD",
 		"ENVIRONMENT",
 		"PARENTHESIS_OPEN",
-		"PARENTHESIS_CLOSE",
-		"OR",
-		"AND",
-		"PIPE",
-		"HEREDOC",
-		"INFILE",
-		"OUTFILE",
-		"ADDFILE"};
+		"PARENTHESIS_CLOSE"};
 
 	if (DEBUG == 0)
 		return ;
@@ -69,52 +69,43 @@ static char	*add_token(t_list **lst, int type, size_t len, char *data)
 	return (data + len);
 }
 
-static int	is_lexeme(char data)
+static enum e_lexeme	get_lexeme(char *data)
 {
-	if (data == ' ' || ('\t' <= data && data <= '\r'))
-		return (LEXEME_IFS);
-	else if (data == '\0')
+	enum e_lexeme	i;
+
+	if (data == NULL || *data == '\0')
 		return (LEXEME_EOF);
-	else if (data == '\'')
-		return (LEXEME_QUOTE);
-	else if (data == '"')
-		return (LEXEME_DQUOTE);
-	else if (data == '*')
-		return (LEXEME_WILDCARD);
-	else if (data == '$')
-		return (LEXEME_ENVIRONMENT);
-	else if (data == '(')
-		return (LEXEME_PARENTHESIS_OPEN);
-	else if (data == ')')
-		return (LEXEME_PARENTHESIS_CLOSE);
-	else if (data == '<')
-		return (LEXEME_INFILE);
-	else if (data == '>')
-		return (LEXEME_OUTFILE);
-	else if (data == '|')
-		return (LEXEME_PIPE);
+	if (*data == ' ' || ('\t' <= *data && *data <= '\r'))
+		return (LEXEME_IFS);
+	i = 0;
+	while (i < MAX_LEXEME)
+	{
+		if (g_lexeme[i].len)
+		{
+			if (ft_strncmp(data, g_lexeme[i].data, g_lexeme[i].len) == 0)
+				return (g_lexeme[i].type);
+		}
+		++i;
+	}
 	return (LEXEME_STRING);
 }
 
 static char	*lex_token(t_list **lst, char *curr)
 {
-	char *const	base = curr;
-	const int	type = is_lexeme(base[0]);
+	char *const			base = curr;
+	const enum e_lexeme	type = get_lexeme(base);
 
-	if (ft_strncmp(base, "||", 2) == 0)
-		return (add_token(lst, LEXEME_OR, 2, base));
-	else if (ft_strncmp(base, "&&", 2) == 0)
-		return (add_token(lst, LEXEME_AND, 2, base));
-	else if (ft_strncmp(base, "<<", 2) == 0)
-		return (add_token(lst, LEXEME_HEREDOC, 2, base));
-	else if (ft_strncmp(base, ">>", 2) == 0)
-		return (add_token(lst, LEXEME_ADDFILE, 2, base));
+	if (type == LEXEME_OR
+		|| type == LEXEME_AND
+		|| type == LEXEME_HEREDOC
+		|| type == LEXEME_ADDFILE)
+		return (add_token(lst, type, 2, base));
 	if ((type == LEXEME_QUOTE && ft_strchr(base + 1, '\'') == NULL)
 		&& (type == LEXEME_DQUOTE && ft_strchr(base + 1, '"') == NULL))
 		errno = EINVAL;
-	while (type == LEXEME_IFS && is_lexeme(curr[1]) == LEXEME_IFS)
+	while (type == LEXEME_IFS && type == get_lexeme(curr + 1))
 		++curr;
-	while (type == LEXEME_STRING && is_lexeme(curr[1]) == LEXEME_STRING)
+	while (type == LEXEME_STRING && type == get_lexeme(curr + 1))
 		++curr;
 	return (add_token(lst, type, curr + 1 - base, base));
 }
