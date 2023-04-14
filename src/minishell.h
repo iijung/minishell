@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:48 by minjungk          #+#    #+#             */
-/*   Updated: 2023/03/07 06:43:26 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:31:33 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@
 # include <stdlib.h>
 # include "libft.h"
 
-#define ERORR -1
-#define FALSE 0
-#define TRUE 1
 # define HASH_MAX	10
 
 struct s_minishell

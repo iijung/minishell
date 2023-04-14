@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
 /*   Updated: 2023/04/12 21:22:55 by minjungk         ###   ########.fr       */
@@ -13,8 +13,9 @@
 #ifndef LEXER_H
 # define LEXER_H
 # include "libft.h"
+# include <stdio.h>
 
-enum
+enum e_lexeme
 {
 	LEXEME_STRING,
 	LEXEME_EOF,
