@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
 /*   Updated: 2023/04/15 04:19:31 by minjungk         ###   ########.fr       */
@@ -12,13 +12,16 @@
 
 #include "lexer.h"
 
-#ifdef DEBUG
-# define DEBUG 1
-#else
-# define DEBUG 0
-#endif
+extern int	is_ifs(char c);
+extern int	is_meta(const char *string);
+extern void	skip_ifs(const char **string);
+extern int	get_next_type(const char *input);
 
-static void	debug(void *param)
+static void	lex_add_token(
+		t_lex_token **lst_lex_token,
+		const char *s_str,
+		int len,
+		int token_type)
 {
 	const struct s_lexeme	*c = param;
 	const char				*typename[] = {
@@ -87,7 +90,7 @@ static enum e_lexeme	get_lexeme(char *data)
 	return (LEXEME_STRING);
 }
 
-static char	*lex_token(t_list **lst, char *curr)
+static void	read_meta(const char **input, t_lex_token **lst_lex_token, int type)
 {
 	char *const			base = curr;
 	const enum e_lexeme	type = get_lexeme(base);
@@ -115,19 +118,27 @@ static char	*lex_token(t_list **lst, char *curr)
 	return (add_token(lst, type, curr + 1 - base, base));
 }
 
-t_list	*lex(char *command)
+t_lex_token	*lexer(const char *input)
 {
-	t_list	*tokens;
+	t_lex_token	*lst_token;
+	int			next_token_type;
 
 	tokens = NULL;
 	while (command && *command)
 		command = lex_token(&tokens, command);
 	if (command == NULL)
 	{
-		ft_lstclear(&tokens, free);
-		ft_putstr_fd("minishell: lexing error\n", STDERR_FILENO);
-		return (NULL);
+		next_token_type = get_next_type(input);
+		if (next_token_type == LEXEME_STRING)
+			read_string(&input, &lst_token);
+		else if (next_token_type == LEXEME_IFS)
+		{
+			skip_ifs(&input);
+			lex_add_token(&lst_token, NULL, 0, LEXEME_IFS);
+		}
+		else
+			read_meta(&input, &lst_token, next_token_type);
 	}
-	ft_lstiter(tokens, debug);
-	return (tokens);
+	lex_add_token(&lst_token, NULL, 0, LEXEME_END);
+	return (lst_token);
 }

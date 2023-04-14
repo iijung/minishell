@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/24 17:36:58 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/03/07 16:41:50 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,34 @@
 #include "environ.h"
 #include "prompt.h"
 #include "lexer.h"
+#include "parse.h"
 
 extern int	executor(const char *command);
 
 static void	run(struct s_minishell *sh, char *command)
 {
-	t_list	*tokens;
+	t_lex_token		*lst_token;
+	t_parse_tree	*tree_parse;
 
 	//	lexing
-	tokens = lex(command);
-	ft_lstclear(&tokens, free);
+	lst_token = lexer(command);
+	tree_parse = parse(lst_token);
 	//	parsing
 	//	expansion
 	//	redirection
+
+	clear_parse_tree(tree_parse);
+	free(tree_parse);
+	ft_lstclear((t_list **)&lst_token, free);
 	sh->exit_status = executor(command);
 }
 
 int	main(void)
 {
-	static struct s_minishell	sh;
-	char						*command;
+	struct s_minishell	sh;
+	char				*command;
 
+	ft_memset(&sh, 0, sizeof(struct s_minishell));
 	env_init(sh.environ, HASH_MAX);
 	while (1)
 	{
