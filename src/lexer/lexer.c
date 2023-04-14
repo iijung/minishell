@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/14 20:41:39 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/15 04:19:31 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,46 +87,26 @@ static enum e_lexeme	get_lexeme(char *data)
 	return (LEXEME_STRING);
 }
 
-static char	*add_dquote(t_list **lst, char *curr)
-{
-	char			*base;
-
-	base = curr;
-	while (curr && *curr)
-	{
-		if (get_lexeme(curr) == LEXEME_DQUOTE)
-			return (add_token(lst, LEXEME_STRING, curr - base, base));
-		if (get_lexeme(curr) == LEXEME_ENVIRONMENT && ft_isalnum(curr[1]))
-		{
-			if (base != curr)
-				base = add_token(lst, LEXEME_STRING, curr - base, base);
-			if (base == NULL)
-				break ;
-			++base;
-			while (curr[1] && ft_isalnum(curr[1]))
-				++curr;
-			++curr;
-			base = add_token(lst, LEXEME_ENVIRONMENT, curr - base, base);
-			continue ;
-		}
-		++curr;
-	}
-	return (NULL);
-}
-
 static char	*lex_token(t_list **lst, char *curr)
 {
 	char *const			base = curr;
 	const enum e_lexeme	type = get_lexeme(base);
 
-	if (type == LEXEME_DQUOTE)
-		return (add_dquote(lst, base + 1) + 1);
 	if (type == LEXEME_QUOTE)
 	{
 		curr = ft_strchr(base + 1, g_lexeme[type].data[0]);
 		if (curr == NULL)
 			return (NULL);
 		return (add_token(lst, LEXEME_STRING, curr - base - 1, base + 1) + 1);
+	}
+	if (type == LEXEME_ENVIRONMENT)
+	{
+		if (ft_isalnum(curr[1]) == 0)
+			return (add_token(lst, LEXEME_STRING, 1, base));
+		++curr;
+		while (curr[0] && ft_isalnum(curr[0]))
+			++curr;
+		return (add_token(lst, type, curr - base - 1, base + 1));
 	}
 	if (g_lexeme[type].len)
 		return (add_token(lst, type, g_lexeme[type].len, base));
