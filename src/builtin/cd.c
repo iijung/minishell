@@ -6,14 +6,10 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 23:08:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/09 06:10:43 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/18 06:35:39 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>	//
-#include <stdlib.h> //
-#include "libft.h"
 #include "builtin.h"
 
 static int	cd_home(void)
@@ -33,7 +29,7 @@ static int	cd_home(void)
 	return (EXIT_SUCCESS);
 }
 
-static int	cd_oldpwd(void)
+static int	cd_oldpwd(t_env **table, const char **argv)
 {
 	const char *const	path = getenv("OLDPWD");
 
@@ -47,16 +43,16 @@ static int	cd_oldpwd(void)
 		perror("minishell: cd");
 		return (EXIT_FAILURE);
 	}
-	return (builtin_pwd());
+	return (builtin_pwd(table, argv));
 }
 
-int	builtin_cd(const char **argv)
+int	builtin_cd(t_env **table, const char **argv)
 {
 	int		argc;
 
-	argc = -1;
-	while (argv[++argc])
-		;
+	argc = 0;
+	while (argv[argc])
+		++argc;
 	if (argc == 1)
 		return (cd_home());
 	if (argc != 2)
@@ -65,7 +61,7 @@ int	builtin_cd(const char **argv)
 		return (EXIT_FAILURE);
 	}
 	if (ft_strncmp(argv[1], "-", 2) == 0)
-		return (cd_oldpwd());
+		return (cd_oldpwd(table, argv));
 	if (chdir(argv[1]) == -1)
 	{
 		perror("minishell: cd");

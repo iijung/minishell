@@ -6,21 +6,23 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/09 05:25:05 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/18 06:37:47 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "builtin.h"
 
-extern char	**environ;
-
-int	builtin_env(void)
+int	builtin_env(t_env **table, const char **argv)
 {
-	int	i;
+	int				i;
+	char **const	envp = env_gets(table);
 
-	i = -1;
-	while (environ[++i])
-		printf("%s\n", environ[i]);
+	(void)argv;
+	i = 0;
+	while (envp && envp[i])
+	{
+		printf("%s\n", envp[i++]);
+	}
+	free(envp);
 	return (EXIT_SUCCESS);
 }

@@ -6,54 +6,67 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:34:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/12 00:38:42 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/18 07:15:03 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "environ.h"
 
-#ifdef DEBUG
-# define DEBUG 1
-#else
-# define DEBUG 0
-#endif
-
-extern char	**environ;
-
-static void	debug(t_list **table, size_t table_max)
+static void	debug(void *param)
 {
 	size_t			i;
-	char **const	environment = env_gets(table, table_max);
+	char **const	env = env_gets(param);
 
-	if (DEBUG == 0)
-		return ;
-	i = -1;
-	while (environment[++i])
-		printf("%s\n", environment[i]);
-	free(environment);
+	i = 0;
+	while (env[i])
+		printf("%s\n", env[i++]);
+	free(env);
 }
 
-void	env_init(t_list **table, size_t table_max)
+int	env_hash(char *key)
 {
-	int		i;
-	char	*key;
-	char	*delimeter;
+	if (key == NULL)
+		return (0);
+	return (*key % ENVIRON_HASH_MAX);
+}
 
-	while (1)
-	{
-		i = -1;
-		while (environ[++i])
-		{
-			delimeter = ft_strchr(environ[i], '=');
-			if (delimeter == NULL)
-				continue ;
-			key = ft_strndup(environ[i], delimeter - environ[i]);
-			env_insert(table, table_max, key, environ[i]);
-			free(key);
-		}
-		debug(table, table_max);
+void	env_set(t_env **table, char *key, char *val)
+{
+	const int			hash = env_hash(key);
+	char				*delimeter;
+	t_list				*curr;
+	struct s_environ	*env;
+
+	if (table == NULL || key == NULL)
 		return ;
+	env = ft_calloc(1, sizeof(struct s_environ));
+	ft_assert(env == NULL, __FILE__, __LINE__);
+	env->val = ft_strdup(val);
+	delimeter = ft_strchr(key, '=');
+	if (delimeter)
+		*delimeter = '\0';
+	env->key = ft_strdup(key);
+	ft_assert(env->key == NULL || env->val == NULL, __FILE__, __LINE__);
+	env_unset(table, key);
+	curr = ft_lstnew(env);
+	ft_assert(curr == NULL, __FILE__, __LINE__);
+	ft_lstadd_back(&table[hash], curr);
+}
+
+t_env	**env_load(void)
+{
+	int			i;
+	t_env		**table;
+	extern char	**environ;
+
+	table = ft_calloc(ENVIRON_HASH_MAX, sizeof(t_env *));
+	ft_assert(table == NULL, __FILE__, __LINE__);
+	i = 0;
+	while (environ && environ[i])
+	{
+		env_set(table, environ[i], environ[i]);
+		++i;
 	}
-	ft_putstr_fd("init error\n", STDERR_FILENO);
-	exit(EXIT_FAILURE);
+	ft_debug(debug, table);
+	return (table);
 }

@@ -6,44 +6,44 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/24 17:36:58 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/18 07:13:19 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "environ.h"
 #include "prompt.h"
 #include "lexer.h"
 
-extern int	executor(const char *command);
+extern int	executor(t_env **table, const char *command);
 
-static void	run(struct s_minishell *sh, char *command)
+static int	run(t_env **table, char *command)
 {
 	t_list	*tokens;
 
-	//	lexing
 	tokens = lex(command);
 	ft_lstclear(&tokens, free);
 	//	parsing
 	//	expansion
 	//	redirection
-	sh->exit_status = executor(command);
+	return (executor(table, command));
 }
 
 int	main(void)
 {
-	static struct s_minishell	sh;
-	char						*command;
+	char	*command;
+	t_env	**table;
 
-	env_init(sh.environ, HASH_MAX);
+	table = env_load();
+	ft_assert(table == NULL, __FILE__, __LINE__);
 	while (1)
 	{
 		command = prompt();
 		if (command == NULL)
 			continue ;
-		run(&sh, command);
+		run(table, command);
 		free(command);
 	}
+	env_clear(&table);
 	rl_clear_history();
 	exit(EXIT_SUCCESS);
 }
