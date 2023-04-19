@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/18 06:37:47 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/19 22:35:27 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	builtin_env(t_env **table, const char **argv)
 {
 	int				i;
-	char **const	envp = env_gets(table);
+	char **const	envp = env_get_arr(table);
 
 	(void)argv;
 	i = 0;
@@ -23,6 +23,6 @@ int	builtin_env(t_env **table, const char **argv)
 	{
 		printf("%s\n", envp[i++]);
 	}
-	free(envp);
+	env_free_arr(envp);
 	return (EXIT_SUCCESS);
 }

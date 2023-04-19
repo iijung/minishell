@@ -6,25 +6,53 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 12:26:19 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/18 05:34:50 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/19 22:57:24 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "environ.h"
 
-char	**env_gets(t_env **table)
+static char	*_join_key_val(char *key, char *val)
 {
-	size_t				i;
-	size_t				count;
+	char	*rtn;
+	size_t	key_len;
+	size_t	val_len;
+
+	if (key == NULL || val == NULL)
+		return (NULL);
+	key_len = ft_strlen(key);
+	val_len = ft_strlen(val);
+	rtn = ft_calloc(key_len + val_len + 2, sizeof(char));
+	ft_assert(rtn == NULL, __FILE__, __LINE__);
+	ft_memmove(rtn, key, key_len);
+	rtn[key_len] = '=';
+	ft_memmove(rtn + key_len + 1, val, val_len);
+	return (rtn);
+}
+
+void	env_free_arr(char **arr)
+{
+	int	i;
+
+	if (arr == NULL)
+		return ;
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
+}
+
+char	**env_get_arr(t_env **table)
+{
+	int					i;
+	int					count;
 	char				**rtn;
+	struct s_environ	*env;
 	t_env				*curr;
 
 	if (table == NULL)
 		return (NULL);
-	i = 0;
-	count = 0;
-	while (i < ENVIRON_HASH_MAX)
-		count += ft_lstsize(table[i++]);
+	count = env_size(table);
 	rtn = ft_calloc(count + 1, sizeof(char *));
 	ft_assert(rtn == NULL, __FILE__, __LINE__);
 	i = 0;
@@ -34,14 +62,16 @@ char	**env_gets(t_env **table)
 		curr = table[i++];
 		while (curr)
 		{
-			rtn[count++] = ((struct s_environ *)(curr->content))->val;
+			env = curr->content;
+			if (env)
+				rtn[count++] = _join_key_val(env->key, env->val);
 			curr = curr->next;
 		}
 	}
 	return (rtn);
 }
 
-char	*env_get(t_env **table, char *key)
+char	*env_get_val(t_env **table, char *key)
 {
 	const int			hash = env_hash(key);
 	struct s_environ	*env;

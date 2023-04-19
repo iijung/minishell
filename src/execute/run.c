@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 23:45:12 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/18 07:08:44 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/19 22:35:16 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 static int	do_child(t_env **table, char **argv)
 {
 	const t_builtin_func	builtin_func = builtin(argv);
-	char **const			envp = env_gets(table);
+	char **const			envp = env_get_arr(table);
 
 	if (ft_strchr(argv[0], '/'))
 		exit(execve(argv[0], argv, envp));
@@ -28,7 +28,7 @@ static int	do_child(t_env **table, char **argv)
 		exit(execve(argv[0], argv, envp));
 	ft_putstr_fd(argv[0], STDERR_FILENO);
 	ft_putstr_fd(": command not found\n", STDERR_FILENO);
-	free(envp);
+	env_free_arr(envp);
 	exit(127);
 }
 
