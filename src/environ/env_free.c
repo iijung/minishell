@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:05:28 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/18 07:14:09 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/19 23:10:17 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	env_unset(t_env **table, char *key)
 	while (curr)
 	{
 		env = curr->content;
-		if (env && env->key
+		if (env && env->key && ft_strlen(env->key) == ft_strlen(key)
 			&& ft_strncmp(env->key, key, ft_strlen(key)) == 0)
 		{
 			if (prev == NULL)
