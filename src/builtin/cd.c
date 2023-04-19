@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 23:08:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/18 06:35:39 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/20 03:30:01 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	builtin_cd(t_env **table, const char **argv)
 {
 	int		argc;
 
+	if (table == NULL || argv == NULL)
+		return (EXIT_FAILURE);
 	argc = 0;
 	while (argv[argc])
 		++argc;
