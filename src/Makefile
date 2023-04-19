@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/04/20 04:05:21 by minjungk         ###   ########.fr        #
+#    Updated: 2023/04/20 05:15:41 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,7 @@ MINISHELL_SRCS = \
 	builtin/cd.c \
 	builtin/env.c \
 	builtin/exit.c \
+	builtin/unset.c \
 	builtin/export.c \
 
 MINISHELL_OBJS := $(MINISHELL_SRCS:.c=.o)

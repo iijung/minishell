@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 22:32:56 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/20 04:04:49 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/20 05:07:53 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ t_builtin_func	builtin(char **argv)
 		return (builtin_pwd);
 	if (ft_strncmp(argv[0], "export", 7) == 0)
 		return (builtin_export);
-//	if (ft_strncmp(argv[0], "unset", 6) == 0)
-//		return (builtin_unset);
+	if (ft_strncmp(argv[0], "unset", 6) == 0)
+		return (builtin_unset);
 	if (ft_strncmp(argv[0], "env", 4) == 0)
 		return (builtin_env);
 	if (ft_strncmp(argv[0], "exit", 5) == 0)
