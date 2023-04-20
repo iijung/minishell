@@ -6,126 +6,88 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 12:26:19 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/24 17:28:19 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/19 22:57:24 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "environ.h"
 
-static void	destroy(void *param)
+static char	*_join_key_val(char *key, char *val)
 {
-	struct s_environ *const	environment = param;
+	char	*rtn;
+	size_t	key_len;
+	size_t	val_len;
 
-	if (environment == NULL)
+	if (key == NULL || val == NULL)
+		return (NULL);
+	key_len = ft_strlen(key);
+	val_len = ft_strlen(val);
+	rtn = ft_calloc(key_len + val_len + 2, sizeof(char));
+	ft_assert(rtn == NULL, __FILE__, __LINE__);
+	ft_memmove(rtn, key, key_len);
+	rtn[key_len] = '=';
+	ft_memmove(rtn + key_len + 1, val, val_len);
+	return (rtn);
+}
+
+void	env_free_arr(char **arr)
+{
+	int	i;
+
+	if (arr == NULL)
 		return ;
-	free(environment->key);
-	environment->key = NULL;
-	free(environment->value);
-	environment->value = NULL;
-	free(environment);
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
 }
 
-int	env_delete(t_list **table, size_t table_max, char *key, int all)
+char	**env_get_arr(t_env **table)
 {
-	struct s_environ	*environment;
-	t_list				*curr;
-	t_list				*next;
-	size_t				key_len;
-
-	if (table == NULL || key == NULL)
-		return (-1);
-	curr = table[*key % table_max];
-	key_len = 0;
-	if (key)
-		key_len = ft_strlen(key);
-	while (curr && curr->next)
-	{
-		next = curr->next;
-		environment = next->content;
-		if (all || ft_strncmp(environment->key, key, key_len) == 0)
-		{
-			next = next->next;
-			ft_lstdelone(curr->next, destroy);
-			curr->next = next;
-			continue ;
-		}
-		curr = next;
-	}
-	return (0);
-}
-
-int	env_insert(t_list **table, size_t table_max, char *key, char *value)
-{
-	struct s_environ	*environment;
-	t_list				*curr;
-
-	if (value == NULL || env_delete(table, table_max, key, 0) < 0)
-		return (-1);
-	while (1)
-	{
-		curr = ft_lstnew(NULL);
-		if (curr == NULL)
-			break ;
-		curr->content = ft_calloc(1, sizeof(struct s_environ));
-		if (curr->content == NULL)
-			break ;
-		environment = curr->content;
-		environment->key = ft_strdup(key);
-		environment->value = ft_strdup(value);
-		if (environment->key == NULL || environment->value == NULL)
-			break ;
-		ft_lstadd_back(&table[*key % table_max], curr);
-		return (0);
-	}
-	ft_lstdelone(curr, destroy);
-	return (-1);
-}
-
-char	**env_gets(t_list **table, size_t table_max)
-{
+	int					i;
+	int					count;
 	char				**rtn;
-	t_list				*curr;
-	size_t				i;
-	size_t				count;
+	struct s_environ	*env;
+	t_env				*curr;
 
 	if (table == NULL)
 		return (NULL);
-	i = -1;
-	count = 0;
-	while (++i < table_max)
-		count += ft_lstsize(table[i]);
+	count = env_size(table);
 	rtn = ft_calloc(count + 1, sizeof(char *));
-	i = -1;
+	ft_assert(rtn == NULL, __FILE__, __LINE__);
+	i = 0;
 	count = 0;
-	while (++i < table_max && rtn)
+	while (i < ENVIRON_HASH_MAX)
 	{
-		curr = table[i];
+		curr = table[i++];
 		while (curr)
 		{
-			rtn[count++] = ((struct s_environ *)(curr->content))->value;
+			env = curr->content;
+			if (env)
+				rtn[count++] = _join_key_val(env->key, env->val);
 			curr = curr->next;
 		}
 	}
 	return (rtn);
 }
 
-char	*env_get(t_list **table, size_t table_max, char *key)
+char	*env_get_val(t_env **table, char *key)
 {
-	struct s_environ	*environment;
-	t_list				*curr;
-	size_t				key_len;
+	const int			hash = env_hash(key);
+	struct s_environ	*env;
+	t_env				*curr;
 
 	if (table == NULL || key == NULL)
 		return (NULL);
-	curr = table[*key % table_max];
-	key_len = 0;
-	if (key)
-		key_len = ft_strlen(key);
+	curr = table[hash];
 	while (curr)
 	{
-		environment = curr->content;
-		if (environment && ft_strncmp(environment->key, key, key_len) == 0)
-			return (environment->value);
+		env = curr->content;
+		if (env && env->key && ft_strlen(env->key) == ft_strlen(key))
+		{
+			if (ft_strncmp(env->key, key, ft_strlen(key)) == 0)
+				return (env->val);
+		}
 		curr = curr->next;
 	}
 	return (NULL);

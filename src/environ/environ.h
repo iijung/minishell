@@ -6,25 +6,31 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 12:11:44 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/24 17:23:51 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/19 22:34:11 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef ENVIRON_H
 # define ENVIRON_H
-# include "libft.h"
 # include "util.h"
-# include <stdio.h>
+
+# define ENVIRON_HASH_MAX	62
+
+typedef t_list	t_env;
 
 struct s_environ
 {
 	char	*key;
-	char	*value;
+	char	*val;
 };
 
-void	env_init(t_list **table, size_t table_max);
-int		env_delete(t_list **table, size_t table_max, char *key, int all);
-int		env_insert(t_list **table, size_t table_max, char *key, char *value);
-char	*env_get(t_list **table, size_t table_max, char *key);
-char	**env_gets(t_list **table, size_t table_max);
+extern int		env_hash(char *key);
+extern int		env_size(t_env **table);
+extern t_env	**env_load(void);
+extern void		env_clear(t_env ***table);
+extern void		env_unset(t_env **table, char *key);
+extern void		env_set(t_env **table, char *key, char *val);
+extern void		env_free_arr(char **arr);
+extern char		**env_get_arr(t_env **table);
+extern char		*env_get_val(t_env **table, char *key);
 
 #endif

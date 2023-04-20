@@ -6,17 +6,17 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 04:37:34 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/12 00:48:53 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/18 06:35:41 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "libft.h"
+#include "builtin.h"
 
-int	builtin_exit(const char **argv)
+int	builtin_exit(t_env **table, const char **argv)
 {
 	int	exit_status;
 
+	(void)table;
 	exit_status = EXIT_SUCCESS;
 	if (argv[1])
 		exit_status = ft_atoi(argv[1]);
