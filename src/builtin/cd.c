@@ -6,14 +6,14 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 23:08:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/24 16:32:08 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/24 17:41:07 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include <dirent.h>
 
-static int	_can_change_path(char *cdpath, const char *path)
+static int	_can_change_path(char *cdpath, char *path)
 {
 	size_t			len;
 	DIR				*dir;
@@ -41,7 +41,7 @@ static int	_can_change_path(char *cdpath, const char *path)
 	return (0);
 }
 
-static void	_set_with_cdpath(char *currpath, t_env **table, const char *path)
+static void	_set_with_cdpath(char *currpath, t_env **table, char *path)
 {
 	int			i;
 	char		**sp;
@@ -66,7 +66,7 @@ static void	_set_with_cdpath(char *currpath, t_env **table, const char *path)
 	free(sp);
 }
 
-static int	_cd(t_env **table, const char *path)
+static int	_cd(t_env **table, char *path)
 {
 	char		oldpath[PATH_MAX];
 	char		currpath[PATH_MAX];
@@ -90,18 +90,14 @@ static int	_cd(t_env **table, const char *path)
 	env_set(table, "OLDPWD", oldpath);
 	getcwd(oldpath, PATH_MAX);
 	env_set(table, "PWD", oldpath);
-	return (builtin_pwd(table, NULL));
+	return (builtin_pwd());
 }
 
-int	builtin_cd(t_env **table, const char **argv)
+int	builtin_cd(t_env **table, int argc, char **argv)
 {
-	int		argc;
 	char	*path;
 	char	*key;
 
-	argc = 0;
-	while (argv && argv[argc])
-		++argc;
 	if (argc != 1 && argc != 2)
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);

@@ -6,13 +6,13 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 05:08:18 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/20 05:18:02 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/24 17:32:27 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-static int	_unset(t_env **table, const char *key)
+static int	_unset(t_env **table, char *key)
 {
 	size_t		i;
 
@@ -29,14 +29,14 @@ static int	_unset(t_env **table, const char *key)
 	return (EXIT_SUCCESS);
 }
 
-int	builtin_unset(t_env **table, const char **argv)
+int	builtin_unset(t_env **table, int argc, char **argv)
 {
 	int	i;
 
 	if (table == NULL || argv == NULL)
 		return (EXIT_FAILURE);
 	i = 1;
-	while (argv[i])
+	while (argv[i] && i < argc)
 	{
 		if (_unset(table, argv[i]) == EXIT_FAILURE)
 			break ;

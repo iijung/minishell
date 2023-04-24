@@ -6,13 +6,13 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 03:20:48 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/20 05:10:58 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/24 17:31:51 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-static int	_export(t_env **table, const char *argv)
+static int	_export(t_env **table, char *argv)
 {
 	char		*key;
 	char		*val;
@@ -29,14 +29,14 @@ static int	_export(t_env **table, const char *argv)
 	return (EXIT_SUCCESS);
 }
 
-int	builtin_export(t_env **table, const char **argv)
+int	builtin_export(t_env **table, int argc, char **argv)
 {
 	int	i;
 
 	if (table == NULL || argv == NULL)
 		return (EXIT_FAILURE);
 	i = 1;
-	while (argv[i])
+	while (argv[i] && i < argc)
 	{
 		if (_export(table, argv[i]) == EXIT_FAILURE)
 			break ;
