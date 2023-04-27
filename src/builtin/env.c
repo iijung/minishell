@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/27 21:57:43 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/27 22:40:37 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ static int	_env(t_env **table, char **argv)
 	int				i;
 	int				status;
 	char			*delimeter;
+	char			**envp;
 	char *const		path = env_get_val(table, "PATH");
-	char **const	envp = env_get_arr(table);
 
 	i = 1;
 	while (argv[i])
@@ -80,10 +80,9 @@ static int	_env(t_env **table, char **argv)
 		*delimeter = '\0';
 		env_set(table, argv[i++], delimeter + 1);
 	}
+	envp = env_get_arr(table);
 	if (argv[i] == NULL)
 		status = _show(table);
-	else if (access(argv[i], F_OK | X_OK) == 0)
-		status = execve(argv[i], argv + i, envp);
 	else
 		status = _exec_with_path(path, argv + i, envp);
 	env_free_arr(envp);
