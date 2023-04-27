@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 05:08:18 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/24 17:32:27 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/27 21:44:06 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	builtin_unset(t_env **table, int argc, char **argv)
 {
 	int	i;
 
-	if (table == NULL || argv == NULL)
+	if (table == NULL || argc < 0 || argv == NULL)
 		return (EXIT_FAILURE);
 	i = 1;
 	while (argv[i] && i < argc)

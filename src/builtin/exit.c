@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 04:37:34 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/24 17:30:48 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/27 21:44:23 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	builtin_exit(t_env **table, int argc, char **argv)
 {
 	int	exit_status;
 
-	(void)table;
-	(void)argc;
+	if (table == NULL || argc < 0 || argv == NULL)
+		return (EXIT_FAILURE);
 	exit_status = EXIT_SUCCESS;
 	if (argv && argv[1])
 		exit_status = ft_atoi(argv[1]);

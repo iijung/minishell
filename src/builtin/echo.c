@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 21:25:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/27 21:34:59 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/27 21:44:20 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	builtin_echo(t_env **table, int argc, char **argv)
 	int	i;
 	int	no_newline;
 
-	(void)table;
+	if (table == NULL || argc < 0 || argv == NULL)
+		return (EXIT_FAILURE);
 	i = 1;
 	no_newline = 0;
 	if (ft_strncmp(argv[i], "-n", 3) == 0)

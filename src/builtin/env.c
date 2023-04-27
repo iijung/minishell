@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/25 23:49:16 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/27 21:57:43 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ int	builtin_env(t_env **table, int argc, char **argv)
 	pid_t	pid;
 	int		wstatus;
 
-	(void)argc;
+	if (table == NULL || argc < 0 || argv == NULL)
+		return (EXIT_FAILURE);
 	pid = fork();
 	if (pid == 0)
 		exit(_env(table, argv));

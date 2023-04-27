@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 23:08:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/25 16:00:37 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/27 21:44:15 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ int	builtin_cd(t_env **table, int argc, char **argv)
 	char	*path;
 	char	*key;
 
+	if (table == NULL || argc < 0 || argv == NULL)
+		return (EXIT_FAILURE);
 	if (argc != 1 && argc != 2)
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
