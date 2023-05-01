@@ -20,6 +20,7 @@ CPPFLAGS	+= -I./environ
 CPPFLAGS	+= -I./prompt
 CPPFLAGS	+= -I./builtin
 CPPFLAGS	+= -I./lexer
+CPPFLAGS	+= -I./parse
 
 CPPFLAGS	+= -I../lib/libft
 LDFLAGS		+= -L../lib/libft
@@ -57,6 +58,7 @@ MINISHELL_SRCS = \
 	builtin/exit.c \
 	builtin/unset.c \
 	builtin/export.c \
+	parse/parse.c \
 
 MINISHELL_OBJS := $(MINISHELL_SRCS:.c=.o)
 MINISHELL_DEPS := $(MINISHELL_SRCS:.c=.d)

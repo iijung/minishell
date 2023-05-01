@@ -13,16 +13,19 @@
 #include "environ.h"
 #include "prompt.h"
 #include "lexer.h"
+#include "parse.h"
 
 extern int	executor(t_env **table, const char *command);
 
 static int	run(t_env **table, char *command)
 {
 	t_list	*tokens;
-
+	t_parse	*parse_tree;
+	
 	tokens = lex(command);
-	ft_lstclear(&tokens, free);
+	// ft_lstclear(&tokens, free);
 	//	parsing
+	parse_tree = parse(tokens);
 	//	expansion
 	//	redirection
 	return (executor(table, command));

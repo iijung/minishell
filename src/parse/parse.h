@@ -16,9 +16,11 @@
 
 typedef struct s_parse
 {
-	struct s_lexeme	*left;
-	struct s_lexeme	*right;
+	struct s_parse	*left;
+	struct s_parse	*right;
 	t_list			*token;
 }	t_parse;
+
+t_parse	*parse(t_list *tokens);
 
 #endif
