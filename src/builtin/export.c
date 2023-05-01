@@ -6,11 +6,32 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 03:20:48 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/24 17:31:51 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/01 13:58:38 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+
+static int	_show(t_env **table)
+{
+	int					i;
+	struct s_environ	*env;
+	t_env				*curr;
+
+	i = 0;
+	while (i < ENVIRON_HASH_MAX)
+	{
+		curr = table[i++];
+		while (curr)
+		{
+			env = curr->content;
+			if (env)
+				printf("declare -x %s=\"%s\"\n", env->key, env->val);
+			curr = curr->next;
+		}
+	}
+	return (EXIT_SUCCESS);
+}
 
 static int	_export(t_env **table, char *argv)
 {
@@ -35,6 +56,8 @@ int	builtin_export(t_env **table, int argc, char **argv)
 
 	if (table == NULL || argv == NULL)
 		return (EXIT_FAILURE);
+	if (argv[1] == NULL)
+		return (_show(table));
 	i = 1;
 	while (argv[i] && i < argc)
 	{
