@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/15 04:19:31 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/20 04:42:33 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,10 @@ static char	*lex_token(t_list **lst, char *curr)
 	}
 	if (type == LEXEME_ENVIRONMENT)
 	{
-		if (ft_isalnum(curr[1]) == 0)
+		if (ft_isalnum(curr[1]) == 0 && curr[1] != '_')
 			return (add_token(lst, LEXEME_STRING, 1, base));
 		++curr;
-		while (curr[0] && ft_isalnum(curr[0]))
+		while (curr[0] && (ft_isalnum(curr[0]) || curr[0] == '_'))
 			++curr;
 		return (add_token(lst, type, curr - base - 1, base + 1));
 	}

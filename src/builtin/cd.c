@@ -6,66 +6,92 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 23:08:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/18 06:35:39 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/27 21:44:15 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include <dirent.h>
 
-static int	cd_home(void)
+static void	_set_with_prefix(char *currpath, char *prefix, char *path)
 {
-	const char *const	path = getenv("HOME");
+	int			i;
+	DIR			*dir;
+	char		**sp;
+	char		dirname[PATH_MAX];
+
+	if (prefix == NULL)
+		sp = ft_split("./", ':');
+	else
+		sp = ft_split(prefix, ':');
+	i = 0;
+	while (sp && sp[i])
+	{
+		if (currpath[0] == '\0')
+		{
+			ft_strlcpy(dirname, sp[i], PATH_MAX);
+			ft_strlcat(dirname, "/", PATH_MAX);
+			ft_strlcat(dirname, path, PATH_MAX);
+			dir = opendir(dirname);
+			if (dir)
+				ft_strlcpy(currpath, dirname, PATH_MAX);
+			closedir(dir);
+		}
+		free(sp[i++]);
+	}
+	free(sp);
+}
+
+static int	_cd(t_env **table, char *path)
+{
+	char		oldpath[PATH_MAX];
+	char		currpath[PATH_MAX];
 
 	if (path == NULL)
-	{
-		ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
+		path = env_get_val(table, "HOME");
+	if (path == NULL || *path == '\0')
 		return (EXIT_FAILURE);
-	}
-	if (chdir(path) == -1)
+	getcwd(oldpath, PATH_MAX);
+	ft_memset(currpath, 0, PATH_MAX);
+	if (*path == '/'
+		|| !ft_strncmp(path, ".", 2) || !ft_strncmp(path, "./", 2)
+		|| !ft_strncmp(path, "..", 3) || !ft_strncmp(path, "../", 3))
+		ft_strlcpy(currpath, path, PATH_MAX);
+	else
+		_set_with_prefix(currpath, env_get_val(table, "CDPATH"), path);
+	if (chdir(currpath) == -1)
 	{
 		perror("minishell: cd");
 		return (EXIT_FAILURE);
 	}
-	return (EXIT_SUCCESS);
+	env_set(table, "OLDPWD", oldpath);
+	getcwd(oldpath, PATH_MAX);
+	env_set(table, "PWD", oldpath);
+	return (builtin_pwd());
 }
 
-static int	cd_oldpwd(t_env **table, const char **argv)
+int	builtin_cd(t_env **table, int argc, char **argv)
 {
-	const char *const	path = getenv("OLDPWD");
+	char	*path;
+	char	*key;
 
-	if (path == NULL)
-	{
-		ft_putstr_fd("minishell: cd: OLDPWD not set\n", STDERR_FILENO);
+	if (table == NULL || argc < 0 || argv == NULL)
 		return (EXIT_FAILURE);
-	}
-	if (chdir(path) == -1)
-	{
-		perror("minishell: cd");
-		return (EXIT_FAILURE);
-	}
-	return (builtin_pwd(table, argv));
-}
-
-int	builtin_cd(t_env **table, const char **argv)
-{
-	int		argc;
-
-	argc = 0;
-	while (argv[argc])
-		++argc;
-	if (argc == 1)
-		return (cd_home());
-	if (argc != 2)
+	if (argc != 1 && argc != 2)
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	if (ft_strncmp(argv[1], "-", 2) == 0)
-		return (cd_oldpwd(table, argv));
-	if (chdir(argv[1]) == -1)
-	{
-		perror("minishell: cd");
-		return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
+	if (argc == 2 && ft_strncmp(argv[1], "-", 2) != 0)
+		return (_cd(table, argv[1]));
+	key = "HOME";
+	if (argc == 2)
+		key = "OLDPWD";
+	path = env_get_val(table, key);
+	if (path)
+		return (_cd(table, path));
+	ft_putstr_fd("minishell: cd: \n", STDERR_FILENO);
+	ft_putstr_fd(key, STDERR_FILENO);
+	ft_putstr_fd(" not set\n", STDERR_FILENO);
+	return (EXIT_FAILURE);
 }

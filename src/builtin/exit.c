@@ -6,22 +6,23 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 04:37:34 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/18 06:35:41 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/04/27 21:44:23 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-int	builtin_exit(t_env **table, const char **argv)
+int	builtin_exit(t_env **table, int argc, char **argv)
 {
 	int	exit_status;
 
-	(void)table;
+	if (table == NULL || argc < 0 || argv == NULL)
+		return (EXIT_FAILURE);
 	exit_status = EXIT_SUCCESS;
-	if (argv[1])
+	if (argv && argv[1])
 		exit_status = ft_atoi(argv[1]);
 	ft_putstr_fd("exit\n", STDERR_FILENO);
-	if (argv[1] && argv[2])
+	if (argv && argv[1] && argv[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
 		return (EXIT_FAILURE);
