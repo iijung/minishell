@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/12 21:22:55 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:25:46 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,6 @@ static const struct s_lexeme	g_lexeme[] = {
 [LEXEME_PARENTHESIS_CLOSE] = {LEXEME_PARENTHESIS_CLOSE, 1, ")"}};
 
 t_list	*lex(char *command);
+void	debug(void *param);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/20 04:42:33 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/02 20:43:14 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define DEBUG 0
 #endif
 
-static void	debug(void *param)
+void	debug(void *param)
 {
 	const struct s_lexeme	*c = param;
 	const char				*typename[] = {
@@ -128,6 +128,6 @@ t_list	*lex(char *command)
 		ft_putstr_fd("minishell: lexing error\n", STDERR_FILENO);
 		return (NULL);
 	}
-	ft_lstiter(tokens, debug);
+	// ft_lstiter(tokens, debug);
 	return (tokens);
 }
