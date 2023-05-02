@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/04/27 21:31:48 by minjungk         ###   ########.fr        #
+#    Updated: 2023/05/02 16:57:58 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_ON_ERROR:
 .DEFAULT_GOAL := all
 
-CFLAGS		= -Wall -Wextra -Werror -MMD -MP -O3
+CFLAGS		= -Wall -Wextra -Werror -MMD -MP -g
 
 CPPFLAGS	+= -I./util
 CPPFLAGS	+= -I./environ
