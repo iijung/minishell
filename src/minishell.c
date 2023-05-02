@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/18 07:13:19 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/02 13:36:11 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@ static int	run(t_env **table, char *command)
 	t_parse	*parse_tree;
 	
 	tokens = lex(command);
-	// ft_lstclear(&tokens, free);
 	//	parsing
 	parse_tree = parse(tokens);
+	debug_print_parse_tree(parse_tree);
+	ft_lstclear(&tokens, free);
+	free(parse_tree);
 	//	expansion
 	//	redirection
 	return (executor(table, command));
