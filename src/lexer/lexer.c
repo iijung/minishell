@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/02 20:43:14 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/04 09:50:52 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ static char	*add_token(t_list **lst, int type, size_t len, char *data)
 	t_list			*token;
 	struct s_lexeme	*lexeme;
 
-	if (len == 0)
-		return (data);
+	// if (len == 0)
+	// 	return (data);
 	lexeme = ft_calloc(1, sizeof(struct s_lexeme));
 	if (lexeme == NULL)
 		return (NULL);
@@ -91,8 +91,10 @@ static char	*lex_token(t_list **lst, char *curr)
 {
 	char *const			base = curr;
 	const enum e_lexeme	type = get_lexeme(base);
+	int					in_dquote_flag;
 
-	if (type == LEXEME_QUOTE)
+	in_dquote_flag = 0;
+	if (type == LEXEME_QUOTE && in_dquote_flag == 0)
 	{
 		curr = ft_strchr(base + 1, g_lexeme[type].data[0]);
 		if (curr == NULL)
@@ -109,7 +111,11 @@ static char	*lex_token(t_list **lst, char *curr)
 		return (add_token(lst, type, curr - base - 1, base + 1));
 	}
 	if (g_lexeme[type].len)
+	{
+		if (type == LEXEME_DQUOTE)
+			in_dquote_flag ^= 1;
 		return (add_token(lst, type, g_lexeme[type].len, base));
+	}
 	while (curr[1] && type == get_lexeme(curr + 1))
 		++curr;
 	return (add_token(lst, type, curr + 1 - base, base));
@@ -128,6 +134,6 @@ t_list	*lex(char *command)
 		ft_putstr_fd("minishell: lexing error\n", STDERR_FILENO);
 		return (NULL);
 	}
-	// ft_lstiter(tokens, debug);
+	ft_lstiter(tokens, debug);
 	return (tokens);
 }
