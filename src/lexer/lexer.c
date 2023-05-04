@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/04 09:50:52 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/04 10:32:55 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ static char	*add_token(t_list **lst, int type, size_t len, char *data)
 	t_list			*token;
 	struct s_lexeme	*lexeme;
 
-	// if (len == 0)
-	// 	return (data);
 	lexeme = ft_calloc(1, sizeof(struct s_lexeme));
 	if (lexeme == NULL)
 		return (NULL);
@@ -87,21 +85,19 @@ static enum e_lexeme	get_lexeme(char *data)
 	return (LEXEME_STRING);
 }
 
-static char	*lex_token(t_list **lst, char *curr)
+static char	*lex_token(t_list **lst, char *curr, int *in_dquote_flag)
 {
 	char *const			base = curr;
 	const enum e_lexeme	type = get_lexeme(base);
-	int					in_dquote_flag;
 
-	in_dquote_flag = 0;
-	if (type == LEXEME_QUOTE && in_dquote_flag == 0)
+	if (type == LEXEME_QUOTE && *in_dquote_flag == 0)
 	{
 		curr = ft_strchr(base + 1, g_lexeme[type].data[0]);
 		if (curr == NULL)
 			return (NULL);
 		return (add_token(lst, LEXEME_STRING, curr - base - 1, base + 1) + 1);
 	}
-	if (type == LEXEME_ENVIRONMENT)
+	else if (type == LEXEME_ENVIRONMENT)
 	{
 		if (ft_isalnum(curr[1]) == 0 && curr[1] != '_')
 			return (add_token(lst, LEXEME_STRING, 1, base));
@@ -110,10 +106,10 @@ static char	*lex_token(t_list **lst, char *curr)
 			++curr;
 		return (add_token(lst, type, curr - base - 1, base + 1));
 	}
-	if (g_lexeme[type].len)
+	else if (g_lexeme[type].len)
 	{
 		if (type == LEXEME_DQUOTE)
-			in_dquote_flag ^= 1;
+			*in_dquote_flag ^= 1;
 		return (add_token(lst, type, g_lexeme[type].len, base));
 	}
 	while (curr[1] && type == get_lexeme(curr + 1))
@@ -124,10 +120,12 @@ static char	*lex_token(t_list **lst, char *curr)
 t_list	*lex(char *command)
 {
 	t_list	*tokens;
+	int		in_dquote_flag;
 
+	in_dquote_flag = 0;
 	tokens = NULL;
 	while (command && *command)
-		command = lex_token(&tokens, command);
+		command = lex_token(&tokens, command, &in_dquote_flag);
 	if (command == NULL)
 	{
 		ft_lstclear(&tokens, free);
