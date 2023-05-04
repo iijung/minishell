@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:29:46 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/04 10:45:21 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/04 15:00:51 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ t_parse	*parse(t_list *tokens)
 	if (check_quote_parenthesis_match_error(tokens))
 		return (NULL);
 	root = ft_calloc(1, sizeof(t_parse));
+	root->token = make_subshell_nodes(&tokens);
 	end_of_left_node = find_end_of_left_node(tokens);
 	if (end_of_left_node != NULL)
 	{

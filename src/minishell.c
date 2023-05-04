@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/03 11:02:51 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/04 14:15:22 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	run(t_env **table, char *command)
 {
 	t_list	*tokens;
 	t_parse	*parse_tree;
-	
+
 	tokens = lex(command);
 	//	parsing
 	parse_tree = parse(tokens);
