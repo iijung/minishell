@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/27 22:40:37 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/05 18:55:53 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,12 @@ static int	_exec_with_path(char *path, char **argv, char **envp)
 	}
 	free(sp);
 	if (is_valid == 0)
-		return (execve(argv[0], argv, envp));
+	{
+		ft_putstr_fd("minishell: command not found: ", STDERR_FILENO);
+		ft_putstr_fd(argv[0], STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
 	return (execve(command, argv, envp));
 }
 
@@ -71,7 +76,7 @@ static int	_env(t_env **table, char **argv)
 	char			**envp;
 	char *const		path = env_get_val(table, "PATH");
 
-	i = 1;
+	i = 0;
 	while (argv[i])
 	{
 		delimeter = ft_strchr(argv[i], '=');

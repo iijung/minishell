@@ -6,26 +6,27 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/18 07:13:19 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/05 17:51:53 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "environ.h"
 #include "prompt.h"
 #include "lexer.h"
-
-extern int	executor(t_env **table, const char *command);
+#include "executor.h"
 
 static int	run(t_env **table, char *command)
 {
 	t_list	*tokens;
+	t_pipex	*pipex;
 
 	tokens = lex(command);
 	ft_lstclear(&tokens, free);
 	//	parsing
 	//	expansion
 	//	redirection
-	return (executor(table, command));
+	pipex = new_pipex(table, command);
+	return (execute(pipex));
 }
 
 int	main(void)
