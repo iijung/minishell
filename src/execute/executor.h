@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 13:49:28 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 17:52:51 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/05 19:43:12 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,22 @@ typedef t_list	t_pipex;
 struct s_pipex
 {
 	char	*command;
-	pid_t	pid;
-	int		argc;
-	char	**argv;
-	t_env	**envp;
-	int		exit_status;
-	int		in_fd;
-	int		out_fd;
-	char	*infile;
-	char	*outfile;
-	int		outflag;
+	struct
+	{
+		pid_t	pid;
+		int		argc;
+		char	**argv;
+		t_env	**envp;
+		int		exit_status;
+	};
+	struct
+	{
+		int		in_fd;
+		int		out_fd;
+		char	*infile;
+		char	*outfile;
+		int		outflag;
+	};
 };
 
 extern int		get_heredoc(char *word);
