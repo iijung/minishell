@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/04/27 21:31:48 by minjungk         ###   ########.fr        #
+#    Updated: 2023/05/05 17:53:01 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ CPPFLAGS	+= -I./environ
 CPPFLAGS	+= -I./prompt
 CPPFLAGS	+= -I./builtin
 CPPFLAGS	+= -I./lexer
+CPPFLAGS	+= -I./execute
 
 CPPFLAGS	+= -I../lib/libft
 LDFLAGS		+= -L../lib/libft
@@ -48,7 +49,10 @@ MINISHELL_SRCS = \
 	environ/env_free.c \
 	prompt/prompt.c \
 	lexer/lexer.c \
-	execute/run.c \
+	execute/executor.c \
+	execute/get_heredoc.c \
+	execute/run_pipex.c \
+	execute/init_pipex.c \
 	builtin/builtin.c \
 	builtin/pwd.c \
 	builtin/cd.c \
