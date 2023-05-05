@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/04 14:30:16 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/05 13:24:59 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define LEXER_H
 # include "libft.h"
 # include <stdio.h>
+
+typedef t_list	t_lex;
 
 enum e_lexeme
 {
@@ -61,7 +63,7 @@ static const struct s_lexeme	g_lexeme[] = {
 [LEXEME_PARENTHESIS_OPEN] = {LEXEME_PARENTHESIS_OPEN, 1, "("},
 [LEXEME_PARENTHESIS_CLOSE] = {LEXEME_PARENTHESIS_CLOSE, 1, ")"}};
 
-t_list	*lex(char *command);
+t_lex	*lex(char *command);
 void	debug(void *param);
 
 #endif
