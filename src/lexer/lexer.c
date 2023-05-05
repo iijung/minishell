@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 13:25:27 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/05 15:42:44 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,6 @@ t_lex	*lex(char *command)
 		ft_putstr_fd("minishell: lexing error\n", STDERR_FILENO);
 		return (NULL);
 	}
-	ft_lstiter(tokens, debug);
+	// ft_lstiter(tokens, debug);
 	return (tokens);
 }

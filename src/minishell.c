@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/04 14:15:22 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/05 16:02:15 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,26 @@
 #include "parse.h"
 
 extern int	executor(t_env **table, const char *command);
+
+void	clear_parse_tree(t_parse *root)
+{
+	t_parse *left_tree;
+	t_parse *right_tree;
+
+	left_tree = root->left;
+	right_tree = root->right;
+	if (left_tree)
+	{
+		clear_parse_tree(left_tree);
+		free(left_tree);
+	}
+	if (right_tree)
+	{
+		clear_parse_tree(right_tree);
+		free(right_tree);
+	}
+	ft_lstclear(&root->node, free);
+}
 
 static int	run(t_env **table, char *command)
 {
@@ -28,10 +48,14 @@ static int	run(t_env **table, char *command)
 	if (parse_tree == 0)
 	{
 		printf("syntax error\n");
-		return 1;
+		ft_lstclear(&tokens, free);
+		return (1);
 	}
-	debug_print_parse_tree(parse_tree);
-	ft_lstclear(&tokens, free);
+	else
+	{
+		debug_print_parse_tree(parse_tree);
+		clear_parse_tree(parse_tree);
+	}
 	free(parse_tree);
 	//	expansion
 	//	redirection
