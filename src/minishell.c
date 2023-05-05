@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 16:02:15 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/05 20:55:32 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "prompt.h"
 #include "lexer.h"
 #include "parse.h"
+#include "executor.h"
 
 extern int	executor(t_env **table, const char *command);
 
@@ -40,7 +41,7 @@ void	clear_parse_tree(t_parse *root)
 static int	run(t_env **table, char *command)
 {
 	t_list	*tokens;
-	t_parse	*parse_tree;
+	t_pipex	*pipex;
 
 	tokens = lex(command);
 	//	parsing
@@ -59,7 +60,8 @@ static int	run(t_env **table, char *command)
 	free(parse_tree);
 	//	expansion
 	//	redirection
-	return (executor(table, command));
+	pipex = new_pipex(table, command);
+	return (execute(pipex));
 }
 
 int	main(void)
