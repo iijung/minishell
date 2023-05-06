@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 13:24:59 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/06 12:33:40 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,8 @@ static const struct s_lexeme	g_lexeme[] = {
 
 t_lex	*lex(char *command);
 void	debug(void *param);
+
+typedef struct s_lexeme	t_lexeme;
+typedef enum e_lexeme	e_lexeme;
 
 #endif
