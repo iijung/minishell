@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 20:55:32 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/06 20:05:48 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,11 @@
 
 extern int	executor(t_env **table, const char *command);
 
-void	clear_parse_tree(t_parse *root)
-{
-	t_parse *left_tree;
-	t_parse *right_tree;
-
-	left_tree = root->left;
-	right_tree = root->right;
-	if (left_tree)
-	{
-		clear_parse_tree(left_tree);
-		free(left_tree);
-	}
-	if (right_tree)
-	{
-		clear_parse_tree(right_tree);
-		free(right_tree);
-	}
-	ft_lstclear(&root->node, free);
-}
-
 static int	run(t_env **table, char *command)
 {
 	t_list	*tokens;
-	t_pipex	*pipex;
+	// t_pipex	*pipex;
+	t_parse	*parse_tree;
 
 	tokens = lex(command);
 	//	parsing
@@ -54,14 +35,17 @@ static int	run(t_env **table, char *command)
 	}
 	else
 	{
+		printf("!!\n");
 		debug_print_parse_tree(parse_tree);
 		clear_parse_tree(parse_tree);
 	}
 	free(parse_tree);
 	//	expansion
 	//	redirection
-	pipex = new_pipex(table, command);
-	return (execute(pipex));
+	// pipex = new_pipex(table, command);
+	// return (execute(pipex));
+	(void)table;
+	return (1);
 }
 
 int	main(void)

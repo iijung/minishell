@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:27:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/05 15:23:05 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/06 13:02:22 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ typedef struct s_parse
 	t_list			*node;
 }	t_parse;
 
-t_parse	*parse(t_list *tokens);
+t_parse	*parse(t_lex *tokens);
 void	debug_print_parse_tree(t_parse *parse_tree);
+void	clear_parse_tree(t_parse *root);
 
-t_parse	*make_subshell_nodes(t_list **tokens);
 
 #endif
