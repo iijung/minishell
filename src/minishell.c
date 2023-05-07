@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/06 20:05:48 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/07 17:19:11 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static int	run(t_env **table, char *command)
 	}
 	else
 	{
-		printf("!!\n");
 		debug_print_parse_tree(parse_tree);
 		clear_parse_tree(parse_tree);
 	}
