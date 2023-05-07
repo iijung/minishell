@@ -6,12 +6,54 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:29:46 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/07 18:18:16 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/07 19:55:00 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 #include "lexer.h"
+
+static int	loop_check_match(t_list *token, int *dquote_flag, int *parenthesis_flag)
+{
+	t_lexeme	*cur_token_data;
+
+	while (token)
+	{
+		cur_token_data = token->content;
+		if (cur_token_data->type == LEXEME_DQUOTE)
+			*dquote_flag ^= 1;
+		else if ((cur_token_data->type == LEXEME_PARENTHESIS_OPEN || \
+				cur_token_data->type == LEXEME_PARENTHESIS_CLOSE) && \
+				dquote_flag == 0)
+		{
+			if (*parenthesis_flag == 0
+				&& cur_token_data->type == LEXEME_PARENTHESIS_OPEN)
+				*parenthesis_flag ^= 1;
+			else if (*parenthesis_flag == 1
+				&& cur_token_data->type == LEXEME_PARENTHESIS_CLOSE)
+				*parenthesis_flag ^= 1;
+			else
+				return (1);
+		}
+		token = token->next;
+	}
+	return (0);
+}
+
+static int	check_quote_parenthesis_match_error(t_list *token)
+{
+	int	dquote_flag;
+	int	parenthesis_flag;
+
+	dquote_flag = 0;
+	parenthesis_flag = 0;
+	if (loop_check_match(token, &dquote_flag, &parenthesis_flag))
+		return (1);
+	if (dquote_flag == 0 && parenthesis_flag == 0)
+		return (0);
+	else
+		return (1);
+}
 
 void	clear_parse_tree(t_parse *root)
 {
@@ -50,6 +92,8 @@ t_parse	*parse(t_lex *lexlst)
 	t_parse	*tree_operator;
 	t_parse	*parse_tree;
 
+	if (check_quote_parenthesis_match_error(lexlst))
+		return (NULL);
 	tree_operator = operator_parse(lexlst);
 	if (tree_operator == NULL)
 		return (NULL);
