@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:27:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/06 13:02:22 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/07 18:17:27 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,8 @@ t_parse	*parse(t_lex *tokens);
 void	debug_print_parse_tree(t_parse *parse_tree);
 void	clear_parse_tree(t_parse *root);
 
+// parse_subshell.c
+t_parse	*subshell_parse(t_parse *tree_operator);
+t_parse	*operator_parse(t_lex *lexlst);
 
 #endif
