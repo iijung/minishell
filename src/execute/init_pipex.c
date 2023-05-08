@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:20:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 17:54:10 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/06 01:25:15 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	free_pipex(void *param)
 t_pipex	*new_pipex(t_env **envp, char *command)
 {
 	t_pipex	*rtn;
-	t_pipex *tmp;
+	t_pipex	*tmp;
 
 	rtn = NULL;
 	tmp = _make(envp, command);
