@@ -6,14 +6,14 @@
 #    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/07 18:17:10 by jaemjeon         ###   ########.fr        #
+#    Updated: 2023/05/09 08:21:49 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_ON_ERROR:
 .DEFAULT_GOAL := all
 
-CFLAGS		= -Wall -Wextra -Werror -MMD -MP -g
+CFLAGS		= -Wall -Wextra -Werror -MMD -MP -O3
 
 CPPFLAGS	+= -I./util
 CPPFLAGS	+= -I./environ

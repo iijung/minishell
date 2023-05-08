@@ -6,14 +6,14 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 18:15:38 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/07 19:07:53 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/09 08:33:05 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
 static int	find_operator(\
-	t_lex *lexlst, t_lex **end_of_left_child, t_lex **root_node, e_lexeme type)
+t_lex *lexlst, t_lex **end_of_left_child, t_lex **root_node, t_e_lexeme type)
 {
 	t_lexeme	*lex_data;	
 	t_lex		*prev_lex;

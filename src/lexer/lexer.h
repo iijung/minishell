@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/06 12:33:40 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/09 08:31:37 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ static const struct s_lexeme	g_lexeme[] = {
 [LEXEME_PARENTHESIS_OPEN] = {LEXEME_PARENTHESIS_OPEN, 1, "("},
 [LEXEME_PARENTHESIS_CLOSE] = {LEXEME_PARENTHESIS_CLOSE, 1, ")"}};
 
-t_lex	*lex(char *command);
-void	debug(void *param);
+t_lex							*lex(char *command);
+void							debug(void *param);
 
-typedef struct s_lexeme	t_lexeme;
-typedef enum e_lexeme	e_lexeme;
+typedef struct s_lexeme			t_lexeme;
+typedef enum e_lexeme			t_e_lexeme;
 
 #endif

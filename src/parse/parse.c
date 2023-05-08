@@ -6,14 +6,15 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:29:46 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/07 19:55:00 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/09 08:32:45 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 #include "lexer.h"
 
-static int	loop_check_match(t_list *token, int *dquote_flag, int *parenthesis_flag)
+static int	loop_check_match(\
+t_list *token, int *dquote_flag, int *parenthesis_flag)
 {
 	t_lexeme	*cur_token_data;
 
