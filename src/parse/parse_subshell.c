@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 18:13:15 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/07 19:55:19 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/08 12:39:20 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ static int	has_subshell(t_lex *lexlst)
 	dquote_flag = 0;
 	while (lexlst)
 	{
-		lex_data = lexlst->content;
+		if (lexlst->content)
+			lex_data = lexlst->content;
+		else
+			break ;
 		if (lex_data->type == LEXEME_DQUOTE)
 			dquote_flag ^= 1;
 		if (dquote_flag == 0 && lex_data->type == LEXEME_PARENTHESIS_OPEN)
@@ -93,7 +96,10 @@ t_parse	*subshell_parse(t_parse *tree_operator)
 	t_lex		*new_lst;
 	t_lexeme	*lex_data;
 
-	lex_data = tree_operator->node->content;
+	if (tree_operator->node && tree_operator->node->content)
+		lex_data = tree_operator->node->content;
+	else
+		return (tree_operator);
 	if (has_subshell(tree_operator->node) \
 		&& lex_data->type == LEXEME_PARENTHESIS_OPEN)
 	{
