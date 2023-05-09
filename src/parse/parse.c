@@ -6,15 +6,15 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:29:46 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/09 09:17:06 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/09 20:02:17 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 #include "lexer.h"
 
-static int	loop_check_match(\
-t_list *token, int *dquote_flag, int *parenthesis_flag)
+static void	loop_check_match(\
+t_list *token, int *dquote_flag, int *parenthesis_dep)
 {
 	t_lexeme	*cur_token_data;
 
@@ -25,32 +25,26 @@ t_list *token, int *dquote_flag, int *parenthesis_flag)
 			*dquote_flag ^= 1;
 		else if ((cur_token_data->type == LEXEME_PARENTHESIS_OPEN || \
 				cur_token_data->type == LEXEME_PARENTHESIS_CLOSE) && \
-				dquote_flag == 0)
+				*dquote_flag == 0)
 		{
-			if (*parenthesis_flag == 0
-				&& cur_token_data->type == LEXEME_PARENTHESIS_OPEN)
-				*parenthesis_flag ^= 1;
-			else if (*parenthesis_flag == 1
-				&& cur_token_data->type == LEXEME_PARENTHESIS_CLOSE)
-				*parenthesis_flag ^= 1;
+			if (cur_token_data->type == LEXEME_PARENTHESIS_OPEN)
+				(*parenthesis_dep)++;
 			else
-				return (1);
+				(*parenthesis_dep)--;
 		}
 		token = token->next;
 	}
-	return (0);
 }
 
 static int	check_quote_parenthesis_match_error(t_list *token)
 {
 	int	dquote_flag;
-	int	parenthesis_flag;
+	int	parenthesis_dep;
 
 	dquote_flag = 0;
-	parenthesis_flag = 0;
-	if (loop_check_match(token, &dquote_flag, &parenthesis_flag))
-		return (1);
-	if (dquote_flag == 0 && parenthesis_flag == 0)
+	parenthesis_dep = 0;
+	loop_check_match(token, &dquote_flag, &parenthesis_dep);
+	if (dquote_flag == 0 && parenthesis_dep == 0)
 		return (0);
 	else
 		return (1);
