@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 18:13:15 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/08 12:39:20 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/09 09:15:13 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,21 @@ static t_lex	*get_prev_last_parenthesis_close(t_lex *lexlst)
 
 static t_lex	*get_next_lextoken_nonifs(t_lex *lexlst)
 {
+	t_lex		*cur_lexlst;
 	t_lexeme	*lex_data;
 
-	while (lexlst)
+	cur_lexlst = lexlst;
+	while (cur_lexlst)
 	{
-		lex_data = lexlst->content;
+		lex_data = cur_lexlst->content;
 		if (lex_data->type != LEXEME_IFS)
 			break ;
-		lexlst = lexlst->next;
+		cur_lexlst = cur_lexlst->next;
 	}
-	return (lexlst);
+	lex_data = cur_lexlst->content;
+	if (lex_data->type == LEXEME_EOF)
+		return (lexlst);
+	return (cur_lexlst);
 }
 
 static void	subshell_parse_process(\
@@ -97,13 +102,15 @@ t_parse	*subshell_parse(t_parse *tree_operator)
 	t_lexeme	*lex_data;
 
 	if (tree_operator->node && tree_operator->node->content)
-		lex_data = tree_operator->node->content;
+	{
+		lex_data = get_next_lextoken_nonifs(tree_operator->node)->content;
+	}
 	else
 		return (tree_operator);
 	if (has_subshell(tree_operator->node) \
 		&& lex_data->type == LEXEME_PARENTHESIS_OPEN)
 	{
-		tmp_node = tree_operator->node;
+		tmp_node = get_next_lextoken_nonifs(tree_operator->node);
 		new_lst = get_next_lextoken_nonifs(tmp_node->next);
 		lex_data = new_lst->content;
 		if (lex_data->type == LEXEME_PARENTHESIS_CLOSE)
