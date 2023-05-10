@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/12 21:22:55 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:19:58 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define LEXER_H
 # include "libft.h"
 # include <stdio.h>
+
+typedef t_list	t_lex_lst;
 
 enum e_lexeme
 {
@@ -61,6 +63,10 @@ static const struct s_lexeme	g_lexeme[] = {
 [LEXEME_PARENTHESIS_OPEN] = {LEXEME_PARENTHESIS_OPEN, 1, "("},
 [LEXEME_PARENTHESIS_CLOSE] = {LEXEME_PARENTHESIS_CLOSE, 1, ")"}};
 
-t_list	*lex(char *command);
+t_lex_lst		*lex(char *command);
+void			debug(void *param);
+
+typedef struct s_lexeme	t_s_lex;
+typedef enum e_lexeme	t_e_lex;
 
 #endif

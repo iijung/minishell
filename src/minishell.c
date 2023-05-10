@@ -3,30 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 17:51:53 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/11 01:04:14 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "environ.h"
 #include "prompt.h"
 #include "lexer.h"
+#include "parse.h"
 #include "executor.h"
+
+extern int	executor(t_env **table, const char *command);
 
 static int	run(t_env **table, char *command)
 {
-	t_list	*tokens;
-	t_pipex	*pipex;
+	int			exit_status;
+	t_lex_lst	*tokens;
+	// t_pipex	*pipex;
+	t_parse		*parse_tree;
 
+	(void)table;
+	exit_status = EXIT_FAILURE;
 	tokens = lex(command);
-	ft_lstclear(&tokens, free);
-	//	parsing
-	//	expansion
-	//	redirection
-	pipex = new_pipex(table, command);
-	return (execute(pipex));
+	if (tokens)
+	{
+		parse_tree = parse(tokens);
+		if (parse_tree)
+		{
+			debug_print_parse_tree(parse_tree);
+//			exit_status = execute(table, parse_tree);
+			clear_parse_tree(parse_tree);
+			free(parse_tree);
+		}
+		else
+		{
+			printf("syntax error\n");
+			ft_lstclear(&tokens, free);
+			return (1);
+		}
+		ft_lstclear(&tokens, free);
+	}
+	return (exit_status);
 }
 
 int	main(void)

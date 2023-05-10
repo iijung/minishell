@@ -3,23 +3,24 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/05 17:53:01 by minjungk         ###   ########.fr        #
+#    Updated: 2023/05/10 23:51:39 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_ON_ERROR:
 .DEFAULT_GOAL := all
 
-CFLAGS		= -Wall -Wextra -Werror -MMD -MP -O3
+CFLAGS		= -Wall -Wextra -Werror -MMD -MP -g
 
 CPPFLAGS	+= -I./util
 CPPFLAGS	+= -I./environ
 CPPFLAGS	+= -I./prompt
 CPPFLAGS	+= -I./builtin
 CPPFLAGS	+= -I./lexer
+CPPFLAGS	+= -I./parse
 CPPFLAGS	+= -I./execute
 
 CPPFLAGS	+= -I../lib/libft
@@ -61,6 +62,9 @@ MINISHELL_SRCS = \
 	builtin/exit.c \
 	builtin/unset.c \
 	builtin/export.c \
+	parse/parse.c \
+	parse/parse_operator.c \
+	parse/parse_util.c
 
 MINISHELL_OBJS := $(MINISHELL_SRCS:.c=.o)
 MINISHELL_DEPS := $(MINISHELL_SRCS:.c=.d)

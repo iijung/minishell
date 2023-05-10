@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/04 20:07:19 by minjungk          #+#    #+#              #
-#    Updated: 2023/01/24 23:10:53 by minjungk         ###   ########.fr        #
+#    Updated: 2023/05/10 23:16:29 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 
 NAME = libft.a
 
-CFLAGS = -Wall -Wextra -Werror -MMD -MP -O3
+CFLAGS = -Wall -Wextra -Werror -MMD -MP -g
 ARFLAGS = rsc
 
 SRCS = \
