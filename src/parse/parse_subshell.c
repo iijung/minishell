@@ -6,16 +6,16 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 18:13:15 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/10 16:09:11 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:16:17 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
-static int	has_subshell(t_lex *lexlst)
+static int	has_subshell(t_lex_lst *lexlst)
 {
-	t_lexeme	*lex_data;
-	int			dquote_flag;
+	t_s_lex	*lex_data;
+	int		dquote_flag;
 
 	dquote_flag = 0;
 	while (lexlst)
@@ -33,12 +33,12 @@ static int	has_subshell(t_lex *lexlst)
 	return (0);
 }
 
-static t_lex	*get_prev_last_parenthesis_close(t_lex *lexlst)
+static t_lex_lst	*get_prev_last_parenthesis_close(t_lex_lst *lexlst)
 {
-	t_lex		*front;
-	t_lex		*rear;
-	t_lex		*last_close;
-	t_lexeme	*lex_data;
+	t_lex_lst	*front;
+	t_lex_lst	*rear;
+	t_lex_lst	*last_close;
+	t_s_lex		*lex_data;
 
 	last_close = NULL;
 	lex_data = lexlst->content;
@@ -57,10 +57,10 @@ static t_lex	*get_prev_last_parenthesis_close(t_lex *lexlst)
 	return (last_close);
 }
 
-t_lex	*get_next_lextoken_nonifs(t_lex *lexlst)
+t_lex_lst	*get_next_lextoken_nonifs(t_lex_lst *lexlst)
 {
-	t_lex		*cur_lexlst;
-	t_lexeme	*lex_data;
+	t_lex_lst	*cur_lexlst;
+	t_s_lex		*lex_data;
 
 	cur_lexlst = lexlst;
 	while (cur_lexlst)
@@ -77,9 +77,9 @@ t_lex	*get_next_lextoken_nonifs(t_lex *lexlst)
 }
 
 static void	subshell_parse_process(\
-	t_lex **tmp_node, t_lex *new_lst, t_parse *tree_operator)
+	t_lex_lst **tmp_node, t_lex_lst *new_lst, t_parse *tree_operator)
 {
-	t_lex	*redirection;
+	t_lex_lst	*redirection;
 
 	while (*tmp_node != new_lst)
 	{
@@ -97,9 +97,9 @@ static void	subshell_parse_process(\
 
 t_parse	*subshell_parse(t_parse *tree_operator)
 {
-	t_lex		*tmp_node;
-	t_lex		*new_lst;
-	t_lexeme	*lex_data;
+	t_lex_lst	*tmp_node;
+	t_lex_lst	*new_lst;
+	t_s_lex		*lex_data;
 
 	if (tree_operator->node && tree_operator->node->content)
 	{

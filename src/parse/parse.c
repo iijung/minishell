@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:29:46 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/09 20:02:17 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:13:21 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	loop_check_match(\
 t_list *token, int *dquote_flag, int *parenthesis_dep)
 {
-	t_lexeme	*cur_token_data;
+	t_s_lex	*cur_token_data;
 
 	while (token)
 	{
@@ -82,7 +82,7 @@ void	debug_print_parse_tree(t_parse *parse_tree)
 		debug_print_parse_tree(parse_tree->right);
 }
 
-t_parse	*parse(t_lex *lexlst)
+t_parse	*parse(t_lex_lst *lexlst)
 {
 	t_parse	*tree_operator;
 	t_parse	*parse_tree;

@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/09 08:29:16 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:17:57 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ void	debug(void *param)
 		c->type, typename[c->type], c->len, (int)c->len, c->data);
 }
 
-static char	*add_token(t_lex **lst, int type, size_t len, char *data)
+static char	*add_token(t_lex_lst **lst, int type, size_t len, char *data)
 {
-	t_lex			*token;
+	t_lex_lst		*token;
 	struct s_lexeme	*lexeme;
 
 	lexeme = ft_calloc(1, sizeof(struct s_lexeme));
@@ -85,7 +85,7 @@ static enum e_lexeme	get_lexeme(char *data)
 	return (LEXEME_STRING);
 }
 
-static char	*lex_token(t_lex **lst, char *curr, int *in_dquote_flag)
+static char	*lex_token(t_lex_lst **lst, char *curr, int *in_dquote_flag)
 {
 	char *const			base = curr;
 	const enum e_lexeme	type = get_lexeme(base);
@@ -117,10 +117,10 @@ static char	*lex_token(t_lex **lst, char *curr, int *in_dquote_flag)
 	return (add_token(lst, type, curr + 1 - base, base));
 }
 
-t_lex	*lex(char *command)
+t_lex_lst	*lex(char *command)
 {
-	t_lex	*tokens;
-	int		in_dquote_flag;
+	t_lex_lst	*tokens;
+	int			in_dquote_flag;
 
 	in_dquote_flag = 0;
 	tokens = NULL;
