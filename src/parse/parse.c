@@ -5,13 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:29:46 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/10 16:13:21 by jaemjeon         ###   ########.fr       */
+/*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
+/*   Updated: 2023/05/10 23:05:04 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parse.h"
 #include "lexer.h"
+#include "parse.h"
 
 static void	loop_check_match(\
 t_list *token, int *dquote_flag, int *parenthesis_dep)
@@ -84,14 +84,11 @@ void	debug_print_parse_tree(t_parse *parse_tree)
 
 t_parse	*parse(t_lex_lst *lexlst)
 {
-	t_parse	*tree_operator;
-	t_parse	*parse_tree;
+	t_parse	*root;
 
 	if (check_quote_parenthesis_match_error(lexlst))
 		return (NULL);
-	tree_operator = operator_parse(lexlst);
-	if (tree_operator == NULL)
-		return (NULL);
-	parse_tree = subshell_parse(tree_operator);
-	return (parse_tree);
+	root = split_with_operator(lexlst, ft_lstlast(lexlst));
+	// debug_print_parse_tree(root);
+	return (root);
 }
