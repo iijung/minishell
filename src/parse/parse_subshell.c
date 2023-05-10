@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 23:55:18 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/11 01:16:53 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/11 03:53:25 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,13 +157,14 @@ t_parse	*expand_subshell(t_parse *root)
 	if (!has_subshell(root->node))
 		return (root);
 	new_root = ft_calloc(1, sizeof(t_parse));
+	new_root->is_subshell = 1;
 	if (has_something_before_parenthesis(root->node))
 		new_root->node = get_something_before_parenthesis(&(root->node));
-	new_root->is_subshell = 1;
 	if (has_something_after_parenthesis(root->node))
 		new_root->right = get_something_after_parenthesis(&(root->node));
 	clear_parenthesis(&(root->node));
 	new_root->left = parse(root->node);
 	clear_parse_tree(root, NULL);
+	free(root);
 	return (new_root);
 }

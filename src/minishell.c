@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/11 01:22:04 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/11 01:34:37 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	run(t_env **table, char *command)
 			ft_lstclear(&tokens, free);
 			return (1);
 		}
-		ft_lstclear(&tokens, free);
+		ft_lstclear(&tokens, NULL);
 	}
 	return (exit_status);
 }
