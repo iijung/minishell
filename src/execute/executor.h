@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 13:49:28 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 19:43:12 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/11 00:41:29 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define EXECUTOR_H
 # include "environ.h"
 # include "builtin.h"
-# include "fcntl.h"
+# include <fcntl.h>
+# include <sys/wait.h>
 
 typedef t_list	t_pipex;
 
@@ -39,7 +40,7 @@ struct s_pipex
 	};
 };
 
-extern int		get_heredoc(char *word);
+extern int		get_heredoc(t_env **table, char *word);
 extern int		run_pipex(t_pipex *pipex);
 extern t_pipex	*new_pipex(t_env **envp, char *command);
 extern void		free_pipex(void *param);

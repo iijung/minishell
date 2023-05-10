@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/11 00:29:43 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/11 01:30:47 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,6 @@ t_parse	*parse(t_lex_lst *lexlst)
 	if (check_quote_parenthesis_match_error(lexlst))
 		return (NULL);
 	root = split_with_operator(lexlst, ft_lstlast(lexlst));
-	root = expand_subshell(root);
+	// root = expand_subshell(root);
 	return (root);
 }
