@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/10 23:05:04 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/11 00:56:33 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	clear_parse_tree(t_parse *root)
 		clear_parse_tree(right_tree);
 		free(right_tree);
 	}
-	ft_lstclear(&root->node, free);
+	ft_lstclear(&root->node, NULL);
 }
 
 void	debug_print_parse_tree(t_parse *parse_tree)

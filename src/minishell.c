@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/10 23:27:23 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/11 01:04:14 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,31 +20,33 @@ extern int	executor(t_env **table, const char *command);
 
 static int	run(t_env **table, char *command)
 {
-	t_list	*tokens;
+	int			exit_status;
+	t_lex_lst	*tokens;
 	// t_pipex	*pipex;
-	t_parse	*parse_tree;
+	t_parse		*parse_tree;
 
-	tokens = lex(command);
-	//	parsing
-	parse_tree = parse(tokens);
-	if (parse_tree == 0)
-	{
-		printf("syntax error\n");
-		return (1);
-	}
-	else
-	{
-		debug_print_parse_tree(parse_tree);
-		clear_parse_tree(parse_tree);
-	}
-	ft_lstclear(&tokens, NULL);
-	free(parse_tree);
-	//	expansion
-	//	redirection
-	// pipex = new_pipex(table, command);
-	// return (execute(pipex));
 	(void)table;
-	return (1);
+	exit_status = EXIT_FAILURE;
+	tokens = lex(command);
+	if (tokens)
+	{
+		parse_tree = parse(tokens);
+		if (parse_tree)
+		{
+			debug_print_parse_tree(parse_tree);
+//			exit_status = execute(table, parse_tree);
+			clear_parse_tree(parse_tree);
+			free(parse_tree);
+		}
+		else
+		{
+			printf("syntax error\n");
+			ft_lstclear(&tokens, free);
+			return (1);
+		}
+		ft_lstclear(&tokens, free);
+	}
+	return (exit_status);
 }
 
 int	main(void)
