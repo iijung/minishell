@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 18:13:15 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/09 09:15:13 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:09:11 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static t_lex	*get_prev_last_parenthesis_close(t_lex *lexlst)
 	return (last_close);
 }
 
-static t_lex	*get_next_lextoken_nonifs(t_lex *lexlst)
+t_lex	*get_next_lextoken_nonifs(t_lex *lexlst)
 {
 	t_lex		*cur_lexlst;
 	t_lexeme	*lex_data;
