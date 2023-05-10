@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 18:13:15 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/10 16:16:17 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:53:50 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,14 @@ static void	subshell_parse_process(\
 	t_lex_lst **tmp_node, t_lex_lst *new_lst, t_parse *tree_operator)
 {
 	t_lex_lst	*redirection;
+	t_lex_lst	*maybe_ifs;
+	t_s_lex		*lex_data;
 
-	while (*tmp_node != new_lst)
-	{
-		ft_lstdelone(*tmp_node, free);
-		*tmp_node = (*tmp_node)->next;
-	}
+	maybe_ifs = (*tmp_node)->next;
+	ft_lstdelone(*tmp_node, free);
+	lex_data = maybe_ifs->content;
+	if (lex_data->type == LEXEME_IFS)
+		ft_lstdelone(maybe_ifs, free);
 	*tmp_node = get_prev_last_parenthesis_close(new_lst);
 	redirection = (*tmp_node)->next->next;
 	ft_lstdelone((*tmp_node)->next, free);
