@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/10 23:05:04 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/11 00:29:43 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	check_quote_parenthesis_match_error(t_list *token)
 		return (1);
 }
 
-void	clear_parse_tree(t_parse *root)
+void	clear_parse_tree(t_parse *root, void (*f)(void *))
 {
 	t_parse	*left_tree;
 	t_parse	*right_tree;
@@ -59,15 +59,15 @@ void	clear_parse_tree(t_parse *root)
 	right_tree = root->right;
 	if (left_tree)
 	{
-		clear_parse_tree(left_tree);
+		clear_parse_tree(left_tree, f);
 		free(left_tree);
 	}
 	if (right_tree)
 	{
-		clear_parse_tree(right_tree);
+		clear_parse_tree(right_tree, f);
 		free(right_tree);
 	}
-	ft_lstclear(&root->node, free);
+	ft_lstclear(&root->node, f);
 }
 
 void	debug_print_parse_tree(t_parse *parse_tree)
@@ -89,6 +89,6 @@ t_parse	*parse(t_lex_lst *lexlst)
 	if (check_quote_parenthesis_match_error(lexlst))
 		return (NULL);
 	root = split_with_operator(lexlst, ft_lstlast(lexlst));
-	// debug_print_parse_tree(root);
+	root = expand_subshell(root);
 	return (root);
 }

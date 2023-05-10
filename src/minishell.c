@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/10 23:27:23 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/11 00:59:47 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static int	run(t_env **table, char *command)
 
 	tokens = lex(command);
 	//	parsing
+	if (tokens == NULL)
+		return (0);
 	parse_tree = parse(tokens);
 	if (parse_tree == 0)
 	{
@@ -35,7 +37,7 @@ static int	run(t_env **table, char *command)
 	else
 	{
 		debug_print_parse_tree(parse_tree);
-		clear_parse_tree(parse_tree);
+		clear_parse_tree(parse_tree, free);
 	}
 	ft_lstclear(&tokens, NULL);
 	free(parse_tree);
