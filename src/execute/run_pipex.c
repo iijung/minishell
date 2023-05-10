@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 18:50:46 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/06 01:13:10 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static void	_exec(void *param)
 	struct s_pipex *const	content = param;
 
 	ft_assert(content == NULL, __FILE__, __LINE__);
+	ft_assert(pipe(pipes) == -1, __FILE__, __LINE__);
 	content->pid = fork();
 	if (content->pid == 0)
 	{

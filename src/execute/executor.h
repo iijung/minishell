@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 13:49:28 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 19:43:12 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/06 01:14:37 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ struct s_pipex
 	};
 };
 
-extern int		get_heredoc(char *word);
+extern int		get_heredoc(t_env **table, char *word);
 extern int		run_pipex(t_pipex *pipex);
 extern t_pipex	*new_pipex(t_env **envp, char *command);
 extern void		free_pipex(void *param);
