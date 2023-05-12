@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/13 00:19:00 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/13 00:43:40 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ t_parse	*make_new_node(t_lex_lst *token_lst)
 	if (token_lst == NULL)
 		return (NULL);
 	root = ft_calloc(1, sizeof(t_parse));
+	if (root == NULL)
+		return (NULL);
 	root->node = token_lst;
 	return (root);
 }
@@ -206,10 +208,14 @@ void	split_by_subshell(
 	*right = make_new_node(tmp_token2);
 }
 
-t_parse	*subshell_parsing(t_parse *root, t_lex_lst *token_lst)
+t_parse	*subshell_parsing(t_lex_lst *token_lst)
 {
+	t_parse	*root;
 	t_parse	*prev_root;
 
+	root = ft_calloc(1, sizeof(t_parse));
+	if (root == NULL)
+		return (NULL);
 	root->is_subshell = 1;
 	split_by_subshell(token_lst, &root->left, &root->right, &root->node);
 	prev_root = root->left;
@@ -321,16 +327,14 @@ static int	is_ifs_token(t_lex_lst *token)
 	return (lex_data->type == LEXEME_IFS);
 }
 
-void	delete_useless_ifs(t_lex_lst *token_lst)
+void	delete_useless_ifs(t_lex_lst *rear)
 {
-	t_lex_lst	*rear;
 	t_lex_lst	*front;
 	t_lex_lst	*mid;
 	t_lex_lst	*to_delete;
 
-	if (ft_lstsize(token_lst) < 3)
+	if (ft_lstsize(rear) < 3)
 		return ;
-	rear = token_lst;
 	mid = rear->next;
 	front = mid->next;
 	while (front)
@@ -372,15 +376,14 @@ t_parse	*parse(t_lex_lst *token_lst)
 	if (operator == NULL)
 	{
 		if (has_subshell(token_lst))
-		{
-			root = ft_calloc(1, sizeof(t_parse));
-			return (subshell_parsing(root, token_lst));
-		}
+			return (subshell_parsing(token_lst));
 		return (make_new_node(token_lst));
 	}
 	else
 	{
 		root = ft_calloc(1, sizeof(t_parse));
+		if (root == NULL)
+			return (NULL);
 		root->node = operator;
 		root->left = parse(get_left_start(token_lst, root->node));
 		root->right = parse(get_right_start(root->node));
