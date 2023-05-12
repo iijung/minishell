@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/11 02:10:33 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:33:09 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,32 @@ void	debug_print_parse_tree(t_parse *parse_tree)
 	printf("debug\n");
 	if (parse_tree->is_subshell)
 		printf("this is SUBSHELL_NODE\n");
-	ft_lstiter(parse_tree->node, debug);
+	if (parse_tree->node)
+	{
+		printf("	in subshell onde\n");
+		ft_lstiter(parse_tree->node, debug);
+	}
 	if (parse_tree->left)
 		debug_print_parse_tree(parse_tree->left);
 	if (parse_tree->right)
 		debug_print_parse_tree(parse_tree->right);
+}
+
+int	check_empty_subshell(t_lex_lst *lexlst)
+{
+	t_s_lex	*front_lex_data;
+	t_s_lex	*rear_lex_data;
+
+	while (lexlst && lexlst->next)
+	{
+		rear_lex_data = lexlst->content;
+		front_lex_data = lexlst->next->content;
+		if (rear_lex_data->type == LEXEME_PARENTHESIS_OPEN
+			&& front_lex_data->type == LEXEME_PARENTHESIS_CLOSE)
+			return (1);
+		lexlst = lexlst->next;
+	}
+	return (0);
 }
 
 t_parse	*parse(t_lex_lst *lexlst)
@@ -90,7 +111,9 @@ t_parse	*parse(t_lex_lst *lexlst)
 
 	if (check_quote_parenthesis_match_error(lexlst))
 		return (NULL);
+	else if (check_empty_subshell(lexlst))
+		return (NULL);
 	root = split_with_operator(lexlst, ft_lstlast(lexlst));
-	root = expand_subshell(root);
+	root = expand_root_subshell(root);
 	return (root);
 }

@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 23:55:18 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/11 03:53:25 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:28:00 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	has_something_before_parenthesis(t_lex_lst *lexlst)
 	t_s_lex		*lex_data;
 
 	lex_data = lexlst->content;
-	if (lex_data->type == LEXEME_IFS)
-		lexlst = lexlst->next;
+	// if (lex_data->type == LEXEME_IFS)
+	// 	lexlst = lexlst->next;
 	lex_data = lexlst->content;
 	if (lex_data->type == LEXEME_PARENTHESIS_OPEN)
 		return (0);
@@ -44,7 +44,8 @@ t_lex_lst	*get_something_before_parenthesis(t_lex_lst **lexlst)
 		(*lexlst) = (*lexlst)->next;
 	}
 	(*lexlst) = (*lexlst)->next;
-	return (make_new_lexlst(*lexlst, end_of_something));
+	end_of_something->next = NULL;
+	return (start_lexlst);
 }
 
 t_lex_lst	*find_first_parenthesis_open(t_lex_lst *lexlst)
@@ -60,6 +61,7 @@ t_lex_lst	*find_first_parenthesis_open(t_lex_lst *lexlst)
 			dquote_flag ^= 1;
 		else if (dquote_flag == 0 && lex_data->type == LEXEME_PARENTHESIS_OPEN)
 			return (lexlst);
+		lexlst = lexlst->next;
 	}
 	return (NULL);
 }
@@ -90,30 +92,15 @@ t_lex_lst	*find_before_last_parenthesis_close(t_lex_lst *lexlst)
 	return (last_before_last);
 }
 
-void	clear_parenthesis(t_lex_lst **lexlst)
-{
-	t_lex_lst	*cur_lexlst;
-	t_lex_lst	*close_parenthesis;
-
-	cur_lexlst = *lexlst;
-	*lexlst = cur_lexlst->next;
-	ft_lstdelone(cur_lexlst, free);
-	cur_lexlst = find_before_last_parenthesis_close(*lexlst);
-	close_parenthesis = cur_lexlst->next;
-	ft_lstdelone(close_parenthesis, free);
-	cur_lexlst->next = NULL;
-}
-
 t_parse	*get_something_after_parenthesis(t_lex_lst **lexlst)
 {
 	t_parse		*node;
-	t_lex_lst	*last_parenthesis_close;
+	t_lex_lst	*before_last_parenthesis_close;
 	t_lex_lst	*something;
 
-	node = ft_calloc(1, sizeof(t_parse));
-	last_parenthesis_close = find_before_last_parenthesis_close(*lexlst);
-	something = last_parenthesis_close->next->next;
-	node->node = make_new_lexlst(something, ft_lstlast(something));
+	before_last_parenthesis_close = find_before_last_parenthesis_close(*lexlst);
+	something = before_last_parenthesis_close->next->next;
+	node = make_new_node(something, ft_lstlast(something));
 	return (node);
 }
 
@@ -150,10 +137,52 @@ int	has_something_after_parenthesis(t_lex_lst *lexlst)
 		return (1);
 }
 
-t_parse	*expand_subshell(t_parse *root)
+void	expand_inner_subshell(t_parse *root)
 {
 	t_parse	*new_root;
 
+	if (root->left && root->left->node)
+	{
+		new_root = split_with_operator(root->left->node, ft_lstlast(root->left->node));
+		clear_parse_tree(root->left, NULL);
+		free(root->left);
+		root->left = new_root;
+	}
+	if (root->right && root->right ->node)
+	{
+		new_root = split_with_operator(root->right->node, ft_lstlast(root->right->node));
+		clear_parse_tree(root->right, NULL);
+		free(root->right);
+		root->right = new_root;
+	}
+	if (root->left && root->left->node && has_subshell(root->left->node))
+		root->left = expand_root_subshell(root->left);
+	if (root->right && root->right->node && has_subshell(root->right->node))
+		root->right = expand_root_subshell(root->right);
+}
+
+t_lex_lst *get_inner_subshell(t_lex_lst *subshell_lst)
+{
+	t_lex_lst	*subshell_open;
+	t_lex_lst	*after_subshell_open;
+	t_lex_lst	*before_subshell_close;
+
+	subshell_open = find_first_parenthesis_open(subshell_lst);
+	after_subshell_open = subshell_open->next;
+	before_subshell_close = find_before_last_parenthesis_close(subshell_lst);
+	subshell_open->next = before_subshell_close->next;
+	before_subshell_close->next = NULL;
+	return (after_subshell_open);
+}
+
+t_parse	*expand_root_subshell(t_parse *root)
+{
+	t_parse		*new_root;
+	t_lex_lst	*inner_lexlst;
+	t_s_lex		*lex_data;
+
+	lex_data = root->node->content;
+	expand_inner_subshell(root);
 	if (!has_subshell(root->node))
 		return (root);
 	new_root = ft_calloc(1, sizeof(t_parse));
@@ -162,9 +191,10 @@ t_parse	*expand_subshell(t_parse *root)
 		new_root->node = get_something_before_parenthesis(&(root->node));
 	if (has_something_after_parenthesis(root->node))
 		new_root->right = get_something_after_parenthesis(&(root->node));
-	clear_parenthesis(&(root->node));
-	new_root->left = parse(root->node);
-	clear_parse_tree(root, NULL);
+	inner_lexlst = get_inner_subshell(root->node);
+	ft_lstclear(&(root->node), free);
 	free(root);
+	new_root->left = parse(inner_lexlst);
+	ft_lstclear(&inner_lexlst, NULL);
 	return (new_root);
 }
