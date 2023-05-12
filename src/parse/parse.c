@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/12 23:57:35 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/13 00:05:44 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,37 +15,24 @@
 
 void	clear_parse_tree(t_parse *root, void (*f)(void *))
 {
-	t_parse	*left_tree;
-	t_parse	*right_tree;
-
-	left_tree = root->left;
-	right_tree = root->right;
-	if (left_tree)
-	{
-		clear_parse_tree(left_tree, f);
-		free(left_tree);
-	}
-	if (right_tree)
-	{
-		clear_parse_tree(right_tree, f);
-		free(right_tree);
-	}
+	if (root == NULL)
+		return ;
+	clear_parse_tree(root->left, f);
+	clear_parse_tree(root->right, f);
 	ft_lstclear(&root->node, f);
-	if (root->node)
-		free(root->node);
+	free(root);
 }
 
 void	debug_print_parse_tree(t_parse *parse_tree)
 {
+	if (parse_tree == NULL)
+		return ;
 	printf("debug\n");
 	if (parse_tree->is_subshell)
 		printf("this is SUBSHELL_NODE\n");
-	if (parse_tree->node)
-		ft_lstiter(parse_tree->node, debug);
-	if (parse_tree->left)
-		debug_print_parse_tree(parse_tree->left);
-	if (parse_tree->right)
-		debug_print_parse_tree(parse_tree->right);
+	ft_lstiter(parse_tree->node, debug);
+	debug_print_parse_tree(parse_tree->left);
+	debug_print_parse_tree(parse_tree->right);
 }
 
 t_lex_lst	*get_type_node(t_lex_lst *token_lst, t_e_lex type)
