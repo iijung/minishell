@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/12 14:27:59 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/12 21:38:37 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	run(t_env **table, char *command)
 			printf("syntax error\n");
 			return (1);
 		}
-		ft_lstclear(&tokens, NULL);
+		// ft_lstclear(&tokens, NULL);
 	}
 	return (exit_status);
 }
