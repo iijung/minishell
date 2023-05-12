@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:27:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/12 22:10:20 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/13 00:20:46 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ typedef struct s_parse
 // parse.c
 t_parse	*parse(t_lex_lst *token_lst);
 void	debug_print_parse_tree(t_parse *parse_tree);
-void	clear_parse_tree(t_parse *root, void(*f)(void*));
-
+void	clear_parse_tree(t_parse *root, void (*f)(void*));
 
 #endif

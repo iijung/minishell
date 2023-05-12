@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/13 00:05:44 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/13 00:19:00 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,10 @@ int	has_subshell(t_lex_lst *token_lst)
 	return (0);
 }
 
-t_lex_lst	*get_before_first_subshell_open(\
-t_lex_lst *token_lst, t_lex_lst **first_open)
+t_lex_lst	*get_before_first_subshell_open(
+	t_lex_lst *token_lst,
+	t_lex_lst **first_open
+)
 {
 	int		dquote_flag;
 	t_s_lex	*lex_data;
@@ -173,15 +175,19 @@ t_lex_lst	*make_new_token_lst(t_lex_lst *start, t_lex_lst *end)
 	return (new_token_lst);
 }
 
-void	split_by_subshell(\
-t_lex_lst *token_lst, t_parse **left, t_parse **right, t_lex_lst **mid)
+void	split_by_subshell(
+	t_lex_lst *token_lst,
+	t_parse **left,
+	t_parse **right,
+	t_lex_lst **mid
+)
 {
 	t_lex_lst	*before_first_subshell_open;
 	t_lex_lst	*first_subshell_open;
 	t_lex_lst	*before_last_subshell_close;
 	t_lex_lst	*tmp_token1;
 	t_lex_lst	*tmp_token2;
-	
+
 	before_first_subshell_open = \
 			get_before_first_subshell_open(token_lst, &first_subshell_open);
 	before_last_subshell_close = get_before_last_subshell_close(token_lst);
@@ -241,8 +247,11 @@ t_lex_lst	*get_right_start(t_lex_lst *root)
 	return (right_start);
 }
 
-static void	loop_check_match(\
-t_list *token, int *dquote_flag, int *parenthesis_dep)
+static void	loop_check_match(
+	t_list *token,
+	int *dquote_flag,
+	int *parenthesis_dep
+)
 {
 	t_s_lex	*cur_token_data;
 
@@ -351,7 +360,7 @@ void	delete_useless_ifs(t_lex_lst *token_lst)
 
 t_parse	*parse(t_lex_lst *token_lst)
 {
-	t_parse	*root;
+	t_parse		*root;
 	t_lex_lst	*operator;
 
 	if (check_quote_parenthesis_match_error(token_lst))
