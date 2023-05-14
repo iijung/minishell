@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/15 00:52:15 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/15 05:28:03 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static int	_open(char *file, int flag)
 			exit(EXIT_FAILURE);
 		}
 		fd = open(path->content, flag, 0666);
+		ft_lstclear(&path, free);
 	}
 	return (fd);
 }
