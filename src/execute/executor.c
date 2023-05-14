@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/15 04:50:51 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/15 05:07:41 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ int	execute(t_env **table, t_parse *tree)
 		return (EXIT_SUCCESS);
 	if (tree->node && tree->node->content)
 	{
-		if (((struct s_lexeme *)(tree->node->content))->type == LEXEME_AND)
+		if (lexeme_type(tree->node->content) == LEXEME_AND)
 			return (_and(table, tree));
-		if (((struct s_lexeme *)(tree->node->content))->type == LEXEME_OR)
+		if (lexeme_type(tree->node->content) == LEXEME_OR)
 			return (_or(table, tree));
 	}
 	if (tree->is_subshell)
