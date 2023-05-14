@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/15 04:55:52 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/15 05:27:29 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_lex_lst	*_redirect(
 	struct s_pipex *pipex
 )
 {
-	curr = skip_lexeme_ifs(curr);
+	curr = skip_lexeme_ifs(curr->next);
 	if (type == LEXEME_HEREDOC || type == LEXEME_INFILE)
 	{
 		free(pipex->infile);
@@ -114,6 +114,8 @@ static t_lex_lst	*_last(t_lex_lst *curr, struct s_pipex *pipex)
 
 t_lex_lst	*set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
 {
+	char	*tmp;
+
 	while (curr)
 	{
 		if (lexeme_type(curr->content) == LEXEME_PIPE)
@@ -122,19 +124,19 @@ t_lex_lst	*set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
 			|| lexeme_type(curr->content) == LEXEME_INFILE
 			|| lexeme_type(curr->content) == LEXEME_ADDFILE
 			|| lexeme_type(curr->content) == LEXEME_OUTFILE)
-			curr = _redirect(lexeme_type(curr->content), \
-					skip_lexeme_ifs(curr->next), pipex);
+			curr = _redirect(lexeme_type(curr->content), curr, pipex);
 		else if (lexeme_type(curr->content) == LEXEME_ENVIRONMENT)
 			curr = _environ(curr, pipex);
 		else if (lexeme_type(curr->content) == LEXEME_WILDCARD)
 		{
-			ft_lstadd_back(&pipex->argl, get_wildcard(curr->content));
+			tmp = lexeme_str(curr->content);
+			ft_lstadd_back(&pipex->argl, get_wildcard(tmp));
+			free(tmp);
 			curr = curr->next;
 		}
 		else if (lexeme_type(curr->content) == LEXEME_STRING)
 			curr = _arg(curr, pipex);
-		else
-			curr = skip_lexeme_ifs(curr->next);
+		curr = skip_lexeme_ifs(curr);
 	}
 	return (_last(curr, pipex));
 }
