@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 16:55:08 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/14 19:35:57 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/15 04:51:45 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,35 +63,25 @@ static int	_is_match(char *pattern, char *str)
 	return (1);
 }
 
-static char	*_concat(char **rtn, char *str)
+static void	_concat(t_list **rtn, char *str)
 {
-	size_t	slen[2];
-	size_t	dlen;
-	char	*dst;
+	t_list	*lst;
 
-	if (*rtn == NULL && str != NULL)
-		*rtn = ft_strdup(str);
-	else if (*rtn && str)
+	lst = ft_lstnew(NULL);
+	while (lst)
 	{
-		slen[0] = ft_strlen(*rtn);
-		slen[1] = ft_strlen(str);
-		dlen = slen[0] + 1 + slen[1];
-		dst = ft_calloc(dlen + 1, sizeof(char));
-		if (dst)
-		{
-			ft_strlcpy(dst, *rtn, dlen + 1);
-			ft_strlcpy(dst + slen[0], " ", dlen + 1);
-			ft_strlcpy(dst + slen[0] + 1, str, dlen + 1);
-		}
-		free(*rtn);
-		*rtn = dst;
+		lst->content = ft_strdup(str);
+		if (lst->content == NULL)
+			break ;
+		ft_lstadd_back(rtn, lst);
+		return ;
 	}
-	return (*rtn);
+	ft_lstclear(rtn, free);
 }
 
-char	*get_wildcard(char *str)
+t_list	*get_wildcard(char *str)
 {
-	char			*rtn;
+	t_list			*rtn;
 	DIR				*dir;
 	struct dirent	*dirent;
 
@@ -105,11 +95,7 @@ char	*get_wildcard(char *str)
 		if (ft_strncmp(dirent->d_name, ".", 2) != 0
 			&& ft_strncmp(dirent->d_name, "..", 3) != 0
 			&& _is_match(str, dirent->d_name))
-		{
-			rtn = _concat(&rtn, dirent->d_name);
-			if (rtn == NULL)
-				break ;
-		}
+			_concat(&rtn, dirent->d_name);
 		dirent = readdir(dir);
 	}
 	closedir(dir);
