@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/14 16:19:00 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/15 20:32:23 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	split_by_subshell(
 	ft_lstdelone(first_subshell_open, free);
 	tmp_token2 = before_last_subshell_close->next;
 	before_last_subshell_close->next = NULL;
-	*left = make_new_node(tmp_token1);
+	*left = parse(tmp_token1);
 	if (before_first_subshell_open)
 		*mid = token_lst;
 	tmp_token1 = tmp_token2;
@@ -64,16 +64,12 @@ void	split_by_subshell(
 t_parse	*subshell_parsing(t_lex_lst *token_lst)
 {
 	t_parse	*root;
-	t_parse	*prev_root;
 
 	root = ft_calloc(1, sizeof(t_parse));
 	if (root == NULL)
 		return (NULL);
 	root->is_subshell = 1;
 	split_by_subshell(token_lst, &root->left, &root->right, &root->node);
-	prev_root = root->left;
-	root->left = parse(root->left->node);
-	free(prev_root);
 	return (root);
 }
 
