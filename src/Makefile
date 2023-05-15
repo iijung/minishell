@@ -6,7 +6,7 @@
 #    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/15 02:53:49 by minjungk         ###   ########.fr        #
+#    Updated: 2023/05/14 16:18:24 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,6 +67,11 @@ MINISHELL_SRCS = \
 	builtin/unset.c \
 	builtin/export.c \
 	parse/parse.c \
+	parse/parse_util.c \
+	parse/parse_inner_util.c \
+	parse/parse_inner_util2.c \
+	parse/parse_inner_syntax.c \
+	parse/parse_inner_getter.c \
 
 MINISHELL_OBJS := $(MINISHELL_SRCS:.c=.o)
 MINISHELL_DEPS := $(MINISHELL_SRCS:.c=.d)
