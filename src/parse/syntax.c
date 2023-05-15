@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:29 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/15 19:06:28 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/15 20:03:58 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	redirection_pair_match_error(t_lex_lst *node_lst)
 			&& lex_data->type != LEXEME_HEREDOC
 			&& lex_data->type != LEXEME_OUTFILE)
 			return (1);
-		else if (pair_flag = 1
+		else if (pair_flag == 1
 			&& lex_data->type != LEXEME_STRING
 			&& lex_data->type != LEXEME_WILDCARD
 			&& lex_data->type != LEXEME_ENVIRONMENT)
@@ -70,7 +70,7 @@ static int	command_redirection_match_error(t_lex_lst *lex_lst)
 		}
 		lex_lst = lex_lst->next;
 	}
-	return (command_redirection_match_error(lex_lst));
+	return (redirection_pair_match_error(lex_lst));
 }
 
 int	is_syntax_error(t_parse *root)
@@ -78,22 +78,25 @@ int	is_syntax_error(t_parse *root)
 	t_lex_lst	*lex_lst;
 	t_s_lex		*lex_data;
 
-	if (root->left && is_syntax_error(root->left))
-		return (1);
-	if (root->right && is_syntax_error(root->right))
-		return (1);
 	if (root->is_subshell)
 	{
 		if (root->node)
 			return (1);
-		return (redirection_pair_match_error(root->right));
+		if (root->right)
+			return (redirection_pair_match_error(root->right->node));
 	}
-	lex_lst = root->node;
-	lex_data = lex_lst->content;
-	if (lex_data->type == LEXEME_PIPE
-		|| lex_data->type == LEXEME_AND
-		|| lex_data->type == LEXEME_OR)
-		return (root->left == 0 || root->right == 0);
 	else
-		return (command_redirection_match_error(lex_lst));
+	{
+		if (root->right && is_syntax_error(root->right))
+			return (1);
+		lex_lst = root->node;
+		lex_data = lex_lst->content;
+		if (lex_data->type == LEXEME_PIPE || lex_data->type == LEXEME_AND || lex_data->type == LEXEME_OR)
+			return (root->left == 0 || root->right == 0);
+		else
+			return (command_redirection_match_error(lex_lst));
+	}
+	if (root->left && is_syntax_error(root->left))
+		return (1);
+	return (0);
 }
