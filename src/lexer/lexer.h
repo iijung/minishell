@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/10 16:19:58 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/15 17:54:13 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "libft.h"
 # include <stdio.h>
 
-typedef t_list	t_lex_lst;
+typedef t_list					t_lex_lst;
 
 enum e_lexeme
 {
@@ -66,7 +66,7 @@ static const struct s_lexeme	g_lexeme[] = {
 t_lex_lst		*lex(char *command);
 void			debug(void *param);
 
-typedef struct s_lexeme	t_s_lex;
-typedef enum e_lexeme	t_e_lex;
+typedef struct s_lexeme			t_s_lex;
+typedef enum e_lexeme			t_e_lex;
 
 #endif
