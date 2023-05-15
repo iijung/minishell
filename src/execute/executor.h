@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 13:49:28 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 02:39:47 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/16 03:26:06 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ extern int			get_heredoc(t_env **table, char *word);
 extern t_pipex		*new_pipex(t_env **table, t_parse *tree);
 extern void			set_pipex(t_lex_lst *curr, struct s_pipex *pipex);
 extern int			run_pipex(t_pipex *pipex);
+extern int			all_pipex(t_pipex *pipex);
 extern void			free_pipex(void *param);
 
 extern int			execute(t_env **table, t_parse *tree);

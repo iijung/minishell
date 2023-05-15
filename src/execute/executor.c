@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 03:13:20 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/16 03:37:26 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,42 +64,16 @@ static int	_pipe(t_env **table, t_parse *tree)
 		tree = tree->right;
 	}
 	ft_lstadd_back(&pipex, new_pipex(table, tree->right));
-	status = run_pipex(pipex);
+	status = all_pipex(pipex);
 	ft_lstclear(&pipex, free_pipex);
 	return (status);
 }
 
-int	_single(t_env **table, t_parse *tree)
-{
-	pid_t			pid;
-	int				status;
-	t_pipex			*pipex;
-	struct s_pipex	*content;
-	t_builtin_func	builtin_func;
-
-	pipex = new_pipex(table, tree);
-	if (pipex == NULL)
-		return (EXIT_FAILURE);
-	content = pipex->content;
-	builtin_func = builtin(content->argv);
-	if (builtin_func)
-	{
-		status = builtin_func(content->envp, content->argc, content->argv);
-		ft_lstdelone(pipex, free_pipex);
-		return (status);
-	}
-	pid = fork();
-	if (pid == 0)
-		exit(run_pipex(pipex));
-	ft_lstdelone(pipex, free_pipex);
-	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (WEXITSTATUS(status));
-}
-
 int	execute(t_env **table, t_parse *tree)
 {
+	int				status;
+	t_pipex			*pipex;
+
 	if (tree == NULL)
 		return (EXIT_SUCCESS);
 	if (tree->node && lexeme_type(tree->node->content) == LEXEME_AND)
@@ -110,5 +84,8 @@ int	execute(t_env **table, t_parse *tree)
 		return (_pipe(table, tree));
 	if (tree->is_subshell)
 		return (_subshell(table, tree));
-	return (_single(table, tree));
+	pipex = new_pipex(table, tree);
+	status = all_pipex(pipex);
+	ft_lstdelone(pipex, free_pipex);
+	return (status);
 }
