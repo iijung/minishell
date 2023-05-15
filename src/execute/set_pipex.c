@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/15 05:27:29 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/15 22:50:10 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static t_lex_lst	*_environ(t_lex_lst *curr, struct s_pipex *pipex)
 
 t_lex_lst	*_arg(t_lex_lst *curr, struct s_pipex *pipex)
 {
-	char				*tmp;
+	char				*tmp[2];
 	t_list *const		argl = ft_lstnew(NULL);
 
 	if (lexeme_type(curr->content) == LEXEME_DQUOTE)
@@ -79,10 +79,13 @@ t_lex_lst	*_arg(t_lex_lst *curr, struct s_pipex *pipex)
 		{
 			if (lexeme_type(curr->content) == LEXEME_DQUOTE)
 				break ;
-			tmp = ft_strjoin(argl->content, curr->content);
-			ft_assert(tmp == NULL, __FILE__, __LINE__);
+			tmp[0] = lexeme_str(curr->content);
+			ft_assert(tmp[0] == NULL, __FILE__, __LINE__);
+			tmp[1] = ft_strjoin(argl->content, tmp[0]);
+			ft_assert(tmp[1] == NULL, __FILE__, __LINE__);
+			free(tmp[0]);
 			free(argl->content);
-			argl->content = tmp;
+			argl->content = tmp[1];
 			curr = curr->next;
 		}
 	}
@@ -134,9 +137,11 @@ t_lex_lst	*set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
 			free(tmp);
 			curr = curr->next;
 		}
-		else if (lexeme_type(curr->content) == LEXEME_STRING)
+		else if (lexeme_type(curr->content) == LEXEME_DQUOTE
+			|| lexeme_type(curr->content) == LEXEME_STRING)
 			curr = _arg(curr, pipex);
-		curr = skip_lexeme_ifs(curr);
+		else
+			curr = skip_lexeme_ifs(curr);
 	}
 	return (_last(curr, pipex));
 }
