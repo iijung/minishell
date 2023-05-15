@@ -6,19 +6,94 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:29 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/15 17:05:05 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/15 19:06:28 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
-int	is_syntax_error(t_parse *tree)
+/*
+all func in this file,
+return 1 at syntax error ditected
+*/
+static int	redirection_pair_match_error(t_lex_lst *node_lst)
 {
-	if (tree->left && is_syntax_error(tree->left))
+	int		pair_flag;
+	int		dquote_flag;
+	t_s_lex	*lex_data;
+
+	pair_flag = 0;
+	dquote_flag = 0;
+	while (node_lst)
+	{
+		lex_data = node_lst->content;
+		if (lex_data->type == LEXEME_DQUOTE)
+			dquote_flag ^= 1;
+		else if ( dquote_flag == 0
+			&& pair_flag == 0
+			&& lex_data->type != LEXEME_ADDFILE
+			&& lex_data->type != LEXEME_INFILE
+			&& lex_data->type != LEXEME_HEREDOC
+			&& lex_data->type != LEXEME_OUTFILE)
+			return (1);
+		else if (pair_flag = 1
+			&& lex_data->type != LEXEME_STRING
+			&& lex_data->type != LEXEME_WILDCARD
+			&& lex_data->type != LEXEME_ENVIRONMENT)
+			return (1);
+		node_lst = node_lst->next;
+		if (dquote_flag == 0)
+			pair_flag ^= 1;
+	}
+	return (pair_flag);
+}
+
+static int	command_redirection_match_error(t_lex_lst *lex_lst)
+{
+	int		dquote_flag;
+	t_s_lex	*lex_data;
+
+	dquote_flag = 0;
+	while (lex_lst)
+	{
+		lex_data = lex_lst->content;
+		if (lex_data->type == LEXEME_DQUOTE)
+			dquote_flag ^= 1;
+		else if (dquote_flag == 0
+			&& (lex_data->type == LEXEME_ADDFILE
+			|| lex_data->type == LEXEME_HEREDOC
+			|| lex_data->type == LEXEME_INFILE
+			|| lex_data->type == LEXEME_OUTFILE))
+		{
+			lex_lst = lex_lst->next;
+			break ;
+		}
+		lex_lst = lex_lst->next;
+	}
+	return (command_redirection_match_error(lex_lst));
+}
+
+int	is_syntax_error(t_parse *root)
+{
+	t_lex_lst	*lex_lst;
+	t_s_lex		*lex_data;
+
+	if (root->left && is_syntax_error(root->left))
 		return (1);
-	if (tree->right && is_syntax_error(tree->right))
+	if (root->right && is_syntax_error(root->right))
 		return (1);
-	/*
-	current node syntax check
-	*/
+	if (root->is_subshell)
+	{
+		if (root->node)
+			return (1);
+		return (redirection_pair_match_error(root->right));
+	}
+	lex_lst = root->node;
+	lex_data = lex_lst->content;
+	if (lex_data->type == LEXEME_PIPE
+		|| lex_data->type == LEXEME_AND
+		|| lex_data->type == LEXEME_OR)
+		return (root->left == 0 || root->right == 0);
+	else
+		return (command_redirection_match_error(lex_lst));
 }
