@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/15 22:50:10 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/16 03:09:46 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static t_lex_lst	*_redirect(
 )
 {
 	curr = skip_lexeme_ifs(curr->next);
+	if (curr == NULL)
+		return (NULL);
 	if (type == LEXEME_HEREDOC || type == LEXEME_INFILE)
 	{
 		free(pipex->infile);
@@ -95,7 +97,7 @@ t_lex_lst	*_arg(t_lex_lst *curr, struct s_pipex *pipex)
 	return (curr->next);
 }
 
-static t_lex_lst	*_last(t_lex_lst *curr, struct s_pipex *pipex)
+static void	_last(struct s_pipex *pipex)
 {
 	int		i;
 	t_list	*argp;
@@ -112,18 +114,15 @@ static t_lex_lst	*_last(t_lex_lst *curr, struct s_pipex *pipex)
 	}
 	if (pipex->is_heredoc)
 		pipex->in_fd = get_heredoc(pipex->envp, pipex->infile);
-	return (curr);
 }
 
-t_lex_lst	*set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
+void	set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
 {
 	char	*tmp;
 
 	while (curr)
 	{
-		if (lexeme_type(curr->content) == LEXEME_PIPE)
-			return (_last(curr->next, pipex));
-		else if (lexeme_type(curr->content) == LEXEME_HEREDOC
+		if (lexeme_type(curr->content) == LEXEME_HEREDOC
 			|| lexeme_type(curr->content) == LEXEME_INFILE
 			|| lexeme_type(curr->content) == LEXEME_ADDFILE
 			|| lexeme_type(curr->content) == LEXEME_OUTFILE)
@@ -143,5 +142,5 @@ t_lex_lst	*set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
 		else
 			curr = skip_lexeme_ifs(curr);
 	}
-	return (_last(curr, pipex));
+	_last(pipex);
 }
