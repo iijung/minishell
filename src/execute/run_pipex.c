@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 19:23:18 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/16 20:15:21 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,10 @@ static void	_wait(void *param)
 
 	ft_assert(content == NULL, __FILE__, __LINE__);
 	waitpid(content->pid, &content->exit_status, 0);
+	if (WIFSIGNALED(content->exit_status))
+		content->exit_status = 128 + WTERMSIG(content->exit_status);
+	else
+		content->exit_status = WEXITSTATUS(content->exit_status);
 }
 
 int	run_pipex(t_pipex *pipex)
