@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:29 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/16 11:50:18 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/16 12:02:46 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	is_redirection_lex(t_s_lex *lex_data)
 {
-	return (lex_data->type == LEXEME_ADDFIE
+	return (lex_data->type == LEXEME_ADDFILE
 		|| lex_data->type == LEXEME_INFILE
 		|| lex_data->type == LEXEME_HEREDOC
 		|| lex_data->type == LEXEME_OUTFILE);
