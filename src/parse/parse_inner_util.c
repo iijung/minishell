@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 15:49:14 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/15 21:11:41 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/17 08:53:07 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,62 +33,63 @@ int	has_subshell(t_lex_lst *token_lst)
 	return (0);
 }
 
-int	is_about_string_token(t_lex_lst *token)
+static int	delete_first_case(t_lex_lst **start)
 {
-	const t_s_lex	*lex_data = token->content;
-
-	return (lex_data->type == LEXEME_STRING
-		|| lex_data->type == LEXEME_ENVIRONMENT
-		|| lex_data->type == LEXEME_WILDCARD
-		|| lex_data->type == LEXEME_DQUOTE);
-}
-
-int	is_ifs_token(t_lex_lst *token)
-{
-	const t_s_lex	*lex_data = token->content;
-
-	return (lex_data->type == LEXEME_IFS);
-}
-
-/*
-size of rear is more than 2.
-this function do not check the list size
-*/
-void	delete_useless_ifs(t_lex_lst *rear)
-{
-	t_lex_lst	*front;
+	t_s_lex		*first_lex_data;
+	t_s_lex		*second_lex_data;
 	t_lex_lst	*to_delete;
 
-	if (ft_lstsize(rear) < 3)
-		return ;
-	front = rear->next->next;
-	if (!is_about_string_token(rear) && is_ifs_token(rear->next))
+	first_lex_data = (*start)->content;
+	if (first_lex_data->type == LEXEME_DQUOTE)
+		return (1);
+	second_lex_data = (*start)->next->content;
+	if (is_ifs_token(*start) && !is_about_string_token((*start)->next))
 	{
-		ft_lstdelone(rear->next, free);
-		rear->next = front;
-		front = front->next;
+		to_delete = *start;
+		*start = (*start)->next;
+		ft_lstdelone(to_delete, free);
 	}
-	while (front)
+	else if (!is_about_string_token(*start) && is_ifs_token((*start)->next))
 	{
-		if (!is_about_string_token(rear->next) && is_ifs_token(front))
+		to_delete = (*start)->next;
+		(*start)->next = (*start)->next->next;
+		ft_lstdelone(to_delete, free);
+	}
+	return (0);
+}
+
+static void	delete_next_token(t_lex_lst *before_delete)
+{
+	t_lex_lst	*to_delete;
+
+	to_delete = before_delete->next;
+	before_delete->next = before_delete->next->next;
+	ft_lstdelone(to_delete, free);
+}
+
+void	delete_useless_ifs(t_lex_lst *start)
+{
+	int			dquote_flag;
+	t_s_lex		*lex_data;
+	t_lex_lst	*to_delete;
+
+	if (ft_lstsize(start) < 3)
+		return ;
+	dquote_flag = delete_first_case(&start);
+	while (start->next->next)
+	{
+		lex_data = start->next->content;
+		if (lex_data->type == LEXEME_DQUOTE)
+			dquote_flag ^= 1;
+		else if (dquote_flag == 0)
 		{
-			to_delete = front;
-			front = front->next;
-			rear->next->next = front;
-			ft_lstdelone(to_delete, free);
-			front = front->next;
-			rear = rear->next;
-			continue ;
+			if (is_ifs_token(start->next)
+				&& !is_about_string_token(start->next->next))
+				delete_next_token(start);
+			else if (!is_about_string_token(start->next)
+				&& is_ifs_token(start->next->next))
+				delete_next_token(start);
 		}
-		else if (is_ifs_token(rear->next) && !is_about_string_token(front))
-		{
-			to_delete = rear->next;
-			rear->next = front;
-			ft_lstdelone(to_delete, free);
-			front = front->next;
-			continue ;
-		}
-		front = front->next;
-		rear = rear->next;
+		start = start->next;
 	}
 }
