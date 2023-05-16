@@ -1,34 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   syntax_inner_util.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:27:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/16 12:02:00 by jaemjeon         ###   ########.fr       */
+/*   Created: 2023/05/16 15:26:29 by jaemjeon          #+#    #+#             */
+/*   Updated: 2023/05/16 15:27:41 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_H
-# define PARSE_H
+#ifndef SYNTAX_INNER_UTIL_H
+# define SYNTAX_INNER_UTIL_H
 # include "lexer.h"
 
-typedef struct s_parse
-{
-	struct s_parse	*left;
-	struct s_parse	*right;
-	int				is_subshell;
-	t_list			*node;
-}	t_parse;
+int	is_redirection_lex(t_s_lex *lex_data);
+int	is_operator_lex(t_s_lex *lex_data);
+int	is_about_string_lex(t_s_lex *lex_data);
 
-// parse.c
-t_parse	*parse(t_lex_lst *token_lst);
-
-// parse_util.c
-void	debug_print_parse_tree(t_parse *parse_tree);
-void	clear_parse_tree(t_parse *root, void (*f)(void*));
-
-// syntax.c
-int		is_syntax_error(t_parse *root);
 #endif

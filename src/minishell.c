@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/15 02:17:41 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:34:42 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,13 @@ static int	run(t_env **table, char *command)
 		parse_tree = parse(tokens);
 		if (parse_tree)
 		{
-			exit_status = execute(table, parse_tree);
+			debug_print_parse_tree(parse_tree);
+			if (is_syntax_error(parse_tree))
+				printf("syntax error\n");
+			else
+			{
+				exit_status = execute(table, parse_tree);
+			}
 			clear_parse_tree(parse_tree, free);
 		}
 		else
