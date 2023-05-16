@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 00:15:53 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/17 02:22:31 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ static int	_show(t_env **table)
 	return (EXIT_SUCCESS);
 }
 
+static int	_error(char *command)
+{
+	ft_putstr_fd("minishell: command not found: ", STDERR_FILENO);
+	ft_putstr_fd(command, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+	return (EXIT_FAILURE);
+}
+
 static int	_exec_with_path(char *path, char **argv, char **envp)
 {
 	int				i;
@@ -59,12 +67,7 @@ static int	_exec_with_path(char *path, char **argv, char **envp)
 	}
 	free(sp);
 	if (is_valid == 0)
-	{
-		ft_putstr_fd("minishell: command not found: ", STDERR_FILENO);
-		ft_putstr_fd(argv[0], STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+		return (_error(argv[0]));
 	return (execve(command, argv, envp));
 }
 
