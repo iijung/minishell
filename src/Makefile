@@ -6,7 +6,7 @@
 #    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/16 11:53:43 by jaemjeon         ###   ########.fr        #
+#    Updated: 2023/05/16 15:30:12 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,7 @@ MINISHELL_SRCS = \
 	builtin/export.c \
 	parse/parse.c \
 	parse/syntax.c \
+	parse/syntax_inner_util.c \
 	parse/parse_util.c \
 	parse/parse_inner_util.c \
 	parse/parse_inner_util2.c \
