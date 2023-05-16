@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 03:37:26 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:24:12 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ static int	_pipe(t_env **table, t_parse *tree)
 		&& tree->right->node->content
 		&& lexeme_type(tree->right->node->content) == LEXEME_PIPE)
 	{
-		ft_lstadd_back(&pipex, new_pipex(table, tree->left));
 		tree = tree->right;
+		ft_lstadd_back(&pipex, new_pipex(table, tree->left));
 	}
 	ft_lstadd_back(&pipex, new_pipex(table, tree->right));
 	status = all_pipex(pipex);

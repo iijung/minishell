@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/15 05:28:03 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/16 19:23:18 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,12 @@ static void	_redirect(struct s_pipex *content)
 		close(content->in_fd);
 		content->in_fd = -1;
 	}
-	if (content->out_fd == -1 && content->outfile)
+	if (content->outfile)
+	{
+		if (content->in_fd != -1)
+			close(content->out_fd);
 		content->out_fd = _open(content->outfile, content->outflag);
+	}
 	if (content->out_fd != -1)
 	{
 		if (dup2(content->out_fd, STDOUT_FILENO) == -1)
