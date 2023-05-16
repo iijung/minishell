@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 22:32:11 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/17 00:15:53 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	_show(t_env **table)
 		while (curr)
 		{
 			env = curr->content;
-			if (env)
+			if (env && ft_strncmp(env->key, "?", 2) != 0)
 				printf("%s=%s\n", env->key, env->val);
 			curr = curr->next;
 		}
