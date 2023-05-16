@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:34:20 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/16 20:39:34 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/16 22:56:07 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	is_operator_lex(t_s_lex *lex_data)
 
 int	is_about_string_lex(t_s_lex *lex_data)
 {
-	return (lex_data->type != LEXEME_STRING
-		&& lex_data->type != LEXEME_WILDCARD
-		&& lex_data->type != LEXEME_ENVIRONMENT);
+	return (lex_data->type == LEXEME_STRING
+		|| lex_data->type == LEXEME_WILDCARD
+		|| lex_data->type == LEXEME_ENVIRONMENT);
 }
