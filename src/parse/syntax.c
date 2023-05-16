@@ -6,12 +6,11 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:29 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/16 15:36:22 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/16 20:43:35 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
-#include "syntax_inner_util.h"
 /*
 all func in this file,
 return 1 at syntax error ditected
