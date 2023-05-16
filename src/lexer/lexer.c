@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 19:51:35 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/17 02:29:35 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char **curr)
 	const enum e_lexeme	type = get_lexeme(base);
 
 	if ((*curr)[1] == '?')
-		return (add_token(lst, type, 2, base));
+		return (add_token(lst, type, 1, base + 1));
 	if (ft_isalnum((*curr)[1]) == 0 && (*curr)[1] != '_')
 		return (add_token(lst, LEXEME_STRING, 1, base));
 	++(*curr);
