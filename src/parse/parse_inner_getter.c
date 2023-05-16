@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 15:53:46 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/14 15:55:30 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/16 12:06:13 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ t_lex_lst	*get_left_start(t_lex_lst *start, t_lex_lst *root)
 {
 	t_lex_lst	*left_start;
 
+	if (start == root)
+		return (NULL);
 	left_start = start;
 	while (start->next)
 	{

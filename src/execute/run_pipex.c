@@ -6,16 +6,41 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/06 01:13:10 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/16 19:23:18 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
+static int	_open(char *file, int flag)
+{
+	int		fd;
+	int		count;
+	t_list	*path;
+
+	path = NULL;
+	if (ft_strchr(file, '*') == NULL)
+		fd = open(file, flag, 0666);
+	else
+	{
+		path = get_wildcard(file);
+		count = ft_lstsize(path);
+		if (count != 1)
+		{
+			ft_putstr_fd(file, STDERR_FILENO);
+			ft_putstr_fd(": ambiguous redirect\n", STDERR_FILENO);
+			exit(EXIT_FAILURE);
+		}
+		fd = open(path->content, flag, 0666);
+		ft_lstclear(&path, free);
+	}
+	return (fd);
+}
+
 static void	_redirect(struct s_pipex *content)
 {
 	if (content->in_fd == -1 && content->infile)
-		content->in_fd = open(content->infile, O_RDONLY);
+		content->in_fd = _open(content->infile, O_RDONLY);
 	if (content->in_fd != -1)
 	{
 		if (dup2(content->in_fd, STDIN_FILENO) == -1)
@@ -25,9 +50,9 @@ static void	_redirect(struct s_pipex *content)
 	}
 	if (content->outfile)
 	{
-		if (content->out_fd != -1)
+		if (content->in_fd != -1)
 			close(content->out_fd);
-		content->out_fd = open(content->outfile, content->outflag, 0644);
+		content->out_fd = _open(content->outfile, content->outflag);
 	}
 	if (content->out_fd != -1)
 	{

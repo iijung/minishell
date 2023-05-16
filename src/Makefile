@@ -6,7 +6,7 @@
 #    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/14 16:18:24 by jaemjeon         ###   ########.fr        #
+#    Updated: 2023/05/16 15:30:12 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,9 +50,13 @@ MINISHELL_SRCS = \
 	environ/env_free.c \
 	prompt/prompt.c \
 	lexer/lexer.c \
+	lexer/get_lexeme.c \
+	lexer/skip_lexeme.c \
 	execute/executor.c \
 	execute/get_heredoc.c \
+	execute/get_wildcard.c \
 	execute/run_pipex.c \
+	execute/set_pipex.c \
 	execute/init_pipex.c \
 	builtin/builtin.c \
 	builtin/pwd.c \
@@ -63,6 +67,8 @@ MINISHELL_SRCS = \
 	builtin/unset.c \
 	builtin/export.c \
 	parse/parse.c \
+	parse/syntax.c \
+	parse/syntax_inner_util.c \
 	parse/parse_util.c \
 	parse/parse_inner_util.c \
 	parse/parse_inner_util2.c \
