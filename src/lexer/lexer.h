@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/15 04:19:15 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/16 20:41:27 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 # include "libft.h"
 # include <stdio.h>
 
-typedef t_list	t_lex_lst;
+typedef t_list					t_lex_lst;
+typedef struct s_lexeme			t_s_lex;
+typedef enum e_lexeme			t_e_lex;
 
 enum e_lexeme
 {
@@ -72,7 +74,8 @@ extern size_t			lexeme_len(void *param);
 extern const char		*lexeme_data(void *param);
 extern char				*lexeme_str(void *param);
 
-typedef struct s_lexeme	t_s_lex;
-typedef enum e_lexeme	t_e_lex;
+extern int				is_redirection_lex(t_s_lex *lex_data);
+extern int				is_operator_lex(t_s_lex *lex_data);
+extern int				is_about_string_lex(t_s_lex *lex_data);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_pipex.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 03:09:46 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/16 20:40:44 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,7 @@ void	set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
 
 	while (curr)
 	{
-		if (lexeme_type(curr->content) == LEXEME_HEREDOC
-			|| lexeme_type(curr->content) == LEXEME_INFILE
-			|| lexeme_type(curr->content) == LEXEME_ADDFILE
-			|| lexeme_type(curr->content) == LEXEME_OUTFILE)
+		if (is_redirection_lex(curr->content))
 			curr = _redirect(lexeme_type(curr->content), curr, pipex);
 		else if (lexeme_type(curr->content) == LEXEME_ENVIRONMENT)
 			curr = _environ(curr, pipex);
