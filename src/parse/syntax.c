@@ -6,11 +6,26 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:29 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/15 20:03:58 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/16 11:50:18 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
+
+static int	is_redirection_lex(t_s_lex *lex_data)
+{
+	return (lex_data->type == LEXEME_ADDFIE
+		|| lex_data->type == LEXEME_INFILE
+		|| lex_data->type == LEXEME_HEREDOC
+		|| lex_data->type == LEXEME_OUTFILE);
+}
+
+static int	is_operator_lex(t_s_lex *lex_data)
+{
+	return (lex_data->type == LEXEME_PIPE
+		|| lex_data->type == LEXEME_AND
+		|| lex_data->type == LEXEME_OR);
+}
 
 /*
 all func in this file,
@@ -29,12 +44,9 @@ static int	redirection_pair_match_error(t_lex_lst *node_lst)
 		lex_data = node_lst->content;
 		if (lex_data->type == LEXEME_DQUOTE)
 			dquote_flag ^= 1;
-		else if ( dquote_flag == 0
+		else if (dquote_flag == 0
 			&& pair_flag == 0
-			&& lex_data->type != LEXEME_ADDFILE
-			&& lex_data->type != LEXEME_INFILE
-			&& lex_data->type != LEXEME_HEREDOC
-			&& lex_data->type != LEXEME_OUTFILE)
+			&& !is_redirection_lex(lex_data))
 			return (1);
 		else if (pair_flag == 1
 			&& lex_data->type != LEXEME_STRING
@@ -59,11 +71,7 @@ static int	command_redirection_match_error(t_lex_lst *lex_lst)
 		lex_data = lex_lst->content;
 		if (lex_data->type == LEXEME_DQUOTE)
 			dquote_flag ^= 1;
-		else if (dquote_flag == 0
-			&& (lex_data->type == LEXEME_ADDFILE
-			|| lex_data->type == LEXEME_HEREDOC
-			|| lex_data->type == LEXEME_INFILE
-			|| lex_data->type == LEXEME_OUTFILE))
+		else if (dquote_flag == 0 && is_redirection_lex(lex_data))
 		{
 			lex_lst = lex_lst->next;
 			break ;
@@ -91,7 +99,7 @@ int	is_syntax_error(t_parse *root)
 			return (1);
 		lex_lst = root->node;
 		lex_data = lex_lst->content;
-		if (lex_data->type == LEXEME_PIPE || lex_data->type == LEXEME_AND || lex_data->type == LEXEME_OR)
+		if (is_operator_lex(lex_data))
 			return (root->left == 0 || root->right == 0);
 		else
 			return (command_redirection_match_error(lex_lst));
