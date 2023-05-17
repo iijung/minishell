@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 17:34:42 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/17 09:12:02 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,20 @@ static int	run(t_env **table, char *command)
 	tokens = lex(command);
 	if (tokens)
 	{
-		parse_tree = parse(tokens);
-		if (parse_tree)
 		{
+			parse_tree = parse(tokens);
 			debug_print_parse_tree(parse_tree);
-			if (is_syntax_error(parse_tree))
-				printf("syntax error\n");
-			else
-			{
-				exit_status = execute(table, parse_tree);
-			}
-			clear_parse_tree(parse_tree, free);
 		}
-		else
 		{
-			ft_putstr_fd("syntax error\n", STDERR_FILENO);
-			ft_lstclear(&tokens, free);
+			if (parse_tree == NULL || is_syntax_error(parse_tree))
+				ft_putstr_fd(2, "syntax error\n", ft_strlen("syntax error\n"));
+			else
+				exit_status = execute(table, parse_tree);
+		}
+		{
+			clear_parse_tree(parse_tree, free);
+			if (parse_tree == NULL)
+				ft_lstclear(&tokens, free);
 		}
 	}
 	return (exit_status);
