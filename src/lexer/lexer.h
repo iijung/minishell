@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 20:41:27 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/17 08:50:17 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,7 @@ extern char				*lexeme_str(void *param);
 extern int				is_redirection_lex(t_s_lex *lex_data);
 extern int				is_operator_lex(t_s_lex *lex_data);
 extern int				is_about_string_lex(t_s_lex *lex_data);
+extern int				is_about_string_token(t_lex_lst *token);
+extern int				is_ifs_token(t_lex_lst *token);
 
 #endif
