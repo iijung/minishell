@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 02:22:31 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:57:51 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static int	_env(t_env **table, char **argv)
 		env_set(table, argv[i++], delimeter + 1);
 	}
 	envp = env_get_arr(table);
-	if (argv[i] == NULL || ft_strncmp(argv[i], "env", 4) == 0)
+	if (argv[i] == NULL || argv[i + 1] == NULL)
 		status = _show(table);
 	else
 		status = _exec_with_path(path, argv + i, envp);
