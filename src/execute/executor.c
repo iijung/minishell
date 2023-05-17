@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 17:24:12 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/17 00:29:49 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,15 @@ static int	_subshell(t_env **table, t_parse *tree)
 {
 	pid_t	pid;
 	int		status;
+	t_pipex	*pipex;
 
 	pid = fork();
 	if (pid == 0)
 	{
-//		_redirection(table, tree->node);
+		pipex = new_pipex(table, tree);
+		ft_assert(pipex == NULL, __FILE__, __LINE__);
+		redirect(pipex->content);
+		ft_lstdelone(pipex, free_pipex);
 		exit(execute(table, tree->left));
 	}
 	waitpid(pid, &status, 0);
@@ -71,21 +75,28 @@ static int	_pipe(t_env **table, t_parse *tree)
 
 int	execute(t_env **table, t_parse *tree)
 {
+	char			*tmp;
 	int				status;
 	t_pipex			*pipex;
 
 	if (tree == NULL)
-		return (EXIT_SUCCESS);
-	if (tree->node && lexeme_type(tree->node->content) == LEXEME_AND)
-		return (_and(table, tree));
-	if (tree->node && lexeme_type(tree->node->content) == LEXEME_OR)
-		return (_or(table, tree));
-	if (tree->node && lexeme_type(tree->node->content) == LEXEME_PIPE)
-		return (_pipe(table, tree));
-	if (tree->is_subshell)
-		return (_subshell(table, tree));
-	pipex = new_pipex(table, tree);
-	status = all_pipex(pipex);
-	ft_lstdelone(pipex, free_pipex);
+		status = EXIT_SUCCESS;
+	else if (tree->node && lexeme_type(tree->node->content) == LEXEME_AND)
+		status = _and(table, tree);
+	else if (tree->node && lexeme_type(tree->node->content) == LEXEME_OR)
+		status = _or(table, tree);
+	else if (tree->node && lexeme_type(tree->node->content) == LEXEME_PIPE)
+		status = _pipe(table, tree);
+	else if (tree->is_subshell)
+		status = _subshell(table, tree);
+	else
+	{
+		pipex = new_pipex(table, tree);
+		status = all_pipex(pipex);
+		ft_lstdelone(pipex, free_pipex);
+	}
+	tmp = ft_itoa(status);
+	env_set(table, "?", tmp);
+	free(tmp);
 	return (status);
 }

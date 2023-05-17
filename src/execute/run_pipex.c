@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 20:15:21 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/16 21:18:49 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	_open(char *file, int flag)
 	return (fd);
 }
 
-static void	_redirect(struct s_pipex *content)
+void	redirect(struct s_pipex *content)
 {
 	if (content->in_fd == -1 && content->infile)
 		content->in_fd = _open(content->infile, O_RDONLY);
@@ -76,7 +76,7 @@ static void	_exec(void *param)
 		close(pipes[0]);
 		ft_assert(dup2(pipes[1], STDOUT_FILENO) == -1, __FILE__, __LINE__);
 		close(pipes[1]);
-		_redirect(content);
+		redirect(content);
 		exit(builtin_env(content->envp, content->argc, content->argv));
 	}
 	else
