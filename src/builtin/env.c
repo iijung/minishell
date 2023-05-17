@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/05 18:55:53 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/17 17:02:36 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,20 @@ static int	_show(t_env **table)
 		while (curr)
 		{
 			env = curr->content;
-			if (env)
+			if (env && ft_strncmp(env->key, "?", 2) != 0)
 				printf("%s=%s\n", env->key, env->val);
 			curr = curr->next;
 		}
 	}
 	return (EXIT_SUCCESS);
+}
+
+static int	_error(char *command)
+{
+	ft_putstr_fd("minishell: command not found: ", STDERR_FILENO);
+	ft_putstr_fd(command, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+	return (EXIT_FAILURE);
 }
 
 static int	_exec_with_path(char *path, char **argv, char **envp)
@@ -59,12 +67,7 @@ static int	_exec_with_path(char *path, char **argv, char **envp)
 	}
 	free(sp);
 	if (is_valid == 0)
-	{
-		ft_putstr_fd("minishell: command not found: ", STDERR_FILENO);
-		ft_putstr_fd(argv[0], STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+		return (_error(argv[0]));
 	return (execve(command, argv, envp));
 }
 
@@ -77,13 +80,16 @@ static int	_env(t_env **table, char **argv)
 	char *const		path = env_get_val(table, "PATH");
 
 	i = 0;
-	while (argv[i])
+	if (ft_strncmp(argv[0], "env", 4) == 0)
 	{
-		delimeter = ft_strchr(argv[i], '=');
-		if (delimeter == NULL)
-			break ;
-		*delimeter = '\0';
-		env_set(table, argv[i++], delimeter + 1);
+		while (argv[++i])
+		{
+			delimeter = ft_strchr(argv[i], '=');
+			if (delimeter == NULL)
+				break ;
+			*delimeter = '\0';
+			env_set(table, argv[i++], delimeter + 1);
+		}
 	}
 	envp = env_get_arr(table);
 	if (argv[i] == NULL)

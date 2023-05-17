@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:34:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/15 02:24:59 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/17 00:29:50 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ t_env	**env_load(void)
 		env_set(table, environ[i], delimeter + 1);
 		++i;
 	}
+	env_set(table, "?", "0");
 	ft_debug(debug, table);
 	return (table);
 }

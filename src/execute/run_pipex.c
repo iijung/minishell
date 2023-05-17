@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 19:23:18 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:05:55 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	_open(char *file, int flag)
 	return (fd);
 }
 
-static void	_redirect(struct s_pipex *content)
+void	redirect(struct s_pipex *content)
 {
 	if (content->in_fd == -1 && content->infile)
 		content->in_fd = _open(content->infile, O_RDONLY);
@@ -67,6 +67,7 @@ static void	_exec(void *param)
 {
 	int						pipes[2];
 	struct s_pipex *const	content = param;
+	t_builtin_func			builtin_func;
 
 	ft_assert(content == NULL, __FILE__, __LINE__);
 	ft_assert(pipe(pipes) == -1, __FILE__, __LINE__);
@@ -76,7 +77,10 @@ static void	_exec(void *param)
 		close(pipes[0]);
 		ft_assert(dup2(pipes[1], STDOUT_FILENO) == -1, __FILE__, __LINE__);
 		close(pipes[1]);
-		_redirect(content);
+		redirect(content);
+		builtin_func = builtin(content->argv);
+		if (builtin_func)
+			exit(builtin_func(content->envp, content->argc, content->argv));
 		exit(builtin_env(content->envp, content->argc, content->argv));
 	}
 	else
@@ -93,6 +97,10 @@ static void	_wait(void *param)
 
 	ft_assert(content == NULL, __FILE__, __LINE__);
 	waitpid(content->pid, &content->exit_status, 0);
+	if (WIFSIGNALED(content->exit_status))
+		content->exit_status = 128 + WTERMSIG(content->exit_status);
+	else
+		content->exit_status = WEXITSTATUS(content->exit_status);
 }
 
 int	run_pipex(t_pipex *pipex)
