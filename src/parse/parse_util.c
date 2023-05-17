@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 15:44:34 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/16 15:10:14 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/17 14:23:15 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,6 @@ void	debug_print_parse_tree(t_parse *parse_tree)
 {
 	if (parse_tree == NULL)
 		return ;
-	#ifdef DEBUG
-		printf("debug\n");
-	#endif
 	if (parse_tree->is_subshell)
 		printf("this is SUBSHELL_NODE\n");
 	ft_lstiter(parse_tree->node, debug);
