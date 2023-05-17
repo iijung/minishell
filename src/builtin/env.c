@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 15:57:51 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/17 17:02:36 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,19 @@ static int	_env(t_env **table, char **argv)
 	char *const		path = env_get_val(table, "PATH");
 
 	i = 0;
-	while (argv[i])
+	if (ft_strncmp(argv[0], "env", 4) == 0)
 	{
-		delimeter = ft_strchr(argv[i], '=');
-		if (delimeter == NULL)
-			break ;
-		*delimeter = '\0';
-		env_set(table, argv[i++], delimeter + 1);
+		while (argv[++i])
+		{
+			delimeter = ft_strchr(argv[i], '=');
+			if (delimeter == NULL)
+				break ;
+			*delimeter = '\0';
+			env_set(table, argv[i++], delimeter + 1);
+		}
 	}
 	envp = env_get_arr(table);
-	if (argv[i] == NULL || argv[i + 1] == NULL)
+	if (argv[i] == NULL)
 		status = _show(table);
 	else
 		status = _exec_with_path(path, argv + i, envp);
