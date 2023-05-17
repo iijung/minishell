@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:20:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 03:37:05 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:33:04 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,11 @@ int	all_pipex(t_pipex *pipex)
 	content = pipex->content;
 	builtin_func = builtin(content->argv);
 	if (ft_lstsize(pipex) == 1 && builtin_func)
+	{
+		if (ft_strncmp(content->argv[0], "exit", 5) == 0)
+			ft_putstr_fd("exit\n", STDERR_FILENO);
 		return (builtin_func(content->envp, content->argc, content->argv));
+	}
 	pid = fork();
 	if (pid == 0)
 		exit(run_pipex(pipex));

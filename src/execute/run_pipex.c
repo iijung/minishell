@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 21:18:49 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:05:55 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static void	_exec(void *param)
 {
 	int						pipes[2];
 	struct s_pipex *const	content = param;
+	t_builtin_func			builtin_func;
 
 	ft_assert(content == NULL, __FILE__, __LINE__);
 	ft_assert(pipe(pipes) == -1, __FILE__, __LINE__);
@@ -77,6 +78,9 @@ static void	_exec(void *param)
 		ft_assert(dup2(pipes[1], STDOUT_FILENO) == -1, __FILE__, __LINE__);
 		close(pipes[1]);
 		redirect(content);
+		builtin_func = builtin(content->argv);
+		if (builtin_func)
+			exit(builtin_func(content->envp, content->argc, content->argv));
 		exit(builtin_env(content->envp, content->argc, content->argv));
 	}
 	else
