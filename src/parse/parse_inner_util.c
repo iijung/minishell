@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 15:49:14 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/17 09:14:45 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:35:14 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,13 @@ void	delete_useless_ifs(t_lex_lst *start)
 		{
 			if (is_ifs_token(start->next)
 				&& !is_about_string_token(start->next->next))
+			{
 				delete_next_token(start);
+				continue ;
+			}
 			else if (!is_about_string_token(start->next)
 				&& is_ifs_token(start->next->next))
-				delete_next_token(start);
+				delete_next_token(start->next);
 		}
 		start = start->next;
 	}
