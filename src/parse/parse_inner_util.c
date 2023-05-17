@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 15:49:14 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/17 08:53:07 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/17 09:14:45 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	delete_useless_ifs(t_lex_lst *start)
 {
 	int			dquote_flag;
 	t_s_lex		*lex_data;
-	t_lex_lst	*to_delete;
 
 	if (ft_lstsize(start) < 3)
 		return ;
