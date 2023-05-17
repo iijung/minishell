@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 12:26:19 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/19 22:57:24 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:59:53 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	**env_get_arr(t_env **table)
 		while (curr)
 		{
 			env = curr->content;
-			if (env)
+			if (env && ft_strncmp(env->key, "?", 2) != 0)
 				rtn[count++] = _join_key_val(env->key, env->val);
 			curr = curr->next;
 		}
