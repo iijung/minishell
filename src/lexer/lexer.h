@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 08:50:17 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/19 02:15:39 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ extern t_lex_lst		*lex(char *command);
 extern void				debug(void *param);
 
 extern t_lex_lst		*skip_lexeme_ifs(t_lex_lst *curr);
-extern enum e_lexeme	lexeme_type(void *param);
-extern size_t			lexeme_len(void *param);
-extern const char		*lexeme_data(void *param);
-extern char				*lexeme_str(void *param);
+extern enum e_lexeme	lexeme_type(t_lex_lst *curr);
+extern size_t			lexeme_len(t_lex_lst *curr);
+extern const char		*lexeme_data(t_lex_lst *curr);
+extern char				*lexeme_str(t_lex_lst *curr);
 
 extern int				is_redirection_lex(t_s_lex *lex_data);
 extern int				is_operator_lex(t_s_lex *lex_data);

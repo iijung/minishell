@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 15:56:15 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/19 01:58:20 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 02:20:14 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	check_quote_parenthesis_match_error(t_lex_lst *curr)
 	parenthesis_dep = 0;
 	while (curr)
 	{
-		type = lexeme_type(curr->content);
+		type = lexeme_type(curr);
 		if (type == LEXEME_DQUOTE)
 			dquote_flag ^= 1;
 		if (dquote_flag == 0 && type == LEXEME_PARENTHESIS_OPEN)
