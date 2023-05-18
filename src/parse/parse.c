@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/19 04:08:58 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 04:20:31 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,35 +30,30 @@ t_lex_lst	*get_root_node(t_lex_lst *token_lst)
 	return (NULL);
 }
 
-void	split_by_subshell(
-	t_lex_lst *token_lst,
-	t_parse **left,
-	t_parse **right,
-	t_lex_lst **mid
+void	split_by_subshell(t_lex_lst *token_lst, t_parse *root
 )
 {
 	t_lex_lst	*before_first_subshell_open;
 	t_lex_lst	*first_subshell_open;
 	t_lex_lst	*before_last_subshell_close;
-	t_lex_lst	*tmp_token1;
-	t_lex_lst	*tmp_token2;
+	t_lex_lst	*tmp_token[2];
 
 	before_first_subshell_open = \
 			get_before_first_subshell_open(token_lst, &first_subshell_open);
 	before_last_subshell_close = get_before_last_subshell_close(token_lst);
 	if (before_first_subshell_open)
 		before_first_subshell_open->next = NULL;
-	tmp_token1 = first_subshell_open->next;
+	tmp_token[0] = first_subshell_open->next;
 	ft_lstdelone(first_subshell_open, free);
-	tmp_token2 = before_last_subshell_close->next;
+	tmp_token[1] = before_last_subshell_close->next;
 	before_last_subshell_close->next = NULL;
-	*left = parse(tmp_token1);
+	root->left = parse(tmp_token[0]);
 	if (before_first_subshell_open)
-		*mid = token_lst;
-	tmp_token1 = tmp_token2;
-	tmp_token2 = tmp_token2->next;
-	ft_lstdelone(tmp_token1, free);
-	*right = make_new_node(tmp_token2);
+		root->node = token_lst;
+	tmp_token[0] = tmp_token[1];
+	tmp_token[1] = tmp_token[1]->next;
+	ft_lstdelone(tmp_token[0], free);
+	root->right = make_new_node(tmp_token[1]);
 }
 
 t_parse	*subshell_parsing(t_lex_lst *token_lst)
@@ -69,7 +64,7 @@ t_parse	*subshell_parsing(t_lex_lst *token_lst)
 	if (root == NULL)
 		return (NULL);
 	root->is_subshell = 1;
-	split_by_subshell(token_lst, &root->left, &root->right, &root->node);
+	split_by_subshell(token_lst, root);
 	return (root);
 }
 
