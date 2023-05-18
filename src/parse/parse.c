@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/16 11:52:25 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/19 01:58:03 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,7 @@ t_parse	*parse(t_lex_lst *token_lst)
 	t_parse		*root;
 	t_lex_lst	*operator;
 
-	if (check_quote_parenthesis_match_error(token_lst))
-		return (NULL);
-	else if (check_empty_subshell(token_lst))
+	if (check_inner_syntax(token_lst))
 		return (NULL);
 	delete_useless_ifs(token_lst);
 	operator = get_root_node(&token_lst);
