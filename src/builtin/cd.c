@@ -6,12 +6,21 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 23:08:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/27 21:44:15 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 06:10:03 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include <dirent.h>
+
+static char	*_get_dirname(char *buf, char *prefix, char *path)
+{
+	ft_memset(buf, 0, PATH_MAX);
+	ft_strlcpy(buf, prefix, PATH_MAX);
+	ft_strlcat(buf, "/", PATH_MAX);
+	ft_strlcat(buf, path, PATH_MAX);
+	return (buf);
+}
 
 static void	_set_with_prefix(char *currpath, char *prefix, char *path)
 {
@@ -29,13 +38,12 @@ static void	_set_with_prefix(char *currpath, char *prefix, char *path)
 	{
 		if (currpath[0] == '\0')
 		{
-			ft_strlcpy(dirname, sp[i], PATH_MAX);
-			ft_strlcat(dirname, "/", PATH_MAX);
-			ft_strlcat(dirname, path, PATH_MAX);
-			dir = opendir(dirname);
+			dir = opendir(_get_dirname(dirname, sp[i], path));
 			if (dir)
+			{
 				ft_strlcpy(currpath, dirname, PATH_MAX);
-			closedir(dir);
+				closedir(dir);
+			}
 		}
 		free(sp[i++]);
 	}
