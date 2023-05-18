@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/19 01:58:03 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 04:08:58 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 #include "parse.h"
 #include "parse_inner_util.h"
 
-t_lex_lst	*get_root_node(t_lex_lst **token_lst)
+t_lex_lst	*get_root_node(t_lex_lst *token_lst)
 {
 	t_lex_lst	*root_node;
 
-	root_node = get_type_node(*token_lst, LEXEME_AND);
+	root_node = get_type_node(token_lst, LEXEME_AND);
 	if (root_node)
 		return (root_node);
-	root_node = get_type_node(*token_lst, LEXEME_OR);
+	root_node = get_type_node(token_lst, LEXEME_OR);
 	if (root_node)
 		return (root_node);
-	root_node = get_type_node(*token_lst, LEXEME_PIPE);
+	root_node = get_type_node(token_lst, LEXEME_PIPE);
 	if (root_node)
 		return (root_node);
 	return (NULL);
@@ -81,7 +81,7 @@ t_parse	*parse(t_lex_lst *token_lst)
 	if (check_inner_syntax(token_lst))
 		return (NULL);
 	delete_useless_ifs(token_lst);
-	operator = get_root_node(&token_lst);
+	operator = get_root_node(token_lst);
 	if (operator == NULL)
 	{
 		if (has_subshell(token_lst))
