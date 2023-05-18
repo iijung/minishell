@@ -6,7 +6,7 @@
 #    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/16 20:44:15 by jaemjeon         ###   ########.fr        #
+#    Updated: 2023/05/19 00:55:46 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ CPPFLAGS	+= -I./prompt
 CPPFLAGS	+= -I./builtin
 CPPFLAGS	+= -I./lexer
 CPPFLAGS	+= -I./parse
+CPPFLAGS	+= -I./expand
 CPPFLAGS	+= -I./execute
 
 CPPFLAGS	+= -I../lib/libft
@@ -53,12 +54,14 @@ MINISHELL_SRCS = \
 	lexer/get_lexeme.c \
 	lexer/skip_lexeme.c \
 	lexer/check_lexeme.c \
+	expand/get_heredoc.c \
+	expand/get_wildcard.c \
+	expand/combine_string.c \
 	execute/executor.c \
-	execute/get_heredoc.c \
-	execute/get_wildcard.c \
 	execute/run_pipex.c \
 	execute/set_pipex.c \
 	execute/init_pipex.c \
+	execute/redirect.c \
 	builtin/builtin.c \
 	builtin/pwd.c \
 	builtin/cd.c \

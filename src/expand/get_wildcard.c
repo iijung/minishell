@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 16:55:08 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/18 12:10:16 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/18 22:25:00 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ t_list	*get_wildcard(char *str)
 	DIR				*dir;
 	struct dirent	*dirent;
 
+	if (str == NULL || ft_strchr(str, '*') == NULL)
+		return (NULL);
 	dir = opendir(".");
 	if (dir == NULL)
 		return (NULL);

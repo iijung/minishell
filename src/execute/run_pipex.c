@@ -6,68 +6,45 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 11:05:55 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/18 23:38:27 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-static int	_open(char *file, int flag)
+static int	_exec(struct s_pipex *content)
 {
-	int		fd;
-	int		count;
-	t_list	*path;
+	int				status;
+	int				save_fd[2];
+	t_builtin_func	builtin_func;
 
-	path = NULL;
-	if (ft_strchr(file, '*') == NULL)
-		fd = open(file, flag, 0666);
-	else
+	status = EXIT_FAILURE;
+	save_fd[STDIN_FILENO] = dup(STDIN_FILENO);
+	save_fd[STDOUT_FILENO] = dup(STDOUT_FILENO);
+	if (content
+		&& save_fd[STDIN_FILENO] != -1
+		&& save_fd[STDOUT_FILENO] != -1
+		&& redirect(content->redirect) != -1)
 	{
-		path = get_wildcard(file);
-		count = ft_lstsize(path);
-		if (count != 1)
-		{
-			ft_putstr_fd(file, STDERR_FILENO);
-			ft_putstr_fd(": ambiguous redirect\n", STDERR_FILENO);
-			exit(EXIT_FAILURE);
-		}
-		fd = open(path->content, flag, 0666);
-		ft_lstclear(&path, free);
+		builtin_func = builtin(content->argv);
+		if (builtin_func)
+			status = builtin_func(content->envp, content->argc, content->argv);
+		else
+			status = builtin_env(content->envp, content->argc, content->argv);
 	}
-	return (fd);
+	dup2(save_fd[STDIN_FILENO], STDIN_FILENO);
+	dup2(save_fd[STDOUT_FILENO], STDOUT_FILENO);
+	if (save_fd[STDIN_FILENO] != -1)
+		close(save_fd[STDIN_FILENO]);
+	if (save_fd[STDOUT_FILENO] != -1)
+		close(save_fd[STDOUT_FILENO]);
+	return (status);
 }
 
-void	redirect(struct s_pipex *content)
-{
-	if (content->in_fd == -1 && content->infile)
-		content->in_fd = _open(content->infile, O_RDONLY);
-	if (content->in_fd != -1)
-	{
-		if (dup2(content->in_fd, STDIN_FILENO) == -1)
-			ft_assert(1, __FILE__, __LINE__);
-		close(content->in_fd);
-		content->in_fd = -1;
-	}
-	if (content->outfile)
-	{
-		if (content->in_fd != -1)
-			close(content->out_fd);
-		content->out_fd = _open(content->outfile, content->outflag);
-	}
-	if (content->out_fd != -1)
-	{
-		if (dup2(content->out_fd, STDOUT_FILENO) == -1)
-			ft_assert(1, __FILE__, __LINE__);
-		close(content->out_fd);
-		content->out_fd = -1;
-	}
-}
-
-static void	_exec(void *param)
+static void	_fork(void *param)
 {
 	int						pipes[2];
 	struct s_pipex *const	content = param;
-	t_builtin_func			builtin_func;
 
 	ft_assert(content == NULL, __FILE__, __LINE__);
 	ft_assert(pipe(pipes) == -1, __FILE__, __LINE__);
@@ -77,11 +54,7 @@ static void	_exec(void *param)
 		close(pipes[0]);
 		ft_assert(dup2(pipes[1], STDOUT_FILENO) == -1, __FILE__, __LINE__);
 		close(pipes[1]);
-		redirect(content);
-		builtin_func = builtin(content->argv);
-		if (builtin_func)
-			exit(builtin_func(content->envp, content->argc, content->argv));
-		exit(builtin_env(content->envp, content->argc, content->argv));
+		exit(_exec(content));
 	}
 	else
 	{
@@ -103,29 +76,49 @@ static void	_wait(void *param)
 		content->exit_status = WEXITSTATUS(content->exit_status);
 }
 
-int	run_pipex(t_pipex *pipex)
+static int	_run(t_pipex *pipex)
 {
-	int				ret;
-	const int		save_stdin = dup(STDIN_FILENO);
-	const int		save_stdout = dup(STDOUT_FILENO);
-	struct s_pipex	*last_content;
+	char					*line;
+	const int				save_stdin = dup(STDIN_FILENO);
+	const struct s_pipex	*last_content = ft_lstlast(pipex)->content;
 
-	ret = EXIT_FAILURE;
-	if (save_stdin != -1 && save_stdout != -1)
+	if (save_stdin == -1)
+		return (EXIT_FAILURE);
+	ft_lstiter(pipex, _fork);
+	ft_lstiter(pipex, _wait);
+	line = get_next_line(STDIN_FILENO);
+	while (line)
 	{
-		last_content = ft_lstlast(pipex)->content;
-		last_content->out_fd = save_stdout;
-		{
-			ft_lstiter(pipex, _exec);
-			ft_lstiter(pipex, _wait);
-			ret = last_content->exit_status;
-		}
-		dup2(save_stdout, STDOUT_FILENO);
-		dup2(save_stdin, STDOUT_FILENO);
+		printf("%s", line);
+		free(line);
+		line = get_next_line(STDIN_FILENO);
 	}
+	dup2(save_stdin, STDIN_FILENO);
 	if (save_stdin != -1)
 		close(save_stdin);
-	if (save_stdout != -1)
-		close(save_stdout);
-	return (ret);
+	return (last_content->exit_status);
+}
+
+int	all_pipex(t_pipex *pipex)
+{
+	pid_t			pid;
+	int				status;
+	struct s_pipex	*content;
+
+	if (pipex == NULL)
+		return (EXIT_FAILURE);
+	content = pipex->content;
+	if (ft_lstsize(pipex) == 1 && builtin(content->argv))
+	{
+		if (ft_strncmp(content->argv[0], "exit", 5) == 0)
+			ft_putstr_fd("exit\n", STDERR_FILENO);
+		return (_exec(content));
+	}
+	pid = fork();
+	if (pid == 0)
+		exit(_run(pipex));
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (WEXITSTATUS(status));
 }
