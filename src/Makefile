@@ -6,7 +6,7 @@
 #    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/18 20:42:57 by minjungk         ###   ########.fr        #
+#    Updated: 2023/05/18 22:48:02 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,6 +60,7 @@ MINISHELL_SRCS = \
 	execute/run_pipex.c \
 	execute/set_pipex.c \
 	execute/init_pipex.c \
+	execute/redirect.c \
 	execute/read_redirect.c \
 	builtin/builtin.c \
 	builtin/pwd.c \

@@ -6,26 +6,11 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/18 14:45:08 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/18 23:07:20 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-
-void	debug_print_redirection_list(t_list *redirect)
-{
-	struct s_redirect_data	*data;
-
-	while (redirect)
-	{
-		data = redirect->content;
-		printf("================\n");
-		printf("fd : %d\n", data->fd);
-		printf("type : %d\n", data->type);
-		printf("filename : %s\n", data->filename);
-		redirect = redirect->next;
-	}
-}
 
 static t_lex_lst	*_redirect(
 	t_e_lex type,
@@ -33,18 +18,24 @@ static t_lex_lst	*_redirect(
 	struct s_pipex *pipex
 )
 {
-	t_list					*lst_redirect;
-	struct s_redirect_data	*redirect_data;
+	t_redirect			*tmp;
+	char				*file;
 
 	if (curr == NULL)
 		return (NULL);
 	curr = skip_lexeme_ifs(curr->next);
-	lst_redirect = ft_calloc(sizeof(t_list), 1);
-	redirect_data = ft_calloc(sizeof(struct s_redirect_data), 1);
-	lst_redirect->content = redirect_data;
-	redirect_data->type = type;
-	redirect_data->filename = read_string_sequence(&curr);
-	ft_lstadd_back(&pipex->redirect, lst_redirect);
+	if (curr == NULL)
+		return (NULL);
+	file = read_string_sequence(&curr);
+	if (file == NULL)
+		return (NULL);
+	tmp = new_redirect(pipex->envp, type, file);
+	if (tmp == NULL)
+	{
+		free(file);
+		return (NULL);
+	}
+	ft_lstadd_back(&pipex->redirect, tmp);
 	return (curr);
 }
 
@@ -121,8 +112,6 @@ static void	_last(struct s_pipex *pipex)
 		pipex->argv[i++] = argp->content;
 		argp = argp->next;
 	}
-	if (pipex->is_heredoc)
-		pipex->in_fd = get_heredoc(pipex->envp, pipex->infile);
 }
 
 void	set_pipex(t_lex_lst *curr, struct s_pipex *pipex)

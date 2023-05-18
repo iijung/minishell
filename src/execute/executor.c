@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 13:09:25 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/18 23:23:55 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,21 @@ static int	_or(t_env **table, t_parse *tree)
 
 static int	_subshell(t_env **table, t_parse *tree)
 {
-	pid_t	pid;
-	int		status;
-	t_pipex	*pipex;
+	pid_t			pid;
+	int				status;
+	t_pipex			*pipex;
+	struct s_pipex	*content;
 
 	pid = fork();
 	if (pid == 0)
 	{
 		pipex = new_pipex(table, tree->right);
-		ft_assert(pipex == NULL, __FILE__, __LINE__);
-		redirect(pipex->content);
+		ft_assert(pipex == NULL || pipex->content == NULL, __FILE__, __LINE__);
+		content = pipex->content;
+		status = redirect(content->redirect);
 		ft_lstdelone(pipex, free_pipex);
+		if (status == -1)
+			exit(EXIT_FAILURE);
 		exit(execute(table, tree->left));
 	}
 	waitpid(pid, &status, 0);
