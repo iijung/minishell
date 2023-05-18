@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 09:14:24 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:54:02 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ static int	run(t_env **table, char *command)
 		}
 		{
 			if (parse_tree == NULL || is_syntax_error(parse_tree))
-				ft_putstr_fd("syntax error\n", 2);
+			{
+				env_set(table, "?", "258");
+				ft_putstr_fd("minishell: syntax error\n", 2);
+			}
 			else
 				exit_status = execute(table, parse_tree);
 		}

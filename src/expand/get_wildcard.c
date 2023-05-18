@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   get_wildcard.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 16:55:08 by minjungk          #+#    #+#             */
 /*   Updated: 2023/05/18 22:25:00 by minjungk         ###   ########.fr       */
@@ -94,7 +94,7 @@ t_list	*get_wildcard(char *str)
 	dirent = readdir(dir);
 	while (dirent)
 	{
-		if (ft_strncmp(dirent->d_name, ".", 2) != 0
+		if (ft_strncmp(dirent->d_name, ".", 1) != 0
 			&& ft_strncmp(dirent->d_name, "..", 3) != 0
 			&& _is_match(str, dirent->d_name))
 			_concat(&rtn, dirent->d_name);
