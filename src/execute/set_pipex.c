@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/18 23:07:20 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 01:05:39 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static t_lex_lst	*_redirect(
 	curr = skip_lexeme_ifs(curr->next);
 	if (curr == NULL)
 		return (NULL);
-	file = read_string_sequence(&curr);
+	file = NULL;
+	curr = combine_string(pipex->envp, curr, &file);
 	if (file == NULL)
 		return (NULL);
 	tmp = new_redirect(pipex->envp, type, file);
@@ -70,31 +71,15 @@ static t_lex_lst	*_environ(t_lex_lst *curr, struct s_pipex *pipex)
 
 t_lex_lst	*_arg(t_lex_lst *curr, struct s_pipex *pipex)
 {
-	char				*tmp[2];
-	t_list *const		argl = ft_lstnew(NULL);
+	char	*str;
+	t_list	*argl;
 
-	if (lexeme_type(curr->content) == LEXEME_DQUOTE)
-	{
-		argl->content = ft_strdup("");
-		curr = curr->next;
-		while (curr)
-		{
-			if (lexeme_type(curr->content) == LEXEME_DQUOTE)
-				break ;
-			tmp[0] = lexeme_str(curr->content);
-			ft_assert(tmp[0] == NULL, __FILE__, __LINE__);
-			tmp[1] = ft_strjoin(argl->content, tmp[0]);
-			ft_assert(tmp[1] == NULL, __FILE__, __LINE__);
-			free(tmp[0]);
-			free(argl->content);
-			argl->content = tmp[1];
-			curr = curr->next;
-		}
-	}
-	else
-		argl->content = lexeme_str(curr->content);
+	str = NULL;
+	curr = combine_string(pipex->envp, curr, &str);
+	argl = ft_lstnew(str);
+	ft_assert(argl == NULL || str == NULL, __FILE__, __LINE__);
 	ft_lstadd_back(&pipex->argl, argl);
-	return (curr->next);
+	return (curr);
 }
 
 static void	_last(struct s_pipex *pipex)
