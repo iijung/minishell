@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:20:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 11:33:04 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/18 11:54:01 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,21 @@ t_pipex	*new_pipex(t_env **table, t_parse *tree)
 		ft_lstdelone(rtn, NULL);
 		return (NULL);
 	}
-	content->in_fd = -1;
-	content->out_fd = -1;
 	content->envp = table;
 	set_pipex(tree->node, content);
 	return (rtn);
+}
+
+static void	free_redirect(void *param)
+{
+	struct s_redirect_data *const	redirect_data = param;
+
+	if (redirect_data->fd != -1)
+		close(redirect_data->fd);
+	redirect_data->fd = -1;
+	free(redirect_data->filename);
+	redirect_data->filename = NULL;
+	free(redirect_data);
 }
 
 void	free_pipex(void *param)
@@ -40,19 +50,10 @@ void	free_pipex(void *param)
 
 	if (content == NULL)
 		return ;
-	if (content->in_fd != -1)
-		close(content->in_fd);
-	if (content->out_fd != -1)
-		close(content->out_fd);
-	content->in_fd = -1;
-	content->out_fd = -1;
 	free(content->argv);
 	content->argv = NULL;
 	ft_lstclear(&content->argl, free);
-	free(content->infile);
-	content->infile = NULL;
-	free(content->outfile);
-	content->outfile = NULL;
+	ft_lstclear(&content->redirect, free_redirect);
 	free(content);
 }
 

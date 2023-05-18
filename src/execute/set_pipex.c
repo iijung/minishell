@@ -6,11 +6,26 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 20:40:44 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/18 14:45:08 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+
+void	debug_print_redirection_list(t_list *redirect)
+{
+	struct s_redirect_data	*data;
+
+	while (redirect)
+	{
+		data = redirect->content;
+		printf("================\n");
+		printf("fd : %d\n", data->fd);
+		printf("type : %d\n", data->type);
+		printf("filename : %s\n", data->filename);
+		redirect = redirect->next;
+	}
+}
 
 static t_lex_lst	*_redirect(
 	t_e_lex type,
@@ -18,25 +33,19 @@ static t_lex_lst	*_redirect(
 	struct s_pipex *pipex
 )
 {
-	curr = skip_lexeme_ifs(curr->next);
+	t_list					*lst_redirect;
+	struct s_redirect_data	*redirect_data;
+
 	if (curr == NULL)
 		return (NULL);
-	if (type == LEXEME_HEREDOC || type == LEXEME_INFILE)
-	{
-		free(pipex->infile);
-		pipex->infile = lexeme_str(curr->content);
-		pipex->is_heredoc = (type == LEXEME_HEREDOC);
-	}
-	else if (type == LEXEME_OUTFILE || type == LEXEME_ADDFILE)
-	{
-		free(pipex->outfile);
-		pipex->outfile = lexeme_str(curr->content);
-		if (type == LEXEME_OUTFILE)
-			pipex->outflag = O_CREAT | O_TRUNC | O_WRONLY;
-		else
-			pipex->outflag = O_CREAT | O_APPEND | O_WRONLY;
-	}
-	return (curr->next);
+	curr = skip_lexeme_ifs(curr->next);
+	lst_redirect = ft_calloc(sizeof(t_list), 1);
+	redirect_data = ft_calloc(sizeof(struct s_redirect_data), 1);
+	lst_redirect->content = redirect_data;
+	redirect_data->type = type;
+	redirect_data->filename = read_string_sequence(&curr);
+	ft_lstadd_back(&pipex->redirect, lst_redirect);
+	return (curr);
 }
 
 static t_lex_lst	*_environ(t_lex_lst *curr, struct s_pipex *pipex)
@@ -140,4 +149,5 @@ void	set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
 			curr = skip_lexeme_ifs(curr);
 	}
 	_last(pipex);
+	debug_print_redirection_list(pipex->redirect);
 }

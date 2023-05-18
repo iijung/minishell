@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 13:49:28 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/16 21:18:50 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/18 13:35:38 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,17 @@
 
 typedef t_list	t_pipex;
 
+struct s_redirect_data
+{
+	int		fd;
+	int		type;
+	char	*filename;
+};
+
 struct s_pipex
 {
 	t_list		*argl;
+	t_list		*redirect;
 	struct
 	{
 		pid_t	pid;
@@ -54,5 +62,6 @@ extern int			all_pipex(t_pipex *pipex);
 extern void			free_pipex(void *param);
 
 extern int			execute(t_env **table, t_parse *tree);
+char	*read_string_sequence(t_lex_lst **curr);
 
 #endif
