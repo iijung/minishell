@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 15:46:32 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/19 01:56:37 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 02:43:22 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "lexer.h"
 
 // parse_inner_util.c
-int			has_subshell(t_lex_lst *token_lst);
+extern int	has_subshell(t_lex_lst *curr);
 int			is_about_string_token(t_lex_lst *token);
 int			is_ifs_token(t_lex_lst *token);
 void		delete_useless_ifs(t_lex_lst *rear);
