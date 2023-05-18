@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 13:49:28 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/18 13:35:38 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/18 20:42:45 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "environ.h"
 # include "builtin.h"
 # include "parse.h"
+# include "expand.h"
 # include <fcntl.h>
 # include <sys/wait.h>
 
@@ -50,9 +51,6 @@ struct s_pipex
 		int		outflag;
 	};
 };
-
-extern t_list		*get_wildcard(char *str);
-extern int			get_heredoc(t_env **table, char *word);
 
 extern void			redirect(struct s_pipex *content);
 extern t_pipex		*new_pipex(t_env **table, t_parse *tree);
