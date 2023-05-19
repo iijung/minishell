@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:29 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/16 22:55:55 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/19 15:20:41 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,6 @@ static int	redirection_pair_match_error(t_lex_lst *node_lst)
 	return (pair_flag);
 }
 
-static int	command_redirection_match_error(t_lex_lst *lex_lst)
-{
-	int		dquote_flag;
-	t_s_lex	*lex_data;
-
-	dquote_flag = 0;
-	while (lex_lst)
-	{
-		lex_data = lex_lst->content;
-		if (lex_data->type == LEXEME_DQUOTE)
-			dquote_flag ^= 1;
-		else if (dquote_flag == 0 && is_redirection_lex(lex_data))
-			break ;
-		lex_lst = lex_lst->next;
-	}
-	return (redirection_pair_match_error(lex_lst));
-}
-
 int	is_syntax_error(t_parse *root)
 {
 	t_lex_lst	*lex_lst;
@@ -81,8 +63,6 @@ int	is_syntax_error(t_parse *root)
 		lex_data = lex_lst->content;
 		if (is_operator_lex(lex_data))
 			return (root->left == 0 || root->right == 0);
-		else
-			return (command_redirection_match_error(lex_lst));
 	}
 	if (root->left && is_syntax_error(root->left))
 		return (1);
