@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 02:18:50 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 17:27:23 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,16 @@ static t_lex_lst	*_redirect(
 
 	if (curr == NULL)
 		return (NULL);
+	file = NULL;
 	curr = skip_lexeme_ifs(curr->next);
 	if (curr == NULL)
-		return (NULL);
-	file = NULL;
-	curr = combine_string(pipex->envp, curr, &file);
-	if (file == NULL)
-		return (NULL);
+		file = ft_strdup("");
+	else
+	{
+		curr = combine_string(pipex->envp, curr, &file);
+		if (file == NULL)
+			return (NULL);
+	}
 	tmp = new_redirect(pipex->envp, type, file);
 	if (tmp == NULL)
 	{

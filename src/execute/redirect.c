@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 21:12:10 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/18 23:24:17 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 17:29:29 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_redirect	*new_redirect(t_env **table, t_e_lex type, char *file)
 	content->type = type;
 	content->filename = file;
 	content->fd = -1;
-	if (type == LEXEME_HEREDOC)
+	if (type == LEXEME_HEREDOC && file[0] != '\0')
 		content->fd = get_heredoc(table, file);
 	content->flag = O_RDONLY;
 	if (type == LEXEME_OUTFILE)
