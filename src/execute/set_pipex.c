@@ -23,13 +23,16 @@ static t_lex_lst	*_redirect(
 
 	if (curr == NULL)
 		return (NULL);
+	file = NULL;
 	curr = skip_lexeme_ifs(curr->next);
 	if (curr == NULL)
-		return (NULL);
-	file = NULL;
-	curr = combine_string(pipex->envp, curr, &file);
-	if (file == NULL)
-		return (NULL);
+		file = ft_strdup("");
+	else
+	{
+		curr = combine_string(pipex->envp, curr, &file);
+		if (file == NULL)
+			return (NULL);
+	}
 	tmp = new_redirect(pipex->envp, type, file);
 	if (tmp == NULL)
 	{
