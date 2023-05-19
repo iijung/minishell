@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/18 23:38:27 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 21:01:01 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,22 +78,22 @@ static void	_wait(void *param)
 
 static int	_run(t_pipex *pipex)
 {
-	char					*line;
 	const int				save_stdin = dup(STDIN_FILENO);
-	const struct s_pipex	*last_content = ft_lstlast(pipex)->content;
+	struct s_pipex *const	last_content = ft_lstlast(pipex)->content;
+	t_redirect *const		tmp = new_redirect(NULL, LEXEME_OUTFILE, NULL);
+	struct s_redirect		*content;
 
-	if (save_stdin == -1)
-		return (EXIT_FAILURE);
-	ft_lstiter(pipex, _fork);
-	ft_lstiter(pipex, _wait);
-	line = get_next_line(STDIN_FILENO);
-	while (line)
+	ft_assert(save_stdin == -1 || tmp == NULL, __FILE__, __LINE__);
 	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(STDIN_FILENO);
+		content = tmp->content;
+		content->fd = dup(STDOUT_FILENO);
+		ft_lstadd_front(&last_content->redirect, tmp);
 	}
-	dup2(save_stdin, STDIN_FILENO);
+	{
+		ft_lstiter(pipex, _fork);
+		ft_lstiter(pipex, _wait);
+		dup2(save_stdin, STDIN_FILENO);
+	}
 	if (save_stdin != -1)
 		close(save_stdin);
 	return (last_content->exit_status);
