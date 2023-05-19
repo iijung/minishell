@@ -6,12 +6,14 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 00:14:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/06 01:02:37 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 21:19:47 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "environ.h"
+#include <signal.h>
+#include <sys/wait.h>
 
 enum e_pipe_direction
 {
@@ -60,31 +62,54 @@ static int	_expand(int fd, char *line, t_env **table)
 	return (-1);
 }
 
-int	get_heredoc(t_env **table, char *word)
+static int	_read(t_env **table, char *word, int fd)
 {
-	int		pipes[2];
-	size_t	word_len;
-	char	*line;
+	const size_t	word_len = ft_strlen(word);
+	char			*line;
 
-	if (word == NULL || pipe(pipes) == -1)
-		return (-1);
-	word_len = ft_strlen(word);
-	line = get_next_line(0);
+	line = get_next_line(STDIN_FILENO);
 	while (line)
 	{
 		if (ft_strncmp(line, word, word_len) == 0
 			&& (line[word_len] == '\n' || line[word_len] == '\0'))
 			break ;
-		if (_expand(pipes[PIPE_IN], line, table) < 0)
+		if (_expand(fd, line, table) < 0)
 		{
-			close(pipes[PIPE_OUT]);
-			pipes[PIPE_OUT] = -1;
-			break ;
+			close(fd);
+			free(line);
+			return (EXIT_FAILURE);
 		}
 		free(line);
-		line = get_next_line(0);
+		line = get_next_line(STDIN_FILENO);
 	}
-	free(line);
-	close(pipes[PIPE_IN]);
+	return (EXIT_SUCCESS);
+}
+
+int	get_heredoc(t_env **table, char *word)
+{
+	pid_t	pid;
+	int		status;
+	int		pipes[2];
+
+	if (word == NULL || pipe(pipes) == -1)
+		return (-1);
+	pid = fork();
+	if (pid == 0)
+	{
+		close(pipes[PIPE_OUT]);
+		exit(_read(table, word, pipes[PIPE_IN]));
+	}
+	else
+	{
+		close(pipes[PIPE_IN]);
+		signal(SIGINT, SIG_IGN);
+		waitpid(pid, &status, 0);
+		signal(SIGINT, SIG_DFL);
+		if (WIFSIGNALED(status) || WEXITSTATUS(status) == EXIT_FAILURE)
+		{
+			close(pipes[PIPE_OUT]);
+			return (-1);
+		}
+	}
 	return (pipes[PIPE_OUT]);
 }
