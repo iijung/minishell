@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 18:25:35 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 05:28:29 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static int	_env(t_env **table, char **argv)
 	char *const		path = env_get_val(table, "PATH");
 
 	i = 0;
-	if (ft_strncmp(argv[0], "env", 4) == 0)
+	if (argv && argv[0] && ft_strncmp(argv[0], "env", 4) == 0)
 	{
 		while (argv[++i])
 		{
@@ -92,7 +92,7 @@ static int	_env(t_env **table, char **argv)
 		}
 	}
 	envp = env_get_arr(table);
-	if (argv[i] == NULL)
+	if (argv == NULL || argv[i] == NULL)
 		status = _show(table);
 	else
 		status = _exec_with_path(path, argv + i, envp);
@@ -114,9 +114,6 @@ int	builtin_env(t_env **table, int argc, char **argv)
 		exit(_env(table, argv));
 	waitpid(pid, &wstatus, 0);
 	if (WIFSIGNALED(wstatus))
-	{
-		perror("minishell: env: ");
 		return (128 + WTERMSIG(wstatus));
-	}
 	return (WEXITSTATUS(wstatus));
 }

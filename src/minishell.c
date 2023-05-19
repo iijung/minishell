@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 18:54:02 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/19 05:50:18 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,18 @@ static int	run(t_env **table, char *command)
 	tokens = lex(command);
 	if (tokens)
 	{
+		parse_tree = parse(tokens);
+		debug_print_parse_tree(parse_tree);
+		if (parse_tree == NULL || is_syntax_error(parse_tree))
 		{
-			parse_tree = parse(tokens);
-			debug_print_parse_tree(parse_tree);
+			env_set(table, "?", "258");
+			ft_putstr_fd("minishell: syntax error\n", 2);
 		}
-		{
-			if (parse_tree == NULL || is_syntax_error(parse_tree))
-			{
-				env_set(table, "?", "258");
-				ft_putstr_fd("minishell: syntax error\n", 2);
-			}
-			else
-				exit_status = execute(table, parse_tree);
-		}
-		{
-			clear_parse_tree(parse_tree, free);
-			if (parse_tree == NULL)
-				ft_lstclear(&tokens, free);
-		}
+		else
+			exit_status = execute(table, parse_tree);
+		clear_parse_tree(parse_tree, free);
+		if (parse_tree == NULL)
+			ft_lstclear(&tokens, free);
 	}
 	return (exit_status);
 }

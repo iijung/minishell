@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/18 23:23:55 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 02:17:52 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,7 @@ static int	_pipe(t_env **table, t_parse *tree)
 	t_pipex	*pipex;
 
 	pipex = new_pipex(table, tree->left);
-	while (tree->right
-		&& tree->right->node
-		&& tree->right->node->content
-		&& lexeme_type(tree->right->node->content) == LEXEME_PIPE)
+	while (tree->right && lexeme_type(tree->right->node) == LEXEME_PIPE)
 	{
 		tree = tree->right;
 		ft_lstadd_back(&pipex, new_pipex(table, tree->left));
@@ -85,11 +82,11 @@ int	execute(t_env **table, t_parse *tree)
 
 	if (tree == NULL)
 		status = EXIT_SUCCESS;
-	else if (tree->node && lexeme_type(tree->node->content) == LEXEME_AND)
+	else if (lexeme_type(tree->node) == LEXEME_AND)
 		status = _and(table, tree);
-	else if (tree->node && lexeme_type(tree->node->content) == LEXEME_OR)
+	else if (lexeme_type(tree->node) == LEXEME_OR)
 		status = _or(table, tree);
-	else if (tree->node && lexeme_type(tree->node->content) == LEXEME_PIPE)
+	else if (lexeme_type(tree->node) == LEXEME_PIPE)
 		status = _pipe(table, tree);
 	else if (tree->is_subshell)
 		status = _subshell(table, tree);

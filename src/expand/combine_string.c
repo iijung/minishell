@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   combine_lexeme.c                                   :+:      :+:    :+:   */
+/*   combine_string.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:05:16 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 00:47:14 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 02:20:57 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ static t_lex_lst	*_dquote(t_env **table, t_lex_lst *curr, char **dst)
 	char	*tmp;
 
 	curr = curr->next;
-	while (curr && lexeme_type(curr->content) != LEXEME_DQUOTE)
+	while (lexeme_type(curr) != LEXEME_DQUOTE)
 	{
-		tmp = lexeme_str(curr->content);
+		tmp = lexeme_str(curr);
 		ft_assert(tmp == NULL, __FILE__, __LINE__);
-		if (lexeme_type(curr->content) == LEXEME_ENVIRONMENT)
+		if (lexeme_type(curr) == LEXEME_ENVIRONMENT)
 			curr = _str(curr, dst, env_get_val(table, tmp));
 		else
 			curr = _str(curr, dst, tmp);
@@ -55,18 +55,17 @@ t_lex_lst	*combine_string(t_env **table, t_lex_lst *curr, char **dst)
 		return (NULL);
 	while (curr)
 	{
-		if (lexeme_type(curr->content) != LEXEME_STRING
-			&& lexeme_type(curr->content) != LEXEME_DQUOTE)
+		if (lexeme_type(curr) != LEXEME_STRING
+			&& lexeme_type(curr) != LEXEME_DQUOTE)
 			break ;
-		if (lexeme_type(curr->content) == LEXEME_DQUOTE)
+		if (lexeme_type(curr) == LEXEME_DQUOTE)
 			curr = _dquote(table, curr, dst);
 		else
 		{
-			tmp = lexeme_str(curr->content);
+			tmp = lexeme_str(curr);
 			curr = _str(curr, dst, tmp);
 			free(tmp);
 		}
 	}
 	return (curr);
 }
-

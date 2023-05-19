@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 01:05:39 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 02:18:50 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static t_lex_lst	*_environ(t_lex_lst *curr, struct s_pipex *pipex)
 	char		**sp;
 	t_list		*arg;
 
-	key = lexeme_str(curr->content);
+	key = lexeme_str(curr);
 	ft_assert(key == NULL, __FILE__, __LINE__);
 	val = env_get_val(pipex->envp, key);
 	free(key);
@@ -106,18 +106,18 @@ void	set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
 	while (curr)
 	{
 		if (is_redirection_lex(curr->content))
-			curr = _redirect(lexeme_type(curr->content), curr, pipex);
-		else if (lexeme_type(curr->content) == LEXEME_ENVIRONMENT)
+			curr = _redirect(lexeme_type(curr), curr, pipex);
+		else if (lexeme_type(curr) == LEXEME_ENVIRONMENT)
 			curr = _environ(curr, pipex);
-		else if (lexeme_type(curr->content) == LEXEME_WILDCARD)
+		else if (lexeme_type(curr) == LEXEME_WILDCARD)
 		{
-			tmp = lexeme_str(curr->content);
+			tmp = lexeme_str(curr);
 			ft_lstadd_back(&pipex->argl, get_wildcard(tmp));
 			free(tmp);
 			curr = curr->next;
 		}
-		else if (lexeme_type(curr->content) == LEXEME_DQUOTE
-			|| lexeme_type(curr->content) == LEXEME_STRING)
+		else if (lexeme_type(curr) == LEXEME_DQUOTE
+			|| lexeme_type(curr) == LEXEME_STRING)
 			curr = _arg(curr, pipex);
 		else
 			curr = skip_lexeme_ifs(curr);

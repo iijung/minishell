@@ -6,29 +6,24 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 15:49:14 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/17 18:35:14 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/19 02:46:56 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
-int	has_subshell(t_lex_lst *token_lst)
+int	has_subshell(t_lex_lst *curr)
 {
-	int			dquote_flag;
-	t_s_lex		*lex_data;
+	int		dquote;
 
-	dquote_flag = 0;
-	while (token_lst)
+	dquote = 0;
+	while (curr)
 	{
-		lex_data = token_lst->content;
-		if (lex_data->type == LEXEME_DQUOTE)
-			dquote_flag ^= 1;
-		else if (dquote_flag == 0)
-		{
-			if (lex_data->type == LEXEME_PARENTHESIS_OPEN)
-				return (1);
-		}
-		token_lst = token_lst->next;
+		if (lexeme_type(curr) == LEXEME_DQUOTE)
+			dquote ^= 1;
+		if (lexeme_type(curr) == LEXEME_PARENTHESIS_OPEN && dquote == 0)
+			return (1);
+		curr = curr->next;
 	}
 	return (0);
 }
