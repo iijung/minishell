@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 02:10:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/21 11:35:59 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 21:09:18 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ static char	*get_readline(void)
 	set_terminal();
 	line = readline("minishell$ ");
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	return (line);
 }
 
