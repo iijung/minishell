@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 02:18:50 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/19 19:02:19 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,30 +43,30 @@ static t_lex_lst	*_redirect(
 static t_lex_lst	*_environ(t_lex_lst *curr, struct s_pipex *pipex)
 {
 	int			i;
-	char		*key;
-	char		*val;
+	char *const	key = lexeme_str(curr);
 	char		**sp;
 	t_list		*arg;
 
-	key = lexeme_str(curr);
 	ft_assert(key == NULL, __FILE__, __LINE__);
-	val = env_get_val(pipex->envp, key);
+	sp = ft_split(env_get_val(pipex->envp, key), ' ');
 	free(key);
-	if (val == NULL)
-		sp = ft_split("", ' ');
-	else
-		sp = ft_split(val, ' ');
-	ft_assert(sp == NULL, __FILE__, __LINE__);
+	curr = curr->next;
 	i = 0;
-	while (sp[i])
+	while (sp && sp[i])
 	{
-		arg = ft_lstnew(sp[i]);
+		if (sp[i + 1] == NULL)
+			curr = combine_string(pipex->envp, curr, &sp[i]);
+		arg = get_wildcard(sp[i]);
+		if (arg == NULL)
+			arg = ft_lstnew(sp[i]);
+		else
+			free(sp[i]);
 		ft_assert(arg == NULL, __FILE__, __LINE__);
 		ft_lstadd_back(&pipex->argl, arg);
 		++i;
 	}
 	free(sp);
-	return (curr->next);
+	return (curr);
 }
 
 t_lex_lst	*_arg(t_lex_lst *curr, struct s_pipex *pipex)
@@ -76,7 +76,9 @@ t_lex_lst	*_arg(t_lex_lst *curr, struct s_pipex *pipex)
 
 	str = NULL;
 	curr = combine_string(pipex->envp, curr, &str);
-	argl = ft_lstnew(str);
+	argl = get_wildcard(str);
+	if (argl == NULL)
+		argl = ft_lstnew(str);
 	ft_assert(argl == NULL || str == NULL, __FILE__, __LINE__);
 	ft_lstadd_back(&pipex->argl, argl);
 	return (curr);
@@ -101,22 +103,14 @@ static void	_last(struct s_pipex *pipex)
 
 void	set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
 {
-	char	*tmp;
-
 	while (curr)
 	{
 		if (is_redirection_lex(curr->content))
 			curr = _redirect(lexeme_type(curr), curr, pipex);
 		else if (lexeme_type(curr) == LEXEME_ENVIRONMENT)
 			curr = _environ(curr, pipex);
-		else if (lexeme_type(curr) == LEXEME_WILDCARD)
-		{
-			tmp = lexeme_str(curr);
-			ft_lstadd_back(&pipex->argl, get_wildcard(tmp));
-			free(tmp);
-			curr = curr->next;
-		}
-		else if (lexeme_type(curr) == LEXEME_DQUOTE
+		else if (lexeme_type(curr) == LEXEME_WILDCARD
+			|| lexeme_type(curr) == LEXEME_DQUOTE
 			|| lexeme_type(curr) == LEXEME_STRING)
 			curr = _arg(curr, pipex);
 		else
