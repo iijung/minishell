@@ -6,44 +6,11 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:28:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 02:29:35 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 00:44:52 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-
-#ifdef DEBUG
-# define DEBUG 1
-#else
-# define DEBUG 0
-#endif
-
-void	debug(void *param)
-{
-	const struct s_lexeme	*c = param;
-	const char				*typename[] = {
-	[LEXEME_STRING] = "STRING",
-	[LEXEME_EOF] = "EOF",
-	[LEXEME_IFS] = "IFS",
-	[LEXEME_OR] = "OR",
-	[LEXEME_AND] = "AND",
-	[LEXEME_HEREDOC] = "HEREDOC",
-	[LEXEME_ADDFILE] = "ADDFILE",
-	[LEXEME_OUTFILE] = "OUTFILE",
-	[LEXEME_INFILE] = "INFILE",
-	[LEXEME_PIPE] = "PIPE",
-	[LEXEME_QUOTE] = "QUOTE",
-	[LEXEME_DQUOTE] = "DQUOTE",
-	[LEXEME_WILDCARD] = "WILDCARD",
-	[LEXEME_ENVIRONMENT] = "ENVIRONMENT",
-	[LEXEME_PARENTHESIS_OPEN] = "PARENTHESIS_OPEN",
-	[LEXEME_PARENTHESIS_CLOSE] = "PARENTHESIS_CLOSE"};
-
-	if (DEBUG == 0 || c == NULL)
-		return ;
-	printf("DEBUG:: lexeme [%x: %12s] len[%lu] data[%.*s]\n",
-		c->type, typename[c->type], c->len, (int)c->len, c->data);
-}
 
 static char	*add_token(t_lex_lst **lst, int type, size_t len, char *data)
 {
@@ -142,6 +109,5 @@ t_lex_lst	*lex(char *command)
 		ft_putstr_fd("minishell: lexing error\n", STDERR_FILENO);
 		return (NULL);
 	}
-	// ft_lstiter(tokens, debug);
 	return (tokens);
 }

@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 05:50:18 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 01:04:14 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static int	run(t_env **table, char *command)
 	if (tokens)
 	{
 		parse_tree = parse(tokens);
-		debug_print_parse_tree(parse_tree);
 		if (parse_tree == NULL || is_syntax_error(parse_tree))
 		{
 			env_set(table, "?", "258");
