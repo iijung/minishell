@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 02:17:52 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/20 17:20:49 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	_subshell(t_env **table, t_parse *tree)
 	pid = fork();
 	if (pid == 0)
 	{
-		pipex = new_pipex(table, tree->right);
+		pipex = new_pipex(table, tree->left);
 		ft_assert(pipex == NULL || pipex->content == NULL, __FILE__, __LINE__);
 		content = pipex->content;
 		status = redirect(content->redirect);
