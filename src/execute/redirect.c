@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 21:12:10 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 17:29:29 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/20 19:46:01 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	redirect(t_redirect *curr)
 	while (curr && curr->content)
 	{
 		content = curr->content;
-		if (content->fd == -1)
+		if (content->fd == -1 && content->type != LEXEME_HEREDOC)
 		{
 			content->fd = _open(content->filename, content->flag);
 			if (content->fd == -1)
