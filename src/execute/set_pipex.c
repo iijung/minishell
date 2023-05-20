@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/20 19:21:49 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 00:58:54 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,4 @@ void	set_pipex(t_lex_lst *curr, struct s_pipex *pipex)
 			curr = skip_lexeme_ifs(curr);
 	}
 	_last(pipex);
-	debug_print_redirection_list(pipex->redirect);
 }
