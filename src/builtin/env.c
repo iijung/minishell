@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 05:28:29 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/20 19:59:29 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,11 @@ int	builtin_env(t_env **table, int argc, char **argv)
 	pid = fork();
 	if (pid == 0)
 		exit(_env(table, argv));
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid, &wstatus, 0);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (WIFSIGNALED(wstatus))
 		return (128 + WTERMSIG(wstatus));
 	return (WEXITSTATUS(wstatus));
