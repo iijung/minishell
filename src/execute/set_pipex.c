@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 20:40:50 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 19:02:19 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/20 15:45:59 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ t_lex_lst	*_arg(t_lex_lst *curr, struct s_pipex *pipex)
 		argl = ft_lstnew(str);
 	ft_assert(argl == NULL || str == NULL, __FILE__, __LINE__);
 	ft_lstadd_back(&pipex->argl, argl);
+	if (str[0] == '*')
+		free(str);
 	return (curr);
 }
 
