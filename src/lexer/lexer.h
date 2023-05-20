@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 22:21:00 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 02:15:39 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 00:54:40 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static const struct s_lexeme	g_lexeme[] = {
 [LEXEME_PARENTHESIS_CLOSE] = {LEXEME_PARENTHESIS_CLOSE, 1, ")"}};
 
 extern t_lex_lst		*lex(char *command);
-extern void				debug(void *param);
+extern void				lexeme_debug(void *param);
 
 extern t_lex_lst		*skip_lexeme_ifs(t_lex_lst *curr);
 extern enum e_lexeme	lexeme_type(t_lex_lst *curr);
