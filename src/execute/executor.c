@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 00:00:44 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 00:03:29 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,14 @@ static int	_subshell(t_env **table, t_parse *tree)
 	if (pid == 0)
 	{
 		pipex = new_pipex(table, tree->right);
-		ft_assert(pipex == NULL || pipex->content == NULL, __FILE__, __LINE__);
-		content = pipex->content;
-		status = redirect(content->redirect);
-		ft_lstdelone(pipex, free_pipex);
-		if (status == -1)
-			exit(EXIT_FAILURE);
+		if (pipex)
+		{
+			content = pipex->content;
+			status = redirect(content->redirect);
+			if (status == -1)
+				exit(EXIT_FAILURE);
+			ft_lstdelone(pipex, free_pipex);
+		}
 		exit(execute(table, tree->left));
 	}
 	return (waitpid_ignore_signal(pid));
