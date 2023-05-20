@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 00:14:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 21:19:47 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/20 23:27:39 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,8 @@ int	get_heredoc(t_env **table, char *word)
 	else
 	{
 		close(pipes[PIPE_IN]);
-		signal(SIGINT, SIG_IGN);
-		waitpid(pid, &status, 0);
-		signal(SIGINT, SIG_DFL);
-		if (WIFSIGNALED(status) || WEXITSTATUS(status) == EXIT_FAILURE)
+		status = waitpid_ignore_signal(pid);
+		if (status != EXIT_SUCCESS)
 		{
 			close(pipes[PIPE_OUT]);
 			return (-1);

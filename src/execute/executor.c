@@ -51,10 +51,7 @@ static int	_subshell(t_env **table, t_parse *tree)
 			exit(EXIT_FAILURE);
 		exit(execute(table, tree->left));
 	}
-	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (WEXITSTATUS(status));
+	return (waitpid_ignore_signal(pid));
 }
 
 static int	_pipe(t_env **table, t_parse *tree)
