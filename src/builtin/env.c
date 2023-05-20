@@ -6,12 +6,11 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 05:19:40 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/20 19:59:29 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/20 23:26:14 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-#include "sys/wait.h"
 
 static int	_show(t_env **table)
 {
@@ -103,7 +102,6 @@ static int	_env(t_env **table, char **argv)
 int	builtin_env(t_env **table, int argc, char **argv)
 {
 	pid_t	pid;
-	int		wstatus;
 
 	if (table == NULL || argc < 0 || argv == NULL)
 		return (EXIT_FAILURE);
@@ -112,12 +110,5 @@ int	builtin_env(t_env **table, int argc, char **argv)
 	pid = fork();
 	if (pid == 0)
 		exit(_env(table, argv));
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	waitpid(pid, &wstatus, 0);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	if (WIFSIGNALED(wstatus))
-		return (128 + WTERMSIG(wstatus));
-	return (WEXITSTATUS(wstatus));
+	return (waitpid_ignore_signal(pid));
 }

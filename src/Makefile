@@ -6,7 +6,7 @@
 #    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/19 00:55:46 by minjungk         ###   ########.fr        #
+#    Updated: 2023/05/20 23:21:54 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ MINISHELL_SRCS = \
 	util/ft_debug.c \
 	util/ft_assert.c \
 	util/ft_strndup.c \
+	util/waitpid_ignore_signal.c \
 	environ/environ.c \
 	environ/env_init.c \
 	environ/env_free.c \

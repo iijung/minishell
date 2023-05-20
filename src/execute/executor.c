@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 02:17:52 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/20 23:23:32 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,7 @@ static int	_subshell(t_env **table, t_parse *tree)
 			exit(EXIT_FAILURE);
 		exit(execute(table, tree->left));
 	}
-	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (WEXITSTATUS(status));
+	return (waitpid_ignore_signal(pid));
 }
 
 static int	_pipe(t_env **table, t_parse *tree)

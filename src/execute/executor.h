@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 13:49:28 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/18 23:24:08 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/20 23:22:48 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "parse.h"
 # include "expand.h"
 # include "redirect.h"
-# include <sys/wait.h>
 
 typedef t_list	t_pipex;
 
