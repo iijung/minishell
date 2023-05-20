@@ -31,13 +31,11 @@ int	has_subshell(t_lex_lst *curr)
 static int	delete_first_case(t_lex_lst **start)
 {
 	t_s_lex		*first_lex_data;
-	t_s_lex		*second_lex_data;
 	t_lex_lst	*to_delete;
 
 	first_lex_data = (*start)->content;
 	if (first_lex_data->type == LEXEME_DQUOTE)
 		return (1);
-	second_lex_data = (*start)->next->content;
 	if (is_ifs_token(*start) && !is_about_string_token((*start)->next))
 	{
 		to_delete = *start;
