@@ -6,24 +6,21 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 21:12:10 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/20 19:46:01 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 08:35:54 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "redirect.h"
 
-void	debug_print_redirection_list(t_redirect *curr)
+void	go_heredoc_check_delimiter(
+t_env **table,
+char *file,
+struct s_redirect *redirect_content)
 {
-	struct s_redirect	*content;
-
-	while (curr)
-	{
-		content = curr->content;
-		printf("fd : %d\n", content->fd);
-		printf("type : %d\n", content->type);
-		printf("filename : %s\n\n", content->filename);
-		curr = curr->next;
-	}
+	if (file == NULL || file[0] == '\0')
+		ft_putendl_fd("heredoc : delimiter not found", 2);
+	else
+		redirect_content->fd = get_heredoc(table, file);
 }
 
 t_redirect	*new_redirect(t_env **table, t_e_lex type, char *file)
@@ -42,8 +39,8 @@ t_redirect	*new_redirect(t_env **table, t_e_lex type, char *file)
 	content->type = type;
 	content->filename = file;
 	content->fd = -1;
-	if (type == LEXEME_HEREDOC && file[0] != '\0')
-		content->fd = get_heredoc(table, file);
+	if (type == LEXEME_HEREDOC)
+		go_heredoc_check_delimiter(table, file, content);
 	content->flag = O_RDONLY;
 	if (type == LEXEME_OUTFILE)
 		content->flag = O_CREAT | O_TRUNC | O_WRONLY;
