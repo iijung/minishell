@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 00:03:29 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 11:35:23 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ static int	_pipe(t_env **table, t_parse *tree)
 
 int	execute(t_env **table, t_parse *tree)
 {
-	char			*tmp;
 	int				status;
 	t_pipex			*pipex;
 
@@ -95,8 +94,5 @@ int	execute(t_env **table, t_parse *tree)
 		status = all_pipex(pipex);
 		ft_lstdelone(pipex, free_pipex);
 	}
-	tmp = ft_itoa(status);
-	env_set(table, "?", tmp);
-	free(tmp);
 	return (status);
 }

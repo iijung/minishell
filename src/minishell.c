@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 01:04:14 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 11:48:47 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,13 @@ static int	run(t_env **table, char *command)
 	t_lex_lst	*tokens;
 	t_parse		*parse_tree;
 
-	exit_status = EXIT_FAILURE;
+	exit_status = SYNTAX_ERROR_EXIT_STATUS;
 	tokens = lex(command);
 	if (tokens)
 	{
 		parse_tree = parse(tokens);
 		if (parse_tree == NULL || is_syntax_error(parse_tree))
-		{
-			env_set(table, "?", "258");
 			ft_putstr_fd("minishell: syntax error\n", 2);
-		}
 		else
 			exit_status = execute(table, parse_tree);
 		clear_parse_tree(parse_tree, free);
@@ -45,6 +42,7 @@ int	main(void)
 {
 	char	*command;
 	t_env	**table;
+	char	*str_exit_status;
 
 	table = env_load();
 	ft_assert(table == NULL, __FILE__, __LINE__);
@@ -53,7 +51,9 @@ int	main(void)
 		command = prompt();
 		if (command == NULL)
 			continue ;
-		run(table, command);
+		str_exit_status = ft_itoa(run(table, command));
+		env_set(table, "?", str_exit_status);
+		free(str_exit_status);
 		free(command);
 	}
 	env_clear(&table);
