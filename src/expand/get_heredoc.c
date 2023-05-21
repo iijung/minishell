@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 00:14:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/20 23:27:39 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 12:38:37 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ static int	_read(t_env **table, char *word, int fd)
 		free(line);
 		line = get_next_line(STDIN_FILENO);
 	}
+	free(line);
 	return (EXIT_SUCCESS);
 }
 
