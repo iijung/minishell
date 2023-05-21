@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 02:10:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 21:09:18 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 03:45:20 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void	set_terminal(void)
 {
 	struct termios	term;
 
+	ft_memset(&term, 0, sizeof(struct termios));
 	rl_signal_event_hook = event;
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~ECHOCTL;
@@ -47,6 +48,7 @@ static char	*get_readline(void)
 	struct termios	term;
 	char			*line;
 
+	ft_memset(&term, 0, sizeof(struct termios));
 	signal(SIGINT, handler);
 	signal(SIGQUIT, SIG_IGN);
 	tcgetattr(STDIN_FILENO, &term);

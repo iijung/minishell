@@ -6,12 +6,14 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 23:08:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/19 06:10:03 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 23:50:01 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include <dirent.h>
+
+extern int	builtin_pwd(void);
 
 static char	*_get_dirname(char *buf, char *prefix, char *path)
 {
@@ -83,8 +85,6 @@ int	builtin_cd(t_env **table, int argc, char **argv)
 	char	*path;
 	char	*key;
 
-	if (table == NULL || argc < 0 || argv == NULL)
-		return (EXIT_FAILURE);
 	if (argc != 1 && argc != 2)
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);

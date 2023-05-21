@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 18:47:10 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 03:27:05 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,11 @@
 
 static int	_exec(struct s_pipex *content)
 {
-	int				status;
-	int				save_fd[2];
-	t_builtin_func	builtin_func;
-
-	status = EXIT_FAILURE;
-	save_fd[STDIN_FILENO] = dup(STDIN_FILENO);
-	save_fd[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	if (content
-		&& save_fd[STDIN_FILENO] != -1
-		&& save_fd[STDOUT_FILENO] != -1
-		&& redirect(content->redirect) != -1)
-	{
-		builtin_func = builtin(content->argv);
-		if (builtin_func)
-			status = builtin_func(content->envp, content->argc, content->argv);
-		else
-			status = builtin_env(content->envp, content->argc, content->argv);
-	}
-	dup2(save_fd[STDIN_FILENO], STDIN_FILENO);
-	dup2(save_fd[STDOUT_FILENO], STDOUT_FILENO);
-	if (save_fd[STDIN_FILENO] != -1)
-		close(save_fd[STDIN_FILENO]);
-	if (save_fd[STDOUT_FILENO] != -1)
-		close(save_fd[STDOUT_FILENO]);
-	return (status);
+	if (content == NULL)
+		return (EXIT_FAILURE);
+	if (content->redirect && redirect(content->redirect) == -1)
+		return (EXIT_FAILURE);
+	return (builtin(content->envp, content->argv));
 }
 
 static void	_fork(void *param)
@@ -55,7 +35,7 @@ static void	_fork(void *param)
 		ft_assert(dup2(pipes[1], STDOUT_FILENO) == -1, __FILE__, __LINE__);
 		close(pipes[1]);
 		if (content->subshell)
-			exit(execute(content->envp, content->subshell));
+			exit(execute(content->envp, content->subshell, 0));
 		else
 			exit(_exec(content));
 	}
@@ -101,16 +81,23 @@ static int	_run(t_pipex *pipex)
 int	all_pipex(t_pipex *pipex)
 {
 	pid_t			pid;
-	struct s_pipex	*content;
+	int				status;
+	int				save_fd[2];
 
 	if (pipex == NULL)
 		return (EXIT_FAILURE);
-	content = pipex->content;
-	if (ft_lstsize(pipex) == 1 && builtin(content->argv))
+	if (ft_lstsize(pipex) == 1)
 	{
-		if (ft_strncmp(content->argv[0], "exit", 5) == 0)
-			ft_putstr_fd("exit\n", STDERR_FILENO);
-		return (_exec(content));
+		save_fd[STDIN_FILENO] = dup(STDIN_FILENO);
+		save_fd[STDOUT_FILENO] = dup(STDOUT_FILENO);
+		status = EXIT_FAILURE;
+		if (save_fd[STDIN_FILENO] != -1 && save_fd[STDOUT_FILENO] != -1)
+			status = _exec(pipex->content);
+		dup2(save_fd[STDIN_FILENO], STDIN_FILENO);
+		dup2(save_fd[STDOUT_FILENO], STDOUT_FILENO);
+		close(save_fd[STDIN_FILENO]);
+		close(save_fd[STDOUT_FILENO]);
+		return (status);
 	}
 	pid = fork();
 	if (pid == 0)

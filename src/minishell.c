@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 14:15:05 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/22 01:28:50 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	run(t_env **table, char *command)
 		if (parse_tree == NULL || is_syntax_error(parse_tree))
 			ft_putstr_fd("minishell: syntax error\n", 2);
 		else
-			exit_status = execute(table, parse_tree);
+			exit_status = execute(table, parse_tree, 1);
 		clear_parse_tree(parse_tree, free);
 		if (parse_tree == NULL)
 			ft_lstclear(&tokens, free);

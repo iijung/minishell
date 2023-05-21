@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 03:20:48 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 00:31:03 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 23:48:41 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ int	builtin_export(t_env **table, int argc, char **argv)
 {
 	int	i;
 
-	if (table == NULL || argv == NULL)
-		return (EXIT_FAILURE);
 	if (argv[1] == NULL)
 		return (_show(table));
 	i = 1;
