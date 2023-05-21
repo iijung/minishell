@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 23:49:19 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 03:13:26 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	_fork(void *param)
 		ft_assert(dup2(pipes[1], STDOUT_FILENO) == -1, __FILE__, __LINE__);
 		close(pipes[1]);
 		if (content->subshell)
-			exit(execute(content->envp, content->subshell));
+			exit(execute(content->envp, content->subshell, 0));
 		else
 			exit(_exec(content));
 	}
@@ -96,16 +96,12 @@ static int	_run(t_pipex *pipex)
 int	all_pipex(t_pipex *pipex)
 {
 	pid_t			pid;
-	struct s_pipex	*content;
 
 	if (pipex == NULL)
 		return (EXIT_FAILURE);
-	content = pipex->content;
 	if (ft_lstsize(pipex) == 1)
 	{
-		if (ft_strncmp(content->argv[0], "exit", 5) == 0)
-			ft_putstr_fd("exit\n", STDERR_FILENO);
-		return (_exec(content));
+		return (_exec(pipex->content));
 	}
 	pid = fork();
 	if (pid == 0)
