@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 23:20:36 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 11:48:47 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/21 14:15:05 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static int	run(t_env **table, char *command)
 	tokens = lex(command);
 	if (tokens)
 	{
+		delete_useless_ifs(tokens);
 		parse_tree = parse(tokens);
 		if (parse_tree == NULL || is_syntax_error(parse_tree))
 			ft_putstr_fd("minishell: syntax error\n", 2);
