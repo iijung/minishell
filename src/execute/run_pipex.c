@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/20 23:25:30 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 18:47:10 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ static void	_fork(void *param)
 		close(pipes[0]);
 		ft_assert(dup2(pipes[1], STDOUT_FILENO) == -1, __FILE__, __LINE__);
 		close(pipes[1]);
-		exit(_exec(content));
+		if (content->subshell)
+			exit(execute(content->envp, content->subshell));
+		else
+			exit(_exec(content));
 	}
 	else
 	{

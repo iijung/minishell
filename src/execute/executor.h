@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 13:49:28 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/20 23:22:48 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 18:46:18 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ struct s_pipex
 {
 	t_list		*argl;
 	t_redirect	*redirect;
+	t_parse		*subshell;
 	struct
 	{
 		pid_t	pid;

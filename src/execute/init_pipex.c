@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:20:04 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/18 22:14:30 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 18:41:49 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ t_pipex	*new_pipex(t_env **table, t_parse *tree)
 		return (NULL);
 	}
 	content->envp = table;
-	set_pipex(tree->node, content);
+	if (tree->is_subshell)
+		content->subshell = tree;
+	else
+		set_pipex(tree->node, content);
 	return (rtn);
 }
 

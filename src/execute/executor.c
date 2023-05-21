@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 11:35:23 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/21 16:20:52 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ static int	_subshell(t_env **table, t_parse *tree)
 		if (pipex)
 		{
 			content = pipex->content;
+			if (content->argl)
+			{
+				ft_putstr_fd("minishell: syntax error\n", 2);
+				exit(258);
+			}
 			status = redirect(content->redirect);
 			if (status == -1)
 				exit(EXIT_FAILURE);
