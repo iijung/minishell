@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 18:47:10 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 23:49:19 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static int	_exec(struct s_pipex *content)
 {
 	int				status;
 	int				save_fd[2];
-	t_builtin_func	builtin_func;
 
 	status = EXIT_FAILURE;
 	save_fd[STDIN_FILENO] = dup(STDIN_FILENO);
@@ -26,11 +25,7 @@ static int	_exec(struct s_pipex *content)
 		&& save_fd[STDOUT_FILENO] != -1
 		&& redirect(content->redirect) != -1)
 	{
-		builtin_func = builtin(content->argv);
-		if (builtin_func)
-			status = builtin_func(content->envp, content->argc, content->argv);
-		else
-			status = builtin_env(content->envp, content->argc, content->argv);
+		status = builtin(content->envp, content->argv);
 	}
 	dup2(save_fd[STDIN_FILENO], STDIN_FILENO);
 	dup2(save_fd[STDOUT_FILENO], STDOUT_FILENO);
@@ -106,7 +101,7 @@ int	all_pipex(t_pipex *pipex)
 	if (pipex == NULL)
 		return (EXIT_FAILURE);
 	content = pipex->content;
-	if (ft_lstsize(pipex) == 1 && builtin(content->argv))
+	if (ft_lstsize(pipex) == 1)
 	{
 		if (ft_strncmp(content->argv[0], "exit", 5) == 0)
 			ft_putstr_fd("exit\n", STDERR_FILENO);
