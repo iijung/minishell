@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 00:14:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 12:38:37 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 13:29:58 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,14 @@ static char	*_env_next(t_env **table, char *line, int fd)
 	len = 0;
 	while (line[len] && (ft_isalpha(line[len]) || line[len] == '_'))
 		++len;
+	if (line[0] == '?')
+		len = 1;
+	if (len == 0)
+	{
+		if (write(fd, "$", 1) < 0)
+			return (NULL);
+		return (line);
+	}
 	key = ft_strndup(line, len);
 	if (key == NULL)
 		return (NULL);
