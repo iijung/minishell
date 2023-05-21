@@ -30,12 +30,12 @@ int	is_syntax_error(t_parse *root)
 	{
 		if (root->right && is_syntax_error(root->right))
 			return (1);
+		if (root->left && is_syntax_error(root->left))
+			return (1);
 		lex_lst = root->node;
 		lex_data = lex_lst->content;
 		if (is_operator_lex(lex_data))
 			return (root->left == 0 || root->right == 0);
 	}
-	if (root->left && is_syntax_error(root->left))
-		return (1);
 	return (0);
 }
