@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 21:12:10 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/22 06:52:52 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/22 08:35:54 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_env **table,
 char *file,
 struct s_redirect *redirect_content)
 {
-	if (file[0] == '\0')
+	if (file == NULL || file[0] == '\0')
 		ft_putendl_fd("heredoc : delimiter not found", 2);
 	else
 		redirect_content->fd = get_heredoc(table, file);
