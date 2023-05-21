@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:42:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/22 03:13:26 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 03:27:05 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,11 @@
 
 static int	_exec(struct s_pipex *content)
 {
-	int				status;
-	int				save_fd[2];
-
-	status = EXIT_FAILURE;
-	save_fd[STDIN_FILENO] = dup(STDIN_FILENO);
-	save_fd[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	if (content
-		&& save_fd[STDIN_FILENO] != -1
-		&& save_fd[STDOUT_FILENO] != -1
-		&& redirect(content->redirect) != -1)
-	{
-		status = builtin(content->envp, content->argv);
-	}
-	dup2(save_fd[STDIN_FILENO], STDIN_FILENO);
-	dup2(save_fd[STDOUT_FILENO], STDOUT_FILENO);
-	if (save_fd[STDIN_FILENO] != -1)
-		close(save_fd[STDIN_FILENO]);
-	if (save_fd[STDOUT_FILENO] != -1)
-		close(save_fd[STDOUT_FILENO]);
-	return (status);
+	if (content == NULL)
+		return (EXIT_FAILURE);
+	if (content->redirect && redirect(content->redirect) == -1)
+		return (EXIT_FAILURE);
+	return (builtin(content->envp, content->argv));
 }
 
 static void	_fork(void *param)
@@ -96,12 +81,23 @@ static int	_run(t_pipex *pipex)
 int	all_pipex(t_pipex *pipex)
 {
 	pid_t			pid;
+	int				status;
+	int				save_fd[2];
 
 	if (pipex == NULL)
 		return (EXIT_FAILURE);
 	if (ft_lstsize(pipex) == 1)
 	{
-		return (_exec(pipex->content));
+		save_fd[STDIN_FILENO] = dup(STDIN_FILENO);
+		save_fd[STDOUT_FILENO] = dup(STDOUT_FILENO);
+		status = EXIT_FAILURE;
+		if (save_fd[STDIN_FILENO] != -1 && save_fd[STDOUT_FILENO] != -1)
+			status = _exec(pipex->content);
+		dup2(save_fd[STDIN_FILENO], STDIN_FILENO);
+		dup2(save_fd[STDOUT_FILENO], STDOUT_FILENO);
+		close(save_fd[STDIN_FILENO]);
+		close(save_fd[STDOUT_FILENO]);
+		return (status);
 	}
 	pid = fork();
 	if (pid == 0)
