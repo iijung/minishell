@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   environ.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 12:11:44 by minjungk          #+#    #+#             */
-/*   Updated: 2023/04/19 22:34:11 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/21 11:37:53 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef ENVIRON_H
 # define ENVIRON_H
 # include "util.h"
 
-# define ENVIRON_HASH_MAX	62
+# define ENVIRON_HASH_MAX			62
+# define SYNTAX_ERROR_EXIT_STATUS	258
 
 typedef t_list	t_env;
 
