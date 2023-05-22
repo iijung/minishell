@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/22 15:40:45 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 20:08:02 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	_or(t_env **table, t_parse *tree, int is_first)
 	status = execute(table, tree->left, is_first);
 	if (status == EXIT_SUCCESS)
 		return (status);
-	return (execute(table, tree->right, 0));
+	return (execute(table, tree->right, is_first));
 }
 
 static int	_subshell(t_env **table, t_parse *tree)
