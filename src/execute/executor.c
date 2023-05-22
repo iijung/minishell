@@ -19,7 +19,7 @@ static int	_and(t_env **table, t_parse *tree, int is_first)
 	status = execute(table, tree->left, is_first);
 	if (status != EXIT_SUCCESS)
 		return (status);
-	return (execute(table, tree->right, 0));
+	return (execute(table, tree->right, is_first));
 }
 
 static int	_or(t_env **table, t_parse *tree, int is_first)
