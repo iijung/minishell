@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:54:48 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/22 20:02:11 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/22 21:44:35 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,10 @@ t_lex_lst	*get_root_node(t_lex_lst *token_lst)
 {
 	t_lex_lst	*root_node;
 
-	root_node = get_type_node_rev(token_lst, LEXEME_AND);
+	root_node = get_last_operator_node(token_lst);
 	if (root_node)
 		return (root_node);
-	root_node = get_type_node_rev(token_lst, LEXEME_OR);
-	if (root_node)
-		return (root_node);
-	root_node = get_type_node_rev(token_lst, LEXEME_PIPE);
+	root_node = get_type_node(token_lst, LEXEME_PIPE);
 	if (root_node)
 		return (root_node);
 	return (NULL);
