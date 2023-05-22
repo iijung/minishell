@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 23:08:02 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 23:50:01 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:48:05 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,8 @@ static int	_cd(t_env **table, char *path)
 	char		oldpath[PATH_MAX];
 	char		currpath[PATH_MAX];
 
-	if (path == NULL)
-		path = env_get_val(table, "HOME");
 	if (path == NULL || *path == '\0')
-		return (EXIT_FAILURE);
+		return (EXIT_SUCCESS);
 	getcwd(oldpath, PATH_MAX);
 	ft_memset(currpath, 0, PATH_MAX);
 	if (*path == '/'
@@ -98,7 +96,7 @@ int	builtin_cd(t_env **table, int argc, char **argv)
 	path = env_get_val(table, key);
 	if (path)
 		return (_cd(table, path));
-	ft_putstr_fd("minishell: cd: \n", STDERR_FILENO);
+	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 	ft_putstr_fd(key, STDERR_FILENO);
 	ft_putstr_fd(" not set\n", STDERR_FILENO);
 	return (EXIT_FAILURE);

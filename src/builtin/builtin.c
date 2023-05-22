@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 22:32:56 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/22 00:07:31 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 17:08:43 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "sys/stat.h"
+#include <errno.h>
 
 extern int	builtin_pwd(void);
 extern int	builtin_cd(t_env **table, int argc, char **argv);
@@ -20,19 +22,12 @@ extern int	builtin_export(t_env **table, int argc, char **argv);
 extern int	builtin_unset(t_env **table, int argc, char **argv);
 extern int	builtin_env(t_env **table, int argc, char **argv);
 
-static int	no_builtin(t_env **table, char **argv)
+static void	search_path(t_env **table, char **argv, char **envp)
 {
-	int		i;
-	pid_t	pid;
-	char	**sp;
-	char	**envp;
-	char	command[PATH_MAX];
+	int			i;
+	char		**sp;
+	char		command[PATH_MAX];
 
-	pid = fork();
-	if (pid)
-		return (waitpid_ignore_signal(pid));
-	envp = env_get_arr(table);
-	execve(argv[0], argv, envp);
 	i = 0;
 	sp = ft_split(env_get_val(table, "PATH"), ':');
 	while (sp && sp[i])
@@ -43,9 +38,29 @@ static int	no_builtin(t_env **table, char **argv)
 		execve(command, argv, envp);
 		free(sp[i++]);
 	}
-	free(sp);
-	ft_putstr_fd(argv[0], STDERR_FILENO);
-	ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	execve(argv[0], argv, envp);
+}
+
+static int	no_builtin(t_env **table, char **argv)
+{
+	pid_t		pid;
+	char		**envp;
+
+	pid = fork();
+	if (pid)
+		return (waitpid_ignore_signal(pid));
+	envp = env_get_arr(table);
+	if (argv[0][0] == '/'
+		|| !ft_strncmp(argv[0], "./", 2)
+		|| !ft_strncmp(argv[0], "../", 3)
+		|| access(argv[0], F_OK) == 0)
+		execve(argv[0], argv, envp);
+	else
+		search_path(table, argv, envp);
+	env_free_arr(envp);
+	perror(argv[0]);
+	if (errno == EISDIR || errno == EACCES)
+		exit(126);
 	exit(127);
 }
 
