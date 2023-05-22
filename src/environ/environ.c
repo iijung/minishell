@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 12:26:19 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/17 15:59:53 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 19:11:14 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,23 @@ static char	*_join_key_val(char *key, char *val)
 	rtn[key_len] = '=';
 	ft_memmove(rtn + key_len + 1, val, val_len);
 	return (rtn);
+}
+
+int	env_invalid(char *key)
+{
+	int	i;
+
+	if (key == NULL)
+		return (EXIT_FAILURE);
+	if (ft_isalpha(key[0]) == 0)
+		return (EXIT_FAILURE);
+	i = 0;
+	while (key[++i])
+	{
+		if (ft_isalnum(key[i]) == 0 && key[i] != '_')
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
 
 void	env_free_arr(char **arr)

@@ -6,41 +6,28 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 05:08:18 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 23:48:49 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 19:09:29 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-static int	_unset(t_env **table, char *key)
-{
-	size_t		i;
-
-	if (key == NULL)
-		return (EXIT_FAILURE);
-	i = 0;
-	while (key[i])
-	{
-		if (ft_isalnum(key[i]) == 0 && key[i] != '_')
-			return (EXIT_FAILURE);
-		++i;
-	}
-	env_unset(table, (char *)key);
-	return (EXIT_SUCCESS);
-}
-
 int	builtin_unset(t_env **table, int argc, char **argv)
 {
 	int	i;
+	int	ret;
 
 	i = 1;
+	ret = EXIT_SUCCESS;
 	while (argv[i] && i < argc)
 	{
-		if (_unset(table, argv[i]) == EXIT_FAILURE)
-			break ;
+		if (env_invalid(argv[i]))
+			ret = EXIT_FAILURE;
+		else
+			env_unset(table, argv[i]);
 		++i;
 	}
-	if (argv[i] == NULL)
+	if (ret == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	ft_putstr_fd("minishell: unset: not a valid identifier\n", STDERR_FILENO);
 	return (EXIT_FAILURE);

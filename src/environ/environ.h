@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 12:11:44 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 11:37:53 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/22 19:12:17 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ struct s_environ
 };
 
 extern int		env_hash(char *key);
+extern int		env_invalid(char *key);
 extern int		env_size(t_env **table);
 extern t_env	**env_load(void);
 extern void		env_clear(t_env ***table);

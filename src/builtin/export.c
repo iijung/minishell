@@ -6,7 +6,7 @@
 /*   By: minjungk <minjungk@student.42seoul.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 03:20:48 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 23:48:41 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 19:09:28 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,14 @@ static int	_export(t_env **table, char *argv)
 	if (delimeter == NULL)
 		return (EXIT_FAILURE);
 	key = ft_strndup(argv, delimeter - argv);
+	if (env_invalid(key))
+	{
+		free(key);
+		return (EXIT_FAILURE);
+	}
 	val = ft_strdup(delimeter + 1);
-	ft_assert(key == NULL || val == NULL, __FILE__, __LINE__);
-	env_set(table, key, val);
+	if (val)
+		env_set(table, key, val);
 	free(key);
 	free(val);
 	return (EXIT_SUCCESS);
@@ -53,17 +58,22 @@ static int	_export(t_env **table, char *argv)
 int	builtin_export(t_env **table, int argc, char **argv)
 {
 	int	i;
+	int	ret;
 
 	if (argv[1] == NULL)
 		return (_show(table));
+	ret = EXIT_SUCCESS;
 	i = 1;
 	while (argv[i] && i < argc)
 	{
 		if (_export(table, argv[i]) == EXIT_FAILURE)
+		{
+			ret = EXIT_FAILURE;
 			break ;
+		}
 		++i;
 	}
-	if (argv[i] == NULL)
+	if (ret == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	ft_putstr_fd("minishell: export: not a valid identifier\n", STDERR_FILENO);
 	return (EXIT_FAILURE);
