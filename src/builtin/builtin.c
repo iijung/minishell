@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 22:32:56 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/23 02:56:25 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/23 03:45:25 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,29 +39,37 @@ static void	search_path(t_env **table, char **argv, char **envp)
 	}
 	free(sp);
 	execve(argv[0], argv, envp);
+	ft_putstr_fd(argv[0], STDERR_FILENO);
+	ft_putstr_fd(": command not found\n", STDERR_FILENO);
 }
 
 static int	no_builtin(t_env **table, char **argv)
 {
+	int			ret;
 	pid_t		pid;
 	char		**envp;
 
 	pid = fork();
 	if (pid)
 		return (waitpid_ignore_signal(pid));
+	ret = 127;
 	envp = env_get_arr(table);
-	if (argv[0][0] == '/'
-		|| !ft_strncmp(argv[0], "./", 2)
-		|| !ft_strncmp(argv[0], "../", 3)
-		|| access(argv[0], F_OK) == 0)
-		execve(argv[0], argv, envp);
-	else
-		search_path(table, argv, envp);
+	{
+		if (argv[0][0] == '/'
+			|| !ft_strncmp(argv[0], "./", 2)
+			|| !ft_strncmp(argv[0], "../", 3)
+			|| access(argv[0], F_OK) == 0)
+		{
+			execve(argv[0], argv, envp);
+			perror(argv[0]);
+			if (errno == EISDIR || errno == EACCES)
+				ret = 126;
+		}
+		else
+			search_path(table, argv, envp);
+	}
 	env_free_arr(envp);
-	perror(argv[0]);
-	if (errno == EISDIR || errno == EACCES)
-		exit(126);
-	exit(127);
+	exit(ret);
 }
 
 int	builtin(t_env **table, char **argv)
