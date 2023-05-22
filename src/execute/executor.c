@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/22 20:08:02 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/23 04:00:20 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	execute(t_env **table, t_parse *tree, int is_first)
 	if (is_first && pipex && pipex->content)
 	{
 		content = pipex->content;
-		if (content->argc == 2 && content->argv && content->argv[0]
+		if (content->argc <= 2 && content->argv && content->argv[0]
 			&& ft_strncmp(content->argv[0], "exit", 5) == 0)
 			ft_putstr_fd("exit\n", STDERR_FILENO);
 	}
