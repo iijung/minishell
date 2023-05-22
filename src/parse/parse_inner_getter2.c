@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 21:36:56 by jaemjeon          #+#    #+#             */
-/*   Updated: 2023/05/22 21:39:18 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/22 22:52:52 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ t_lex_lst	*get_type_node(t_lex_lst *token_lst, t_e_lex type)
 	return (NULL);
 }
 
+static int	is_or_and_lex(t_s_lex *lex_data)
+{
+	return (lex_data->type == LEXEME_AND || lex_data->type == LEXEME_OR);
+}
+
 t_lex_lst	*get_last_operator_node(t_lex_lst *token_lst)
 {
 	int			dquote_flag;
@@ -60,7 +65,7 @@ t_lex_lst	*get_last_operator_node(t_lex_lst *token_lst)
 				subshell_depth++;
 			else if (lex_data->type == LEXEME_PARENTHESIS_CLOSE)
 				subshell_depth--;
-			else if (subshell_depth == 0 && is_operator_lex(lex_data))
+			else if (subshell_depth == 0 && is_or_and_lex(lex_data))
 				last = token_lst;
 		}
 		token_lst = token_lst->next;
