@@ -6,14 +6,14 @@
 #    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/20 23:21:54 by minjungk         ###   ########.fr        #
+#    Updated: 2023/05/22 17:54:18 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_ON_ERROR:
 .DEFAULT_GOAL := all
 
-CFLAGS		= -Wall -Wextra -Werror -MMD -MP -g
+CFLAGS		= -Wall -Wextra -Werror -MMD -MP
 
 CPPFLAGS	+= -I./util
 CPPFLAGS	+= -I./environ
@@ -28,10 +28,8 @@ CPPFLAGS	+= -I../lib/libft
 LDFLAGS		+= -L../lib/libft
 LDLIBS		+= -lft
 
-CPPFLAGS	+= -I../external/include/ncurses
 CPPFLAGS	+= -I../external/include/readline
 LDFLAGS		+= -L../external/lib
-LDLIBS		+= -lncurses
 LDLIBS		+= -lreadline
 
 ifdef DEBUG
@@ -97,6 +95,6 @@ fclean: clean
 	$(RM) $(MINISHELL)
 
 re: fclean
-	$(MAKE) $(if $(filter bonus,$(MAKECMDGOALS)), bonus, all)
+	$(MAKE) $(MINISHELL)
 
 .PHONY: all clean fclean re bonus
