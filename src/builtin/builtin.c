@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 22:32:56 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/22 17:08:43 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 18:17:08 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	search_path(t_env **table, char **argv, char **envp)
 		execve(command, argv, envp);
 		free(sp[i++]);
 	}
+	free(sp);
 	execve(argv[0], argv, envp);
 }
 
