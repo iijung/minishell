@@ -6,7 +6,7 @@
 #    By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:05:51 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/22 17:21:02 by minjungk         ###   ########.fr        #
+#    Updated: 2023/05/22 17:55:03 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ re:
 # **************************************************************************** #
 READLINE_VERSION	= 8.2
 READLINE_DIR		= readline-$(READLINE_VERSION)
-READLINE_LIB		= libreadline.a
+READLINE_LIB		= ./lib/libreadline.a
 
 readline_all: $(READLINE_LIB)
 $(READLINE_LIB):
