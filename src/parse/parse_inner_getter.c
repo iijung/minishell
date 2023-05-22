@@ -89,14 +89,16 @@ t_lex_lst	*get_before_last_subshell_close(t_lex_lst *token_lst)
 	return (last_before_close);
 }
 
-t_lex_lst	*get_type_node(t_lex_lst *token_lst, t_e_lex type)
+t_lex_lst	*get_type_node_rev(t_lex_lst *token_lst, t_e_lex type)
 {
-	int		dquote_flag;
-	int		subshell_depth;
-	t_s_lex	*lex_data;
+	int			dquote_flag;
+	int			subshell_depth;
+	t_s_lex		*lex_data;
+	t_lex_lst	*last_node;
 
 	dquote_flag = 0;
 	subshell_depth = 0;
+	last_node = NULL;
 	while (token_lst)
 	{
 		lex_data = token_lst->content;
@@ -109,9 +111,9 @@ t_lex_lst	*get_type_node(t_lex_lst *token_lst, t_e_lex type)
 			else if (lex_data->type == LEXEME_PARENTHESIS_CLOSE)
 				subshell_depth--;
 			else if (subshell_depth == 0 && lex_data->type == type)
-				return (token_lst);
+				last_node = token_lst;
 		}
 		token_lst = token_lst->next;
 	}
-	return (NULL);
+	return (last_node);
 }

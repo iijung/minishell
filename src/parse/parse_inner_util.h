@@ -32,7 +32,7 @@ t_lex_lst	*get_before_first_subshell_open(
 				t_lex_lst **first_open
 				);
 t_lex_lst	*get_before_last_subshell_close(t_lex_lst *token_lst);
-t_lex_lst	*get_type_node(t_lex_lst *token_lst, t_e_lex type);
+t_lex_lst	*get_type_node_rev(t_lex_lst *token_lst, t_e_lex type);
 
 // parse_inner_syntax.c
 extern int	check_inner_syntax(t_lex_lst *curr);
