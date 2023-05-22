@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 02:07:45 by minjungk          #+#    #+#             */
-/*   Updated: 2023/02/20 23:08:59 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/23 04:23:08 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@
 # include "libft.h"
 
 extern char	*prompt(void);
+extern void	set_terminal(void);
 
 #endif

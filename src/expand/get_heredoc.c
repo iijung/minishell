@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_heredoc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjungk <minjungk@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 00:14:21 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/21 13:29:58 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/23 04:22:41 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "environ.h"
 #include <signal.h>
 #include <sys/wait.h>
+#include "prompt.h"
 
 enum e_pipe_direction
 {
@@ -96,27 +97,29 @@ static int	_read(t_env **table, char *word, int fd)
 
 int	get_heredoc(t_env **table, char *word)
 {
-	pid_t	pid;
-	int		status;
-	int		pipes[2];
+	pid_t			pid;
+	int				status;
+	int				pipes[2];
+	struct termios	term;
 
 	if (word == NULL || pipe(pipes) == -1)
 		return (-1);
+	tcgetattr(STDIN_FILENO, &term);
+	set_terminal();
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGQUIT, SIG_IGN);
 		close(pipes[PIPE_OUT]);
 		exit(_read(table, word, pipes[PIPE_IN]));
 	}
-	else
+	close(pipes[PIPE_IN]);
+	status = waitpid_ignore_signal(pid);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	if (status != EXIT_SUCCESS)
 	{
-		close(pipes[PIPE_IN]);
-		status = waitpid_ignore_signal(pid);
-		if (status != EXIT_SUCCESS)
-		{
-			close(pipes[PIPE_OUT]);
-			return (-1);
-		}
+		close(pipes[PIPE_OUT]);
+		return (-1);
 	}
 	return (pipes[PIPE_OUT]);
 }
