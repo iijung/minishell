@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 15:12:55 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/22 02:01:18 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:40:45 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	execute(t_env **table, t_parse *tree, int is_first)
 {
 	int				status;
 	t_pipex			*pipex;
-	char			**argv;
+	struct s_pipex	*content;
 
 	if (tree == NULL)
 		return (EXIT_SUCCESS);
@@ -97,8 +97,9 @@ int	execute(t_env **table, t_parse *tree, int is_first)
 	pipex = new_pipex(table, tree);
 	if (is_first && pipex && pipex->content)
 	{
-		argv = ((struct s_pipex *)(pipex->content))->argv;
-		if (argv && argv[0] && ft_strncmp(argv[0], "exit", 5) == 0)
+		content = pipex->content;
+		if (content->argc == 2 && content->argv && content->argv[0]
+			&& ft_strncmp(content->argv[0], "exit", 5) == 0)
 			ft_putstr_fd("exit\n", STDERR_FILENO);
 	}
 	status = all_pipex(pipex);
