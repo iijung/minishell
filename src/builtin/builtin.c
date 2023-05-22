@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 22:32:56 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/22 10:54:15 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2023/05/22 17:08:43 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,53 +22,42 @@ extern int	builtin_export(t_env **table, int argc, char **argv);
 extern int	builtin_unset(t_env **table, int argc, char **argv);
 extern int	builtin_env(t_env **table, int argc, char **argv);
 
-static char	*strjoin3(char *s1, char *s2, char *s3)
-{
-	char	*rtn;
-	char	*tmp;
-
-	rtn = ft_strjoin(s1, s2);
-	tmp = rtn;
-	rtn = ft_strjoin(tmp, s3);
-	free(tmp);
-	return (rtn);
-}
-
 static void	search_path(t_env **table, char **argv, char **envp)
 {
 	int			i;
 	char		**sp;
-	char		*execve_path;
-	struct stat	st;
+	char		command[PATH_MAX];
 
-	sp = ft_split(env_get_val(table, "PATH"), ':');
 	i = 0;
+	sp = ft_split(env_get_val(table, "PATH"), ':');
 	while (sp && sp[i])
 	{
-		execve_path = strjoin3(sp[i], "/", argv[0]);
-		if (stat(execve_path, &st) == 0)
-			exit(execve(execve_path, argv, envp));
+		ft_strlcpy(command, sp[i], PATH_MAX);
+		ft_strlcat(command, "/", PATH_MAX);
+		ft_strlcat(command, argv[0], PATH_MAX);
+		execve(command, argv, envp);
 		free(sp[i++]);
 	}
+	execve(argv[0], argv, envp);
 }
 
 static int	no_builtin(t_env **table, char **argv)
 {
 	pid_t		pid;
 	char		**envp;
-	struct stat	st;
 
 	pid = fork();
 	if (pid)
 		return (waitpid_ignore_signal(pid));
 	envp = env_get_arr(table);
-	if (ft_strchr(argv[0], '/') != NULL)
-	{
-		if (stat(argv[0], &st) == 0)
-			execve(argv[0], argv, envp);
-	}
+	if (argv[0][0] == '/'
+		|| !ft_strncmp(argv[0], "./", 2)
+		|| !ft_strncmp(argv[0], "../", 3)
+		|| access(argv[0], F_OK) == 0)
+		execve(argv[0], argv, envp);
 	else
 		search_path(table, argv, envp);
+	env_free_arr(envp);
 	perror(argv[0]);
 	if (errno == EISDIR || errno == EACCES)
 		exit(126);
