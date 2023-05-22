@@ -6,12 +6,11 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 22:32:56 by minjungk          #+#    #+#             */
-/*   Updated: 2023/05/22 18:17:08 by minjungk         ###   ########.fr       */
+/*   Updated: 2023/05/23 02:56:25 by minjungk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-#include "sys/stat.h"
 #include <errno.h>
 
 extern int	builtin_pwd(void);
