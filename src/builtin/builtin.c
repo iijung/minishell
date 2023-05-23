@@ -57,8 +57,7 @@ static int	no_builtin(t_env **table, char **argv)
 	{
 		if (argv[0][0] == '/'
 			|| !ft_strncmp(argv[0], "./", 2)
-			|| !ft_strncmp(argv[0], "../", 3)
-			|| access(argv[0], F_OK) == 0)
+			|| !ft_strncmp(argv[0], "../", 3))
 		{
 			execve(argv[0], argv, envp);
 			perror(argv[0]);
