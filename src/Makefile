@@ -6,14 +6,15 @@
 #    By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 23:09:45 by minjungk          #+#    #+#              #
-#    Updated: 2023/05/22 21:37:30 by jaemjeon         ###   ########.fr        #
+#    Updated: 2024/08/19 17:10:21 by minjungk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_ON_ERROR:
 .DEFAULT_GOAL := all
 
-CFLAGS		= -Wall -Wextra -Werror -MMD -MP
+CFLAGS		= -Wall -Wextra -Werror
+CPPFLAGS	+= -MMD -MP
 
 CPPFLAGS	+= -I./util
 CPPFLAGS	+= -I./environ
@@ -30,7 +31,7 @@ LDLIBS		+= -lft
 
 CPPFLAGS	+= -I../external/include/readline
 LDFLAGS		+= -L../external/lib
-LDLIBS		+= -lreadline
+LDLIBS		+= -lreadline -lcurses
 
 ifdef DEBUG
 CPPFLAGS	+= -g -DDEBUG
